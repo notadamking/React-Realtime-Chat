@@ -1,5 +1,5 @@
+import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
-import React, {PropTypes} from 'react';
 
 import Navigation from '../../components/Navigation';
 import config from '../../../config';

@@ -1,6 +1,6 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 
-const Html = ({assets, content, head, initialState}) => (
+const Html = ({ apolloState, assets, content, head, initialState }) => (
   <html>
     <head>
       <meta charSet='utf-8' />
@@ -10,14 +10,16 @@ const Html = ({assets, content, head, initialState}) => (
       <link href={assets.main.css} rel='stylesheet' />
     </head>
     <body>
-      <div dangerouslySetInnerHTML={{__html: content}} id='root' />
-      <script dangerouslySetInnerHTML={{__html: `window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}`}} />
+      <div dangerouslySetInnerHTML={{ __html: content }} id='root' />
+      <script dangerouslySetInnerHTML={{ __html: `window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}` }} />
+      <script dangerouslySetInnerHTML={{ __html: `window.__APOLLO_STATE__ = ${JSON.stringify(apolloState)}` }} />
       <script src={assets.main.js} />
     </body>
   </html>
 );
 
 Html.propTypes = {
+  apolloState: PropTypes.object,
   assets: PropTypes.object.isRequired,
   content: PropTypes.string.isRequired,
   head: PropTypes.object.isRequired,

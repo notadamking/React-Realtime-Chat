@@ -1,14 +1,12 @@
 import path from 'path';
-
 import AssetsPlugin from 'assets-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import autoprefixer from 'autoprefixer';
-import nested from 'postcss-nested';
+import cssnext from 'postcss-cssnext';
 import webpack from 'webpack';
 
 import config from './config';
 
-const isProduction = config.env === 'production';
+const isProduction = config.env !== 'development';
 
 export default {
   entry: isProduction ? [
@@ -29,7 +27,9 @@ export default {
       {
         test: /\.css$/,
         exclude: /node_modules/,
-        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]-[hash:base64:4]!postcss')
+        loaders: isProduction
+        ? [ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]-[hash:base64:4]', 'postcss')]
+        : ['style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]-[hash:base64:4]', 'postcss']
       },
       {
         test: /\.js$/,
@@ -55,11 +55,11 @@ export default {
       filename: 'assets.json',
       path: 'build'
     }),
-    new ExtractTextPlugin('[name].[contenthash:7].css'),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     }),
     ...isProduction ? [
+      new ExtractTextPlugin('[name]-[chunkhash].css', { allChunks: true }),
       new webpack.optimize.DedupePlugin(),
       new webpack.optimize.OccurenceOrderPlugin(),
       new webpack.optimize.UglifyJsPlugin({
@@ -75,8 +75,7 @@ export default {
     ]
   ],
   postcss: [
-    nested(),
-    autoprefixer()
+    cssnext(),
   ],
   bail: isProduction,
   cache: !isProduction,
