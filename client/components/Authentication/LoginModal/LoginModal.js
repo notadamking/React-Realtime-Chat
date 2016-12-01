@@ -4,8 +4,8 @@ import { Modal } from 'semantic-ui-react';
 import { LoginForm } from '../../../containers';
 import styles from './LoginModal.css';
 
-const LoginModal = ({ open, onShowSignupModal }) => (
-  <Modal dimmer open={open} size='small'>
+const LoginModal = ({ open, onClose, onShowSignupModal }) => (
+  <Modal closeIcon dimmer open={open} size='small' onClose={onClose}>
     <Modal.Header>Login</Modal.Header>
     <Modal.Content>
       <LoginForm />
@@ -18,6 +18,7 @@ const LoginModal = ({ open, onShowSignupModal }) => (
 
 LoginModal.propTypes = {
   open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
   onShowSignupModal: PropTypes.func.isRequired,
 };
 

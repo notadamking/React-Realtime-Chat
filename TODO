@@ -1,12 +1,18 @@
 Redux:
-  ☐ redux-thunk, etc.
+  ✔ redux-thunk @done(2016-12-01 00:31) @project(Redux)
+  ☐ redux-form
+    ☐ sync/async validation
 
 React-Apollo:
-  ☐ Current user, login, logout
+  ✔ Current user  @done(2016-12-01 00:31) @project(React-Apollo)
+  ✔ login / logout @done(2016-12-01 00:49) @project(React-Apollo)
+  ✔ signup @done(2016-12-01 01:13) @project(React-Apollo)
+  ☐ optimistic ui/update queries
   ☐ Subscription example (live chat?)
 
 Semantic Styling:
-  ☐ setup semantic-ui-react
+  ✔ setup semantic-ui-react @done(2016-12-01 00:31) @project(Semantic Styling)
+  ☐ setup theming
 
 No Console Errors:
   ✔ Fix "You cannot change <Router routes>; it will be ignored" bug @done(2016-11-28 23:18) @project(No Console Errors)

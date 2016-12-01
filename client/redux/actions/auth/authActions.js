@@ -1,7 +1,7 @@
 import config from '../../../../config';
 import {
-  SET_CURRENT_USER,
-  REMOVE_CURRENT_USER,
+  SET_LOGGED_IN,
+  SET_LOGGED_OUT,
   SET_LOGIN_MODAL_OPEN,
   SET_SIGNUP_MODAL_OPEN,
   SET_LOGIN_SUBMIT_ERROR,
@@ -9,13 +9,13 @@ import {
   CLEAR_SUBMIT_ERRORS,
 } from '../types';
 
-export const setCurrentUser = (user) => ({
-  type: SET_CURRENT_USER,
+export const setLoggedIn = (user) => ({
+  type: SET_LOGGED_IN,
   user
 });
 
-export const removeCurrentUser = () => ({
-  type: REMOVE_CURRENT_USER
+export const setLoggedOut = () => ({
+  type: SET_LOGGED_OUT
 });
 
 export const setLoginModalOpen = (open) => ({
@@ -47,7 +47,7 @@ export const handleLoginSuccess = (user) => {
     localStorage.setItem(config.authTokenName, user.authToken);
   }
   return (dispatch) => {
-    dispatch(setCurrentUser(user));
+    dispatch(setLoggedIn(user));
     dispatch(setLoginModalOpen(false));
     dispatch(clearSubmitErrors());
   };
@@ -58,7 +58,7 @@ export const handleSignupSuccess = (user) => {
     localStorage.setItem(config.authTokenName, user.authToken);
   }
   return (dispatch) => {
-    dispatch(setCurrentUser(user));
+    dispatch(setLoggedIn(user));
     dispatch(setSignupModalOpen(false));
     dispatch(clearSubmitErrors());
   };

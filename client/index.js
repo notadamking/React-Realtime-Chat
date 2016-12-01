@@ -44,7 +44,7 @@ const client = new ApolloClient({
     if (result.id && result.__typename) {
       return result.__typename + result.id;
     }
-    console.log('no data id from object could be found', result);
+    // console.log('no data id from object could be found', result);
     return null;
   },
   // shouldBatch: true,

@@ -1,6 +1,6 @@
 import {
-  setCurrentUser,
-  removeCurrentUser,
+  setLoggedIn,
+  setLoggedOut,
   setLoginModalOpen,
   setSignupModalOpen,
   setLoginSubmitError,
@@ -11,8 +11,8 @@ import {
 } from './auth/authActions';
 
 export {
-  setCurrentUser,
-  removeCurrentUser,
+  setLoggedIn,
+  setLoggedOut,
   setLoginModalOpen,
   setSignupModalOpen,
   setLoginSubmitError,

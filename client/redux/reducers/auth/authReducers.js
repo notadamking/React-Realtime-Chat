@@ -1,6 +1,6 @@
 import {
-  SET_CURRENT_USER,
-  REMOVE_CURRENT_USER,
+  SET_LOGGED_IN,
+  SET_LOGGED_OUT,
   SET_LOGIN_MODAL_OPEN,
   SET_SIGNUP_MODAL_OPEN,
   SET_LOGIN_SUBMIT_ERROR,
@@ -19,14 +19,14 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SET_CURRENT_USER:
+    case SET_LOGGED_IN:
       return {
         ...state,
         currentUser: action.user,
         isLoggedIn: true
       };
 
-    case REMOVE_CURRENT_USER:
+    case SET_LOGGED_OUT:
       return {
         ...state,
         currentUser: null,

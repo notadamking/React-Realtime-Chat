@@ -4,31 +4,31 @@ import { graphql } from 'react-apollo';
 import { Field, reduxForm } from 'redux-form';
 import { Form, Button, Message } from 'semantic-ui-react';
 
-import { setLoginSubmitError, handleLoginSuccess } from '../../../redux/actions';
+import { setSignupSubmitError, handleSignupSuccess } from '../../../redux/actions';
 import { FormField } from '../../../components';
-import loginMutation from './login.graphql';
+import signupMutation from './signup.graphql';
 
 @connect(
   (state) => ({
-    submitError: (state.auth && state.auth.loginSubmitError) || null,
+    submitError: (state.auth && state.auth.signupSubmitError) || null,
   })
 )
-@graphql(loginMutation, {
+@graphql(signupMutation, {
   props: ({ mutate }) => ({
-    submitLogin: ({ email, password }) => mutate({ variables: { email, password } }),
+    submitSignup: ({ email, password }) => mutate({ variables: { email, password } }),
   }),
 })
 @reduxForm({
-  form: 'login'
+  form: 'signup'
 })
-export default class LoginForm extends Component {
+export default class SignupForm extends Component {
   async onSubmit({ email, password }) {
-    const { dispatch, submitLogin } = this.props;
-    const { data: { login: { error, user } } } = await submitLogin({ email, password });
+    const { dispatch, submitSignup } = this.props;
+    const { data: { createUser: { error, user } } } = await submitSignup({ email, password });
     if (user) {
-      dispatch(handleLoginSuccess(user));
+      dispatch(handleSignupSuccess(user));
     } else if (error) {
-      dispatch(setLoginSubmitError(error));
+      dispatch(setSignupSubmitError(error));
     }
   }
 
@@ -36,7 +36,7 @@ export default class LoginForm extends Component {
     const { handleSubmit, pristine, submitError, submitting } = this.props;
     return (
       <div>
-        <Message content={submitError} error header='Login Failed!' hidden={!submitError} />
+        <Message content={submitError} error header='Signup Failed!' hidden={!submitError} />
         <Form size='large' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
           <Field
             component={FormField}
@@ -54,8 +54,16 @@ export default class LoginForm extends Component {
             placeholder='password'
             type='password'
           />
+          <Field
+            component={FormField}
+            icon='lock'
+            label='Repeat password'
+            name='repeat_password'
+            placeholder='repeat password'
+            type='password'
+          />
           <Button className='primary' disabled={pristine || submitting} fluid size='large' type='submit'>
-            Login
+            Signup
           </Button>
         </Form>
       </div>
@@ -63,11 +71,11 @@ export default class LoginForm extends Component {
   }
 }
 
-LoginForm.propTypes = {
+SignupForm.propTypes = {
   dispatch: PropTypes.func,
   handleSubmit: PropTypes.func,
   pristine: PropTypes.bool,
   submitError: PropTypes.string,
-  submitLogin: PropTypes.func,
+  submitSignup: PropTypes.func,
   submitting: PropTypes.bool,
 };

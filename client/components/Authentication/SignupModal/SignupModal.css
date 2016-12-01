@@ -1,0 +1,9 @@
+.loginLink {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  cursor: pointer;
+  font-size: 1.05rem;
+}
