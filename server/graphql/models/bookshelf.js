@@ -11,6 +11,6 @@ const User = Bookshelf.Model.extend({
   hasTimestamps: true,
 });
 
-export default {
-  User,
+export {
+  User
 };

@@ -1,6 +1,8 @@
+/* eslint-disable import/no-commonjs */
+
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-export default {
+module.exports = {
   env: process.env.NODE_ENV || 'development',
   meta: {
     title: 'React Redux Apollo Starter'
@@ -15,6 +17,8 @@ export default {
     connection: 'postgres://postgres:password@localhost:5432/boilerplate',
     searchPath: 'knex,public',
   },
+  devServerPort: 3001,
+  wsPort: 3030,
   assetTransferPort: 3003,
   authTokenName: 'token',
   graphqlEndpoint: '/graphql',

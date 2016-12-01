@@ -2,15 +2,14 @@ const types = `
   type User {
     id: ID!
     email: Email!
-    name: String
-    nickname: String
     createdAt: String!
     updatedAt: String!
+    authToken: String
   }
 
   type AuthenticatedUser {
+    id: ID
     user: User
-    authToken: String
     error: String
   }
 `;
@@ -22,7 +21,7 @@ const queries = `
 
 const mutations = `
   login(email: Email!, password: String!): AuthenticatedUser
-  createUser(name: String, email: Email!, password: String!): AuthenticatedUser
+  createUser(email: Email!, password: String!): AuthenticatedUser
 `;
 
 const resolvers = {
@@ -34,8 +33,8 @@ const resolvers = {
     login: async (__, { email, password }, context) => {
       return await context.User.login({ email, password });
     },
-    createUser: async (__, { name, email, password }, context) => {
-      return await context.User.createNewUser({ name, email, password });
+    createUser: async (__, { email, password }, context) => {
+      return await context.User.createNewUser({ email, password });
     },
   },
 };

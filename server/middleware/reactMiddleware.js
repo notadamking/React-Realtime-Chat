@@ -1,4 +1,3 @@
-import Helmet from 'react-helmet';
 import React from 'react';
 import ApolloClient, { createNetworkInterface, addTypename } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
@@ -8,12 +7,18 @@ import { createLocation } from 'history/LocationUtils';
 import { renderToStaticMarkup } from 'react-dom/server';
 import 'isomorphic-fetch';
 
-import Html from '../../client/components/Html';
-import configureStore from '../../client/configureStore';
+import { Html } from '../../client/components';
+import configureStore from '../../client/redux/configureStore';
 import routes from '../../client/routes';
 import config from '../../config';
 
 export default (req, res) => {
+  if (__DEVELOPMENT__) {
+    // clear require() cache if in development mode
+    // (makes asset hot reloading work)
+    webpackIsomorphicTools.refresh();
+  }
+
   const location = createLocation(req.url);
 
   match({ routes, location }, (error, redirectLocation, renderProps) => {
@@ -24,8 +29,6 @@ export default (req, res) => {
     } else if (!renderProps) {
       return res.status(404).send('Not Found');
     }
-    const assets = require('../../build/assets.json'); // eslint-disable-line global-require, import/newline-after-import
-    const head = Helmet.rewind();
     const client = new ApolloClient({
       ssrMode: true,
       networkInterface: createNetworkInterface({
@@ -42,8 +45,6 @@ export default (req, res) => {
       },
     });
     const store = configureStore({ client });
-    const initialState = store.getState();
-
     const component = (
       <ApolloProvider client={client} store={store}>
         <RouterContext {...renderProps} />
@@ -52,6 +53,9 @@ export default (req, res) => {
 
     renderToStringWithData(component).then((content) => {
       const data = client.store.getState().apollo.data;
+      const assets = webpackIsomorphicTools.assets();
+      const initialState = store.getState();
+
       res.status(200);
 
       const page = renderToStaticMarkup(
@@ -59,7 +63,6 @@ export default (req, res) => {
           apolloState={{ apollo: { data } }}
           assets={assets}
           content={content}
-          head={head}
           initialState={initialState}
         />
       );

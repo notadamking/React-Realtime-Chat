@@ -9,20 +9,28 @@ const bcrypt = Promise.promisifyAll(bcryptjs);
 const verifyJwt = Promise.promisify(jwt.verify);
 
 const UserModel = {
+  normalizeUser(aUser) {
+    const user = aUser.toJSON();
+    return {
+      ...user,
+      createdAt: user.created_at,
+      updatedAt: user.updated_at
+    };
+  },
+
   async getById(id) {
     const user = await User.where({ id }).fetch();
-    return user.toJSON();
+    return this.normalizeUser(user);
   },
 
-  async getAll() {
-    const users = await User.fetchAll();
-    return users.map(user => user.toJSON());
-  },
-
-  authedUser(user, authToken = null) {
+  normalizeAuthedUser(user, authToken = null) {
+    const normalizedUser = this.normalizeUser(user);
     return {
-      user: user.toJSON(),
-      authToken: authToken || this.signJwt(user.id),
+      id: normalizedUser.id,
+      user: {
+        ...normalizedUser,
+        authToken: authToken || this.signJwt(user.id),
+      }
     };
   },
 
@@ -37,10 +45,10 @@ const UserModel = {
         error: 'Invalid email or password.'
       };
     }
-    return this.authedUser(user);
+    return this.normalizeAuthedUser(user);
   },
 
-  async createNewUser({ name, email, password }) {
+  async createNewUser({ email, password }) {
     const exists = await User.where({ email }).fetch();
     if (exists) {
       return {
@@ -48,15 +56,15 @@ const UserModel = {
       };
     }
     const hash = await this.getPasswordHash(password);
-    const user = await new User({ name, email, hash }).save();
-    return this.authedUser(user);
+    const user = await new User({ email, hash }).save();
+    return this.normalizeAuthedUser(user);
   },
 
   async getCurrentUser(authToken) {
     try {
       const { id } = await verifyJwt(authToken, config.secretKey);
       const user = await User.where({ id }).fetch();
-      return this.authedUser(user, authToken);
+      return this.normalizeAuthedUser(user, authToken);
     } catch (error) {
       return false;
     }

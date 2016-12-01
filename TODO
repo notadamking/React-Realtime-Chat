@@ -1,0 +1,14 @@
+Redux:
+  ☐ redux-thunk, etc.
+
+React-Apollo:
+  ☐ Current user, login, logout
+  ☐ Subscription example (live chat?)
+
+Semantic Styling:
+  ☐ setup semantic-ui-react
+
+No Console Errors:
+  ✔ Fix "You cannot change <Router routes>; it will be ignored" bug @done(2016-11-28 23:18) @project(No Console Errors)
+
+Heroku:

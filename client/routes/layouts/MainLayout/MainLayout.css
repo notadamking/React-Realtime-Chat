@@ -1,0 +1,11 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex-grow: 1;
+  height: 100%;
+  padding: 40px 0;
+}

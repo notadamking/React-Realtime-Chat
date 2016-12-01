@@ -1,17 +1,15 @@
 import React from 'react';
-import { IndexRoute, Route, Router, browserHistory } from 'react-router';
+import { IndexRoute, Route } from 'react-router';
 
-import App from './App';
 import Home from './Home';
+import MainLayout from './layouts/MainLayout';
 import NotFound from './NotFound';
 
 export default (
-  <Router history={browserHistory}>
-    <Route component={App} path='/'>
-      <IndexRoute component={Home} />
+  <Route component={MainLayout} path='/'>
+    <IndexRoute component={Home} />
 
-      { /* Catch all route */ }
-      <Route component={NotFound} name='404' path='*' status={404} />
-    </Route>
-  </Router>
+    { /* Catch all route */ }
+    <Route component={NotFound} name='404' path='*' status={404} />
+  </Route>
 );

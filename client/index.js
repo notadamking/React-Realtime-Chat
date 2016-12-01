@@ -1,17 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ApolloClient, { createNetworkInterface, addTypename } from 'apollo-client';
-import { AppContainer } from 'react-hot-loader';
+import { Router, browserHistory } from 'react-router';
 import { ApolloProvider } from 'react-apollo';
+import { AppContainer } from 'react-hot-loader';
 import { Client } from 'subscriptions-transport-ws';
 import 'isomorphic-fetch';
 
 import config from '../config';
 import addGraphQLSubscriptions from './utils/subscriptions';
-import configureStore from './configureStore';
+import configureStore from './redux/configureStore';
 import routes from './routes';
 
-const wsClient = new Client('ws://localhost:3030');
+const wsClient = new Client(`ws://${config.server.host}:${config.wsPort}`);
 
 const networkInterface = createNetworkInterface({
   uri: config.graphqlEndpoint,
@@ -20,6 +21,16 @@ const networkInterface = createNetworkInterface({
   },
   transportBatching: true,
 });
+
+networkInterface.use([{
+  applyMiddleware(req, next) {
+    if (!req.options.headers) {
+      req.options.headers = {};
+    }
+    req.options.headers.authorization = localStorage.getItem(config.authTokenName);
+    next();
+  }
+}]);
 
 const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
   networkInterface,
@@ -33,6 +44,7 @@ const client = new ApolloClient({
     if (result.id && result.__typename) {
       return result.__typename + result.id;
     }
+    console.log('no data id from object could be found', result);
     return null;
   },
   // shouldBatch: true,
@@ -43,26 +55,24 @@ const client = new ApolloClient({
 const initialState = window.__INITIAL_STATE__;
 const store = configureStore({ initialState, client });
 
-ReactDOM.render(
-  <AppContainer>
-    <ApolloProvider client={client} store={store}>
-      {routes}
-    </ApolloProvider>
-  </AppContainer>,
-  document.getElementById('root')
-);
+function render() {
+  ReactDOM.render(
+    <AppContainer>
+      <ApolloProvider client={client} store={store}>
+        <Router history={browserHistory}>
+          {routes}
+        </Router>
+      </ApolloProvider>
+    </AppContainer>,
+    document.getElementById('root')
+  );
+}
+
+render();
 
 if (module.hot) {
   module.hot.accept('./routes', () => {
-    const nextRoutes = require('./routes').default; // eslint-disable-line global-require
-
-    ReactDOM.render(
-      <AppContainer>
-        <ApolloProvider client={client} store={store}>
-          {nextRoutes}
-        </ApolloProvider>
-      </AppContainer>,
-      document.getElementById('root')
-    );
+    const newRoutes = require('./routes').default; // eslint-disable-line
+    render(); // although it doesn't seem like it, the routes are actually being updated
   });
 }
