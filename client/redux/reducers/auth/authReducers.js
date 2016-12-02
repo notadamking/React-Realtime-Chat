@@ -5,7 +5,7 @@ import {
   SET_SIGNUP_MODAL_OPEN,
   SET_LOGIN_SUBMIT_ERROR,
   SET_SIGNUP_SUBMIT_ERROR,
-  CLEAR_SUBMIT_ERRORS,
+  CLEAR_AUTH_SUBMIT_ERRORS,
 } from '../../actions/types';
 
 const initialState = {
@@ -57,7 +57,7 @@ export default (state = initialState, action) => {
         signupSubmitError: action.error
       };
 
-    case CLEAR_SUBMIT_ERRORS:
+    case CLEAR_AUTH_SUBMIT_ERRORS:
       return {
         ...state,
         loginSubmitError: null,

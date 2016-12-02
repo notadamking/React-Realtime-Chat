@@ -4,7 +4,7 @@ import { SubscriptionServer } from 'subscriptions-transport-ws';
 import bodyParser from 'body-parser';
 
 import config from '../../config';
-import { User } from './models';
+import { User, Comment } from './models';
 import { subscriptionManager } from './subscriptions';
 import schema from './schema';
 
@@ -16,6 +16,7 @@ export default (app) => {
       context: {
         user: userWithToken && userWithToken.user,
         userWithToken,
+        Comment,
         User,
       }
     };

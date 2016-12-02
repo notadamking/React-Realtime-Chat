@@ -1,23 +1,7 @@
-import {
-  setLoggedIn,
-  setLoggedOut,
-  setLoginModalOpen,
-  setSignupModalOpen,
-  setLoginSubmitError,
-  setSignupSubmitError,
-  clearSubmitErrors,
-  handleLoginSuccess,
-  handleSignupSuccess,
-} from './auth/authActions';
+import * as auth from './auth';
+import * as comments from './comments';
 
 export {
-  setLoggedIn,
-  setLoggedOut,
-  setLoginModalOpen,
-  setSignupModalOpen,
-  setLoginSubmitError,
-  setSignupSubmitError,
-  clearSubmitErrors,
-  handleLoginSuccess,
-  handleSignupSuccess,
+  auth,
+  comments,
 };

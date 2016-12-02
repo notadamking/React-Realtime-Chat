@@ -4,7 +4,7 @@ import { graphql } from 'react-apollo';
 import { Field, reduxForm } from 'redux-form';
 import { Form, Button, Message } from 'semantic-ui-react';
 
-import { setLoginSubmitError, handleLoginSuccess } from '../../../redux/actions';
+import { setLoginSubmitError, handleLoginSuccess } from '../../../redux/actions/auth';
 import { FormField } from '../../../components';
 import loginMutation from './login.graphql';
 

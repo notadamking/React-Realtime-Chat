@@ -55,6 +55,7 @@ export default (req, res) => {
       const data = client.store.getState().apollo.data;
       const assets = webpackIsomorphicTools.assets();
       const initialState = store.getState();
+      initialState.apollo.queries = {};
 
       res.status(200);
 

@@ -6,7 +6,7 @@ import {
   SET_SIGNUP_MODAL_OPEN,
   SET_LOGIN_SUBMIT_ERROR,
   SET_SIGNUP_SUBMIT_ERROR,
-  CLEAR_SUBMIT_ERRORS,
+  CLEAR_AUTH_SUBMIT_ERRORS,
 } from '../types';
 
 export const setLoggedIn = (user) => ({
@@ -39,7 +39,7 @@ export const setSignupSubmitError = (error) => ({
 });
 
 export const clearSubmitErrors = () => ({
-  type: CLEAR_SUBMIT_ERRORS
+  type: CLEAR_AUTH_SUBMIT_ERRORS
 });
 
 export const handleLoginSuccess = (user) => {
@@ -49,7 +49,6 @@ export const handleLoginSuccess = (user) => {
   return (dispatch) => {
     dispatch(setLoggedIn(user));
     dispatch(setLoginModalOpen(false));
-    dispatch(clearSubmitErrors());
   };
 };
 
@@ -60,6 +59,5 @@ export const handleSignupSuccess = (user) => {
   return (dispatch) => {
     dispatch(setLoggedIn(user));
     dispatch(setSignupModalOpen(false));
-    dispatch(clearSubmitErrors());
   };
 };

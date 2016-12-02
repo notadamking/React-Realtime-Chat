@@ -4,13 +4,13 @@ import { graphql } from 'react-apollo';
 import Helmet from 'react-helmet';
 
 import config from '../../../../config';
-import { setLoggedIn, setLoggedOut } from '../../../redux/actions';
+import { setLoggedIn, setLoggedOut } from '../../../redux/actions/auth';
 import { Navbar } from '../../../containers';
 import getCurrentUser from './currentUser.graphql';
 import styles from './MainLayout.css';
 
 @connect()
-@graphql(getCurrentUser, { skip: __SERVER__, options: { forceFetch: __CLIENT__ } })
+@graphql(getCurrentUser, { options: { ssr: false } })
 export default class MainLayout extends Component {
   componentWillReceiveProps({ data: { currentUser }, user }) {
     const { dispatch } = this.props;

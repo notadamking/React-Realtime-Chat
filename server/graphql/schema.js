@@ -1,6 +1,7 @@
 import { makeExecutableSchema } from 'graphql-tools';
+
 import { EmailScalar, UrlScalar, DateScalar } from './types';
-import { UserSchema } from './schemas';
+import { UserSchema, CommentSchema } from './schemas';
 
 const typeDefs = [`
   scalar Email
@@ -8,13 +9,16 @@ const typeDefs = [`
   scalar Date
 
   ${UserSchema.types}
+  ${CommentSchema.types()}
 
   type RootQuery {
     ${UserSchema.queries}
+    ${CommentSchema.queries}
   }
 
   type RootMutation {
     ${UserSchema.mutations}
+    ${CommentSchema.mutations}
   }
 
   schema {
@@ -29,9 +33,11 @@ const resolvers = {
   Url: UrlScalar,
   RootQuery: {
     ...UserSchema.resolvers.Query,
+    ...CommentSchema.resolvers.Query,
   },
   RootMutation: {
     ...UserSchema.resolvers.Mutation,
+    ...CommentSchema.resolvers.Mutation,
   }
 };
 

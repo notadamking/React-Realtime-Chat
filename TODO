@@ -1,13 +1,21 @@
+Bugs:
+  ☐ Fix: when a comment is posted, load more breaks
+
+Components/Containers:
+  ☐ Separate Forms into presentational/functional components
+
 Redux:
   ✔ redux-thunk @done(2016-12-01 00:31) @project(Redux)
   ☐ redux-form
-    ☐ sync/async validation
+    ✔ sync validation @done(2016-12-01 14:12) @project(Redux)
+    ☐ async validation (if a necessary use is found)
 
 React-Apollo:
   ✔ Current user  @done(2016-12-01 00:31) @project(React-Apollo)
   ✔ login / logout @done(2016-12-01 00:49) @project(React-Apollo)
   ✔ signup @done(2016-12-01 01:13) @project(React-Apollo)
-  ☐ optimistic ui/update queries
+  ✔ fetch more @done(2016-12-02 00:21) @project(React-Apollo)
+  ✔ optimistic ui/update queries @done(2016-12-02 01:22) @project(React-Apollo)
   ☐ Subscription example (live chat?)
 
 Semantic Styling:

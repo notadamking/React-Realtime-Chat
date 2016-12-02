@@ -1,16 +1,17 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import Helmet from 'react-helmet';
+import { Container, Header } from 'semantic-ui-react';
 
-const Home = ({ children }) => (
-  <div>
+import { CommentList } from '../../containers';
+
+const Home = () => (
+  <Container>
     <Helmet title='Home' />
-    <h1>Welcome home</h1>
-    {children}
-  </div>
+    <Header as='h1' textAlign='center'>
+      Welcome home!
+    </Header>
+    <CommentList />
+  </Container>
 );
-
-Home.propTypes = {
-  children: PropTypes.object,
-};
 
 export default Home;

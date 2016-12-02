@@ -4,7 +4,7 @@ import { withApollo } from 'react-apollo';
 import { Menu } from 'semantic-ui-react';
 
 import config from '../../../../config';
-import { setLoginModalOpen, setLoggedOut, setSignupModalOpen } from '../../../redux/actions';
+import { setLoggedOut, setLoginModalOpen, setSignupModalOpen } from '../../../redux/actions/auth';
 import { LoginModal, SignupModal } from '../../../components';
 
 @withApollo

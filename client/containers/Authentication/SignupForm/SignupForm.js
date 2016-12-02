@@ -4,26 +4,29 @@ import { graphql } from 'react-apollo';
 import { Field, reduxForm } from 'redux-form';
 import { Form, Button, Message } from 'semantic-ui-react';
 
-import { setSignupSubmitError, handleSignupSuccess } from '../../../redux/actions';
+import { clearSubmitErrors, handleSignupSuccess, setSignupSubmitError } from '../../../redux/actions/auth';
 import { FormField } from '../../../components';
-import signupMutation from './signup.graphql';
+import createUserMutation from './createUser.graphql';
+import validate from './validate';
 
 @connect(
   (state) => ({
     submitError: (state.auth && state.auth.signupSubmitError) || null,
   })
 )
-@graphql(signupMutation, {
+@graphql(createUserMutation, {
   props: ({ mutate }) => ({
     submitSignup: ({ email, password }) => mutate({ variables: { email, password } }),
   }),
 })
 @reduxForm({
-  form: 'signup'
+  form: 'signup',
+  validate
 })
 export default class SignupForm extends Component {
   async onSubmit({ email, password }) {
     const { dispatch, submitSignup } = this.props;
+    dispatch(clearSubmitErrors());
     const { data: { createUser: { error, user } } } = await submitSignup({ email, password });
     if (user) {
       dispatch(handleSignupSuccess(user));
@@ -58,7 +61,7 @@ export default class SignupForm extends Component {
             component={FormField}
             icon='lock'
             label='Repeat password'
-            name='repeat_password'
+            name='repeatPassword'
             placeholder='repeat password'
             type='password'
           />
