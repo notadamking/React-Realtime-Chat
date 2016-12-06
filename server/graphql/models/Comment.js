@@ -1,3 +1,4 @@
+import { pubsub } from '../utils/subscriptions';
 import { Comment } from './bookshelf';
 
 const normalizeComment = (aComment) => {
@@ -47,6 +48,7 @@ const CommentModel = {
       .where({ id: newComment.id })
       .fetch({ withRelated: ['author'] });
 
+    pubsub.publish('commentAdded', normalizeComment(comment));
     return normalizeErrableComment(comment);
   },
 

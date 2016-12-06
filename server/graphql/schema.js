@@ -11,19 +11,24 @@ const typeDefs = [`
   ${UserSchema.types}
   ${CommentSchema.types()}
 
-  type RootQuery {
+  type Query {
     ${UserSchema.queries}
     ${CommentSchema.queries}
   }
 
-  type RootMutation {
+  type Mutation {
     ${UserSchema.mutations}
     ${CommentSchema.mutations}
   }
 
+  type Subscription {
+    ${CommentSchema.subscriptions}
+  }
+
   schema {
-    query: RootQuery
-    mutation: RootMutation
+    query: Query
+    mutation: Mutation
+    subscription: Subscription
   }
 `];
 
@@ -31,14 +36,17 @@ const resolvers = {
   Email: EmailScalar,
   Date: DateScalar,
   Url: UrlScalar,
-  RootQuery: {
+  Query: {
     ...UserSchema.resolvers.Query,
     ...CommentSchema.resolvers.Query,
   },
-  RootMutation: {
+  Mutation: {
     ...UserSchema.resolvers.Mutation,
     ...CommentSchema.resolvers.Mutation,
-  }
+  },
+  Subscription: {
+    ...CommentSchema.resolvers.Subscription,
+  },
 };
 
 const schema = makeExecutableSchema({

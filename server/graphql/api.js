@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 
 import config from '../../config';
 import { User, Comment } from './models';
-import { subscriptionManager } from './subscriptions';
+import { subscriptionManager } from './utils/subscriptions';
 import schema from './schema';
 
 export default (app) => {
@@ -37,10 +37,5 @@ export default (app) => {
   ));
 
   // eslint-disable-next-line
-  new SubscriptionServer(
-    {
-      subscriptionManager
-    },
-    websocketServer
-  );
+  new SubscriptionServer({ subscriptionManager }, websocketServer);
 };

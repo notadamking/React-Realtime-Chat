@@ -9,7 +9,13 @@ const types = `
     author: User!
   }
 
-  type ErrableComment {
+  type NewComment {
+    id: ID
+    comment: Comment
+    error: String
+  }
+
+  type DeletedComment {
     id: ID
     comment: Comment
     error: String
@@ -22,8 +28,12 @@ const queries = `
 `;
 
 const mutations = `
-  postComment(content: String!): ErrableComment
-  removeComment(id: ID!): ErrableComment
+  postComment(content: String!): NewComment
+  removeComment(id: ID!): DeletedComment
+`;
+
+const subscriptions = `
+  commentAdded: Comment
 `;
 
 const resolvers = {
@@ -41,11 +51,15 @@ const resolvers = {
       return await context.Comment.removeComment({ id, user: context.user });
     }
   },
+  Subscription: {
+    commentAdded: (comment) => comment,
+  },
 };
 
 export default {
   types: () => [types, UserSchema.types],
   queries,
   mutations,
-  resolvers
+  subscriptions,
+  resolvers,
 };

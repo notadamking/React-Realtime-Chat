@@ -1,17 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
-import { Button, Form, Message } from 'semantic-ui-react';
+import { reduxForm } from 'redux-form';
+import { Header } from 'semantic-ui-react';
 
-import { clearSubmitErrors, setCommentSubmitError } from '../../../redux/actions/comments';
-import { FormTextField } from '../../../components';
-import styles from './NewCommentForm.css';
+import { NewCommentForm } from '../../../components';
 import postCommentMutation from './postComment.graphql';
+
+function isDuplicateComment(newComment, existingComments) {
+  return newComment.id !== null && existingComments.some(comment => newComment.id === comment.id);
+}
 
 @connect(
   (state) => ({
-    submitError: (state.comments && state.comments.commentSubmitError) || null,
     user: (state.auth && state.auth.currentUser) || null,
   })
 )
@@ -22,13 +23,13 @@ import postCommentMutation from './postComment.graphql';
       optimisticResponse: {
         postComment: {
           __typename: 'NewComment',
-          id: 0,
+          id: '0',
           comment: {
             __typename: 'Comment',
-            id: 0,
+            id: '0',
             author: {
               __typename: 'User',
-              id: 0,
+              id: '0',
               email: ownProps.user && ownProps.user.email,
             },
             content,
@@ -40,9 +41,15 @@ import postCommentMutation from './postComment.graphql';
       },
       updateQueries: {
         CommentList: (prev, { mutationResult }) => {
+          const newComment = mutationResult.data.postComment.comment;
+
+          if (isDuplicateComment(newComment, prev.comments)) {
+            return prev;
+          }
+
           return {
             comments: [
-              mutationResult.data.postComment.comment,
+              newComment,
               ...prev.comments
             ]
           };
@@ -54,54 +61,49 @@ import postCommentMutation from './postComment.graphql';
 @reduxForm({
   form: 'postComment'
 })
-export default class NewCommentForm extends Component {
+export default class NewCommentFormContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      submitError: null,
+    };
+  }
+
   async onSubmit({ content }) {
-    const { dispatch, postComment, reset } = this.props;
-    dispatch(clearSubmitErrors());
+    this.setState({ submitError: null });
+
+    const { postComment, reset } = this.props;
     const { data: { postComment: { error, comment } } } = await postComment({ content });
+
     if (comment) {
       reset();
     } else if (error) {
-      dispatch(setCommentSubmitError(error));
+      this.setState({ submitError: error });
     }
   }
 
   render() {
-    const { handleSubmit, pristine, submitError, submitting } = this.props;
-    return (
-      <div>
-        <Message content={submitError} error header='Comment Failed!' hidden={!submitError} />
-        <Form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-          <div className={styles.commentBox}>
-            <Field
-              component={FormTextField}
-              label='Leave a comment'
-              name='content'
-              rows={4}
-            />
-            <Button
-              className={styles.submitCommentButton}
-              color='green'
-              content='Submit'
-              disabled={pristine || submitting}
-              inverted
-              size='small'
-              type='submit'
-            />
-          </div>
-        </Form>
-      </div>
+    const { submitError } = this.state;
+    const { handleSubmit, pristine, submitting, user } = this.props;
+    return user ? (
+      <NewCommentForm
+        pristine={pristine}
+        submitError={submitError}
+        submitting={submitting}
+        onSubmit={handleSubmit(this.onSubmit.bind(this))}
+      />
+    ) : (
+      <Header as='h4' content='Login to leave a comment.' />
     );
   }
 }
 
-NewCommentForm.propTypes = {
-  dispatch: PropTypes.func,
+NewCommentFormContainer.propTypes = {
   handleSubmit: PropTypes.func,
   postComment: PropTypes.func,
   pristine: PropTypes.bool,
   reset: PropTypes.func,
-  submitError: PropTypes.string,
   submitting: PropTypes.bool,
   user: PropTypes.object,
 };

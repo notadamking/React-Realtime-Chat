@@ -7,7 +7,7 @@ import CommentList from './Comments/CommentList';
 import NewCommentForm from './Comments/NewCommentForm';
 
 /* Layout */
-import Navbar from './Layout/Navbar';
+import Navbar from './Navigation/Navbar';
 
 export {
   CommentList,

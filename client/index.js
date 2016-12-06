@@ -12,8 +12,6 @@ import addGraphQLSubscriptions from './utils/subscriptions';
 import configureStore from './redux/configureStore';
 import routes from './routes';
 
-const wsClient = new Client(`ws://${config.server.host}:${config.wsPort}`);
-
 const networkInterface = createNetworkInterface({
   uri: config.graphqlEndpoint,
   opts: {
@@ -32,10 +30,8 @@ networkInterface.use([{
   }
 }]);
 
-const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
-  networkInterface,
-  wsClient,
-);
+const wsClient = new Client(`ws://${config.server.host}:${config.wsPort}`);
+const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(networkInterface, wsClient);
 
 const client = new ApolloClient({
   networkInterface: networkInterfaceWithSubscriptions,
@@ -47,7 +43,7 @@ const client = new ApolloClient({
     // console.log('no data id from object could be found', result);
     return null;
   },
-  shouldBatch: true,
+  // shouldBatch: true,
   initialState: window.__APOLLO_STATE__,
   ssrForceFetchDelay: 100,
 });

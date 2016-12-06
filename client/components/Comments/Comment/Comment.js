@@ -1,10 +1,12 @@
 import React, { PropTypes } from 'react';
 import { Comment } from 'semantic-ui-react';
+import cx from 'classnames';
 
 import { RelativeTime } from '../../';
+import styles from './Comment.css';
 
 const CommentComponent = ({ comment }) => (
-  <Comment>
+  <Comment className={cx({ [styles.newComment]: comment.id !== '0' })}>
     <Comment.Avatar src={`https://api.adorable.io/avatars/64/${comment.author.email}.png`} />
     <Comment.Content>
       <Comment.Author as='a'>{comment.author.email}</Comment.Author>

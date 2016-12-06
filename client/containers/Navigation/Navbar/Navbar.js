@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withApollo } from 'react-apollo';
-import { Menu } from 'semantic-ui-react';
 
 import config from '../../../../config';
 import { setLoggedOut, setLoginModalOpen, setSignupModalOpen } from '../../../redux/actions/auth';
-import { LoginModal, SignupModal } from '../../../components';
+import { Navbar } from '../../../components';
 
 @withApollo
 @connect(
@@ -15,7 +14,7 @@ import { LoginModal, SignupModal } from '../../../components';
     signupModalOpen: (state.auth && state.auth.signupModalOpen) || false,
   })
 )
-export default class Navbar extends Component {
+export default class NavbarContainer extends Component {
   handleLoginClick() {
     const { dispatch } = this.props;
     dispatch(setSignupModalOpen(false));
@@ -46,36 +45,20 @@ export default class Navbar extends Component {
   render() {
     const { loginModalOpen, signupModalOpen, user } = this.props;
     return (
-      <Menu secondary>
-        {user ? (
-          <Menu.Menu position='right'>
-            <Menu.Item>
-              Logged in as {user.email}
-            </Menu.Item>
-            <Menu.Item name='logout' onClick={this.handleLogoutClick.bind(this)} />
-          </Menu.Menu>
-        ) : (
-          <Menu.Menu position='right'>
-            <Menu.Item name='sign up' onClick={this.handleSignupClick.bind(this)} />
-            <Menu.Item name='login' onClick={this.handleLoginClick.bind(this)} />
-          </Menu.Menu>
-        )}
-        <LoginModal
-          open={loginModalOpen}
-          onClose={this.handleCloseModals.bind(this)}
-          onShowSignupModal={this.handleSignupClick.bind(this)}
-        />
-        <SignupModal
-          open={signupModalOpen}
-          onClose={this.handleCloseModals.bind(this)}
-          onShowLoginModal={this.handleLoginClick.bind(this)}
-        />
-      </Menu>
+      <Navbar
+        loginModalOpen={loginModalOpen}
+        signupModalOpen={signupModalOpen}
+        user={user}
+        onCloseModal={this.handleCloseModals.bind(this)}
+        onLoginClicked={this.handleLoginClick.bind(this)}
+        onLogoutClicked={this.handleLogoutClick.bind(this)}
+        onSignupClicked={this.handleSignupClick.bind(this)}
+      />
     );
   }
 }
 
-Navbar.propTypes = {
+NavbarContainer.propTypes = {
   client: PropTypes.object,
   dispatch: PropTypes.func,
   loginModalOpen: PropTypes.bool,

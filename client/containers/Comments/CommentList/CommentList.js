@@ -1,77 +1,83 @@
 import React, { Component, PropTypes } from 'react';
 import { graphql } from 'react-apollo';
-import { connect } from 'react-redux';
-import { Comment as UIComment } from 'semantic-ui-react';
 
-import { NewCommentForm } from '../../';
-import { Comment } from '../../../components';
-import commentListQuery from './commentList.graphql';
-import styles from './CommentList.css';
+import { CommentList } from '../../../components';
+import { commentListQuery, commentsSubscription } from './commentList.graphql';
 
-const COMMENTS_PER_FETCH = 10;
+const COMMENTS_PER_FETCH = 5;
 
-@connect(
-  (state) => ({
-    user: (state.auth && state.auth.currentUser) || null,
-  })
-)
 @graphql(commentListQuery, {
   options: {
     variables: {
       offset: 0,
       limit: COMMENTS_PER_FETCH,
-    },
-  },
-  props: ({ data: { comments, fetchMore } }) => ({
-    data: {
-      comments,
-      loadMoreComments: () => {
-        return fetchMore({
-          variables: {
-            offset: comments.length
-          },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            // previousResult is {} after comment posted ?
-            if (!fetchMoreResult.data) {
-              return previousResult;
-            }
-            return {
-              comments: [
-                ...previousResult.comments,
-                ...fetchMoreResult.data.comments
-              ],
-            };
-          },
-        });
-      }
     }
+  },
+  props: ({ data: { comments, fetchMore, loading, subscribeToMore } }) => ({
+    comments,
+    loading,
+    loadMoreComments: () => {
+      return fetchMore({
+        variables: {
+          offset: comments.length,
+          limit: COMMENTS_PER_FETCH,
+        },
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          const newComments = fetchMoreResult.data.comments;
+
+          if (!previousResult.comments) {
+            return newComments;
+          }
+
+          return {
+            comments: [
+              ...previousResult.comments,
+              ...newComments,
+            ],
+          };
+        },
+      });
+    },
+    subscribeToMore,
   }),
 })
-export default class CommentList extends Component {
+export default class CommentListContainer extends Component {
+  componentWillReceiveProps(nextProps) {
+    if (!this.subscription && !nextProps.loading) {
+      this.subscription = nextProps.subscribeToMore({
+        document: commentsSubscription,
+        updateQuery: (previousResult, { subscriptionData }) => {
+          const newComment = subscriptionData.data.commentAdded;
+
+          if (!previousResult.comments) {
+            return newComment;
+          }
+
+          return {
+            comments: [
+              newComment,
+              ...previousResult.comments,
+            ]
+          };
+        }
+      });
+    }
+  }
+
   render() {
-    const { data: { comments, loadMoreComments }, user } = this.props;
+    const { comments, loadMoreComments } = this.props;
     return (
-      <UIComment.Group className={styles.commentList}>
-        {user && <NewCommentForm />}
-        {comments && comments.map((comment) => (
-          <Comment
-            comment={comment}
-            key={comment.id}
-          />
-        ))}
-        <a className={styles.loadMoreButton} onClick={loadMoreComments}>
-          load more...
-        </a>
-      </UIComment.Group>
+      <CommentList
+        comments={comments}
+        onLoadMoreComments={loadMoreComments}
+      />
     );
   }
 }
 
-CommentList.propTypes = {
-  data: PropTypes.shape({
-    loading: PropTypes.bool,
-    comments: PropTypes.object,
-    loadMoreComments: PropTypes.func,
-  }),
-  user: PropTypes.object,
+CommentListContainer.propTypes = {
+  comments: PropTypes.object,
+  loadMoreComments: PropTypes.func,
+  loading: PropTypes.bool,
+  subscribeToMore: PropTypes.func,
 };

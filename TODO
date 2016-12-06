@@ -1,8 +1,8 @@
 Bugs:
-  ☐ Fix: when a comment is posted, load more breaks
+  ✔ Fix: when a comment is posted, load more breaks @done(2016-12-02 19:18) @project(Bugs)
 
 Components/Containers:
-  ☐ Separate Forms into presentational/functional components
+  ✔ Separate Forms into presentational/functional components @done(2016-12-05 20:28) @project(Components/Containers)
 
 Redux:
   ✔ redux-thunk @done(2016-12-01 00:31) @project(Redux)
@@ -16,7 +16,7 @@ React-Apollo:
   ✔ signup @done(2016-12-01 01:13) @project(React-Apollo)
   ✔ fetch more @done(2016-12-02 00:21) @project(React-Apollo)
   ✔ optimistic ui/update queries @done(2016-12-02 01:22) @project(React-Apollo)
-  ☐ Subscription example (live chat?)
+  ✔ Subscription example  @done(2016-12-05 23:09) @project(React-Apollo)
 
 Semantic Styling:
   ✔ setup semantic-ui-react @done(2016-12-01 00:31) @project(Semantic Styling)
