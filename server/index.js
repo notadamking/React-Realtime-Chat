@@ -19,6 +19,8 @@ requireHook({
   ],
 });
 
+require('./server');
+
 const basePath = path.resolve(__dirname, '../client');
 global.webpackIsomorphicTools = new WebpackIsomorphicTools(toolsConfig)
   .server(basePath, () => {
