@@ -2,12 +2,12 @@
   "name": "react-redux-apollo-starter",
   "version": "0.0.1",
   "scripts": {
-    "build-prod": "NODE_ENV=production webpack -c --progress --config webpack/config.babel.js",
-    "clean-build": "rimraf build/*",
-    "heroku-start": "concurrently --kill-others \"npm run start-build\" \"npm run start\"",
+    "build": "NODE_ENV=production webpack -c --progress --config webpack/config.babel.js",
     "lint": "eslint --ignore-path .gitignore .",
+    "postinstall": "npm run build",
+    "prebuild": "rimraf build/*",
+    "prestart": "npm run build",
     "start": "NODE_ENV=production node server",
-    "start-build": "npm run clean-build && npm run build-prod",
     "start-dev": "NODE_ENV=development nodemon server -w server -w client",
     "watch-client": "node webpack/webpack-dev-server.js",
     "dev": "concurrently --kill-others \"npm run watch-client\" \"npm run start-dev\""
