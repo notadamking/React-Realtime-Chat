@@ -16,7 +16,7 @@ module.exports = {
     title: 'React Redux Apollo Starter'
   },
   server: {
-    host: process.env.HOST || 'localhost',
+    host: 'localhost',
     port: isDevelopment ? 3000 : productionPort,
   },
   secretKey: 'd98d1690-7f39-4676-830d-7cf8720b1475',

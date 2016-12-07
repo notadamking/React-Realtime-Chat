@@ -30,7 +30,7 @@ networkInterface.use([{
   }
 }]);
 
-const wsClient = new Client(`ws://${config.server.host}:${config.server.port}`);
+const wsClient = new Client(`ws://${config.server.host}`);
 const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(networkInterface, wsClient);
 
 const client = new ApolloClient({
