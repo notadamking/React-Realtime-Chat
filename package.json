@@ -5,7 +5,7 @@
     "build": "NODE_ENV=production webpack -c --progress --config webpack/config.babel.js",
     "lint": "eslint --ignore-path .gitignore .",
     "prebuild": "rimraf build/*",
-    "prestart": "npm run build",
+    "poststart": "npm run build",
     "start": "NODE_ENV=production node server",
     "start-dev": "NODE_ENV=development nodemon server -w server -w client",
     "watch-client": "node webpack/webpack-dev-server.js",
