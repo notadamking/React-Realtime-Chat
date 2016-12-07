@@ -2,6 +2,12 @@
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
+/* Heroku binds a port and database url to process.env, we are
+*  required to use them when using Heroku.
+*/
+const productionPort = process.env.PORT || 8080;
+const databaseUrl = process.env.DATABASE_URL || 'postgres://postgres:password@localhost:5432/boilerplate';
+
 module.exports = {
   env: process.env.NODE_ENV || 'development',
   meta: {
@@ -9,12 +15,12 @@ module.exports = {
   },
   server: {
     host: 'localhost',
-    port: isDevelopment ? 3000 : 8080,
+    port: isDevelopment ? 3000 : productionPort,
   },
   secretKey: 'd98d1690-7f39-4676-830d-7cf8720b1475',
   dbConfig: {
     client: 'pg',
-    connection: 'postgres://postgres:password@localhost:5432/boilerplate',
+    connection: databaseUrl,
     searchPath: 'knex,public',
   },
   devServerPort: 3001,
