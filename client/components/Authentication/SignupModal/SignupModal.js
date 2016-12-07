@@ -11,7 +11,7 @@ const SignupModal = ({ open, onClose, onShowLoginModal }) => (
       <SignupForm />
     </Modal.Content>
     <a className={styles.loginLink} onClick={onShowLoginModal} >
-      Need an account?&nbsp; Sign up, it's free!
+      Already have an account?&nbsp; Log in here!
     </a>
   </Modal>
 );

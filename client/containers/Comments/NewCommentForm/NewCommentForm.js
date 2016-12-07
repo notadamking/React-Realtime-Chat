@@ -75,14 +75,15 @@ export default class NewCommentFormContainer extends Component {
   }
 
   async onSubmit({ content }) {
-    this.setState({ submitError: null });
-
     const { postComment, reset } = this.props;
-    const { data: { postComment: { error, comment } } } = await postComment({ content });
-
-    if (comment) {
+    if (content) {
       reset();
-    } else if (error) {
+      this.setState({ submitError: null });
+    }
+
+    const { data: { postComment: { error } } } = await postComment({ content });
+
+    if (error) {
       this.setState({ submitError: error });
     }
   }

@@ -26,9 +26,8 @@ module.exports = {
     searchPath: 'knex,public',
   },
   devServerPort: 3001,
-  wsPort: 8090,
   assetTransferPort: 3003,
   authTokenName: 'token',
-  graphqlEndpoint: '/graphql',
+  graphqlEndpoint: '/api/graphql',
   isDevelopment,
 };
