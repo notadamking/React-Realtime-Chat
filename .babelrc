@@ -10,14 +10,4 @@
     "add-module-exports",
     "transform-decorators-legacy",
   ],
-  "env": {
-     "production": {
-       "plugins": [
-         "transform-react-constant-elements",
-         "transform-react-inline-elements",
-         "transform-react-pure-class-to-function",
-         "transform-react-remove-prop-types"
-       ]
-     }
-   }
 }

@@ -48,7 +48,7 @@ const CommentModel = {
       .where({ id: newComment.id })
       .fetch({ withRelated: ['author'] });
 
-    pubsub.publish('commentAdded', normalizeComment(comment));
+    pubsub.publish('newCommentsChannel', normalizeComment(comment));
     return normalizeErrableComment(comment);
   },
 

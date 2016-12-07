@@ -24,7 +24,3 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(toolsConfig)
   .server(basePath, () => {
     require('./server'); // eslint-disable-line global-require
   });
-
-process.on('uncaughtException', (err) => {
-  console.log('Uncaught exception: ', err);
-});

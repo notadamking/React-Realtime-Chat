@@ -43,7 +43,7 @@ const client = new ApolloClient({
     // console.log('no data id from object could be found', result);
     return null;
   },
-  // shouldBatch: true,
+  shouldBatch: true,
   initialState: window.__APOLLO_STATE__,
   ssrForceFetchDelay: 100,
 });

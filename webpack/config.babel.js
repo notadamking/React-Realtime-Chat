@@ -10,7 +10,6 @@ const config = require('../config');
 const toolsConfig = require('./webpack-isomorphic-tools');
 
 const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(toolsConfig).development();
-
 const isProduction = config.env !== 'development';
 
 module.exports = {
@@ -26,8 +25,8 @@ module.exports = {
   output: {
     filename: '[name]-[hash].js',
     chunkFilename: '[name]-[chunkhash].js',
-    path: path.resolve(__dirname, './build'),
-    publicPath: `http://${config.server.host}:${config.devServerPort}/`,
+    path: path.resolve(__dirname, '../build'),
+    publicPath: isProduction ? '/' : `http://${config.server.host}:${config.devServerPort}/`,
   },
   module: {
     loaders: [
@@ -46,10 +45,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel',
-        query: {
-          cacheDirectory: !isProduction
-        }
+        loader: 'babel'
       },
       { test: /\.json$/, loader: 'json-loader' },
       { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
@@ -68,7 +64,10 @@ module.exports = {
       __DEVELOPMENT__: !isProduction,
     }),
     ...isProduction ? [
-      new ExtractTextPlugin('[name]-[chunkhash].css', { allChunks: true }),
+      new ExtractTextPlugin('styles/main.css', {
+        allChunks: true,
+        publicPath: '/styles/',
+      }),
       new webpack.optimize.DedupePlugin(),
       new webpack.optimize.OccurenceOrderPlugin(),
       new webpack.optimize.UglifyJsPlugin({
@@ -89,8 +88,6 @@ module.exports = {
   postcss: [
     cssnext(),
   ],
-  bail: isProduction,
-  cache: !isProduction,
   stats: {
     children: false
   }

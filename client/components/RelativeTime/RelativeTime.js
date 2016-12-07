@@ -25,7 +25,11 @@ export default class RelativeTime extends Component {
     if (!this.state.timeFromNow) return null;
 
     const { text } = this.props;
-    return <time>{text}{this.state.timeFromNow}</time>;
+    return (
+      <time>
+        {text}{this.state.timeFromNow}
+      </time>
+    );
   }
 }
 

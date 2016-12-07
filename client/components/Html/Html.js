@@ -7,12 +7,15 @@ const Html = ({ apolloState, assets, content, initialState }) => {
   return (
     <html>
       <head>
+        {head.title.toComponent()}
+        {head.meta.toComponent()}
+
         <meta charSet='UTF-8' />
         <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport' />
         <meta content='IE=edge,chrome=1' httpEquiv='X-UA-Compatible' />
         <link href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/semantic.min.css' rel='stylesheet' type='text/css' />
-        {head.meta.toComponent()}
-        {head.title.toComponent()}
+
+        <link href='/styles/main.css' rel='stylesheet' type='text/css' />
       </head>
       <body>
         <div dangerouslySetInnerHTML={{ __html: content }} id='root' />

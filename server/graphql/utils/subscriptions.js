@@ -7,7 +7,7 @@ const subscriptionManager = new SubscriptionManager({
   pubsub,
   setupFunctions: {
     commentAdded: () => ({
-      commentAdded: (comment) => comment.id !== '0',
+      newCommentsChannel: (comment) => comment.id !== '0',
     }),
   },
 });
