@@ -6,7 +6,9 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 *  required to use them when using Heroku.
 */
 const productionPort = process.env.PORT || 8080;
-const databaseUrl = process.env.DATABASE_URL || 'postgres://postgres:password@localhost:5432/boilerplate';
+const databaseUrl = isDevelopment
+  ? 'postgres://postgres:password@localhost:5432/boilerplate'
+  : `${process.env.DATABASE_URL}?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory`;
 
 module.exports = {
   env: process.env.NODE_ENV || 'development',
