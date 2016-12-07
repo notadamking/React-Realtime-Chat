@@ -1,9 +1,11 @@
 import path from 'path';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
 import express from 'express';
 import compression from 'compression';
 import morgan from 'morgan';
 
 import config from '../config';
+import { subscriptionManager } from './graphql/utils/subscriptions';
 import setupApi from './graphql/api';
 import reactMiddleware from './middleware/reactMiddleware';
 
@@ -17,6 +19,9 @@ setupApi(app);
 
 app.use(reactMiddleware);
 
-app.listen(config.server.port, () =>
+const server = app.listen(config.server.port, () =>
   console.info(`Server running in ${app.get('env')} on port ${config.server.port}`) // eslint-disable-line no-console
 );
+
+// eslint-disable-next-line
+new SubscriptionServer({ subscriptionManager }, server);
