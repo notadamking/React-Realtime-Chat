@@ -88,6 +88,8 @@
     "apollo",
     "webpack",
     "babel",
+    "graphql",
+    "subscriptions",
     "express",
     "hot",
     "reloading",
