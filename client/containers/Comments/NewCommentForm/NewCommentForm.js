@@ -43,6 +43,10 @@ function isDuplicateComment(newComment, existingComments) {
         CommentList: (prev, { mutationResult }) => {
           const newComment = mutationResult.data.postComment.comment;
 
+          if (!prev.comments) {
+            return { comments: [newComment] };
+          }
+
           if (isDuplicateComment(newComment, prev.comments)) {
             return prev;
           }

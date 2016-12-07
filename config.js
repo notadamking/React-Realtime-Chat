@@ -10,13 +10,15 @@ const databaseUrl = isDevelopment
   ? 'postgres://postgres:password@localhost:5432/boilerplate'
   : `${process.env.DATABASE_URL}?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory`;
 
+console.log(process.env);
+
 module.exports = {
   env: process.env.NODE_ENV || 'development',
   meta: {
     title: 'React Redux Apollo Starter'
   },
   server: {
-    host: 'localhost',
+    host: process.env.HOST || 'localhost',
     port: isDevelopment ? 3000 : productionPort,
   },
   secretKey: 'd98d1690-7f39-4676-830d-7cf8720b1475',
