@@ -4,7 +4,7 @@ const express = require('express');
 const webpack = require('webpack');
 
 const config = require('../config');
-const webpackConfig = require('./config.babel');
+const webpackConfig = require('./webpack.config');
 
 const devServer = express();
 const compiler = webpack(webpackConfig);

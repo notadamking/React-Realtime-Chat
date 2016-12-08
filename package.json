@@ -2,7 +2,7 @@
   "name": "react-redux-apollo-starter",
   "version": "0.0.1",
   "scripts": {
-    "build": "NODE_ENV=production webpack -c --progress --config webpack/config.babel.js",
+    "build": "NODE_ENV=production webpack -c --progress --config webpack/webpack.config.js",
     "lint": "eslint --ignore-path .gitignore .",
     "postinstall": "npm run build",
     "prebuild": "rimraf build/*",
