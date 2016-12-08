@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
-import { Comment } from 'semantic-ui-react';
+import { Comment, Icon } from 'semantic-ui-react';
 import cx from 'classnames';
 
 import { RelativeTime } from '../../';
 import styles from './Comment.css';
 
-const CommentComponent = ({ comment }) => (
+const CommentComponent = ({ comment, isRemovable, onDelete }) => (
   <Comment className={cx({ [styles.newComment]: comment.id !== '0' })}>
     <Comment.Avatar src={`https://api.adorable.io/avatars/64/${comment.author.email}.png`} />
     <Comment.Content>
@@ -15,7 +15,14 @@ const CommentComponent = ({ comment }) => (
       </Comment.Metadata>
       <Comment.Text>{comment.content}</Comment.Text>
       <Comment.Actions>
-        <Comment.Action>Reply</Comment.Action>
+        <Comment.Action>
+          <Icon name='reply' /> Reply
+        </Comment.Action>
+        {isRemovable && (
+          <Comment.Action onClick={onDelete}>
+            <Icon name='trash' /> Delete
+          </Comment.Action>
+        )}
       </Comment.Actions>
     </Comment.Content>
   </Comment>
@@ -23,6 +30,8 @@ const CommentComponent = ({ comment }) => (
 
 CommentComponent.propTypes = {
   comment: PropTypes.object.isRequired,
+  isRemovable: PropTypes.bool,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default CommentComponent;

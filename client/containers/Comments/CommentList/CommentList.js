@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { graphql } from 'react-apollo';
 
 import { CommentList } from '../../../components';
-import { commentListQuery, commentsSubscription } from './commentList.graphql';
+import { commentListQuery, commentFeedSubscription } from './commentList.graphql';
 
 const COMMENTS_PER_FETCH = 5;
 
@@ -45,20 +45,33 @@ export default class CommentListContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (!this.subscription && !nextProps.loading) {
       this.subscription = nextProps.subscribeToMore({
-        document: commentsSubscription,
+        document: commentFeedSubscription,
         updateQuery: (previousResult, { subscriptionData }) => {
-          const newComment = subscriptionData.data.commentAdded;
+          const update = subscriptionData.data.commentFeedUpdated;
+          if (update.action === 'add') {
+            const newComment = update.comment;
 
-          if (!previousResult.comments) {
-            return newComment;
+            if (!previousResult.comments) {
+              return newComment;
+            }
+
+            return {
+              comments: [
+                newComment,
+                ...previousResult.comments,
+              ]
+            };
+          } else if (update.action === 'delete') {
+            const deletedComment = update.comment;
+
+            const remainingComments = previousResult.comments.filter((comment) => {
+              return comment.id !== deletedComment.id;
+            });
+
+            return {
+              comments: remainingComments
+            };
           }
-
-          return {
-            comments: [
-              newComment,
-              ...previousResult.comments,
-            ]
-          };
         }
       });
     }

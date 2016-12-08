@@ -18,7 +18,7 @@ function isDuplicateComment(newComment, existingComments) {
 )
 @graphql(postCommentMutation, {
   props: ({ ownProps, mutate }) => ({
-    postComment: ({ content }) => mutate({
+    postComment: (content) => mutate({
       variables: { content },
       optimisticResponse: {
         postComment: {
@@ -40,21 +40,21 @@ function isDuplicateComment(newComment, existingComments) {
         }
       },
       updateQueries: {
-        CommentList: (prev, { mutationResult }) => {
+        CommentList: (previousResult, { mutationResult }) => {
           const newComment = mutationResult.data.postComment.comment;
 
-          if (!prev.comments) {
+          if (!previousResult.comments || previousResult.comments.length < 1) {
             return { comments: [newComment] };
           }
 
-          if (isDuplicateComment(newComment, prev.comments)) {
-            return prev;
+          if (isDuplicateComment(newComment, previousResult.comments)) {
+            return previousResult;
           }
 
           return {
             comments: [
               newComment,
-              ...prev.comments
+              ...previousResult.comments
             ]
           };
         }
@@ -81,7 +81,7 @@ export default class NewCommentFormContainer extends Component {
       this.setState({ submitError: null });
     }
 
-    const { data: { postComment: { error } } } = await postComment({ content });
+    const { data: { postComment: { error } } } = await postComment(content);
 
     if (error) {
       this.setState({ submitError: error });

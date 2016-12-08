@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Comment as UIComment } from 'semantic-ui-react';
 
-import { Comment } from '../../';
-import { NewCommentForm } from '../../../containers';
+import { Comment, NewCommentForm } from '../../../containers';
 import styles from './CommentList.css';
 
 const CommentList = ({ comments, refetchComments, onLoadMoreComments }) => (

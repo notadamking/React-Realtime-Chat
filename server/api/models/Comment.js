@@ -10,11 +10,19 @@ const normalizeComment = (aComment) => {
   };
 };
 
-const normalizeErrableComment = (newComment) => {
-  const comment = normalizeComment(newComment);
+const normalizeErrableComment = (errableComment) => {
+  const comment = normalizeComment(errableComment);
   return {
     id: comment.id,
     comment
+  };
+};
+
+const normalizeCommentFeedUpdate = (aComment, action) => {
+  const comment = normalizeComment(aComment);
+  return {
+    comment,
+    action
   };
 };
 
@@ -48,11 +56,11 @@ const CommentModel = {
       .where({ id: newComment.id })
       .fetch({ withRelated: ['author'] });
 
-    pubsub.publish('newCommentsChannel', normalizeComment(comment));
+    pubsub.publish('commentFeedChannel', normalizeCommentFeedUpdate(comment, 'add'));
     return normalizeErrableComment(comment);
   },
 
-  removeComment: async ({ id, user }) => {
+  deleteComment: async ({ id, user }) => {
     const comment = await Comment
       .where({ id })
       .fetch({ withRelated: ['author'] });
@@ -63,6 +71,7 @@ const CommentModel = {
     }
 
     comment.destroy();
+    pubsub.publish('commentFeedChannel', normalizeCommentFeedUpdate(comment, 'delete'));
     return deletedComment;
   },
 };

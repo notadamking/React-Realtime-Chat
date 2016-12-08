@@ -15,17 +15,20 @@ query CommentList($offset: Int, $limit: Int) {
 }
 `;
 
-export const commentsSubscription = gql`
-subscription NewCommentAdded {
-  commentAdded {
-    id
-    content
-    createdAt
-    updatedAt
-    author {
+export const commentFeedSubscription = gql`
+subscription CommentFeedUpdates {
+  commentFeedUpdated {
+    comment {
       id
-      email
+      content
+      createdAt
+      updatedAt
+      author {
+        id
+        email
+      }
     }
+    action
   }
 }
 `;

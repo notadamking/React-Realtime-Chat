@@ -20,6 +20,11 @@ const types = `
     comment: Comment
     error: String
   }
+
+  type CommentFeedUpdate {
+    comment: Comment!
+    action: String!
+  }
 `;
 
 const queries = `
@@ -29,11 +34,11 @@ const queries = `
 
 const mutations = `
   postComment(content: String!): NewComment
-  removeComment(id: ID!): DeletedComment
+  deleteComment(id: ID!): DeletedComment
 `;
 
 const subscriptions = `
-  commentAdded: Comment
+  commentFeedUpdated: CommentFeedUpdate
 `;
 
 const resolvers = {
@@ -47,12 +52,12 @@ const resolvers = {
     postComment: async (__, { content }, context) => {
       return await context.Comment.postNewComment({ content, user: context.user });
     },
-    removeComment: async (__, { id }, context) => {
-      return await context.Comment.removeComment({ id, user: context.user });
+    deleteComment: async (__, { id }, context) => {
+      return await context.Comment.deleteComment({ id, user: context.user });
     }
   },
   Subscription: {
-    commentAdded: (comment) => comment,
+    commentFeedUpdated: (feedUpdate) => feedUpdate,
   },
 };
 

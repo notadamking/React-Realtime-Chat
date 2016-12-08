@@ -18,7 +18,7 @@ app.use(express.static(path.resolve(__dirname, '../build')));
 app.use(morgan(config.isDevelopment ? 'dev' : 'combined'));
 
 if (__DEVELOPMENT__) {
-  app.use('graphiql', graphiqlMiddleware);
+  app.use('/graphiql', graphiqlMiddleware);
 }
 
 app.use(config.graphqlEndpoint, bodyParser.json(), graphqlMiddleware);

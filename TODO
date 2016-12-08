@@ -1,6 +1,9 @@
 Bugs:
   ✔ Fix: when a comment is posted, load more breaks @done(2016-12-02 19:18) @project(Bugs)
 
+Github:
+  ☐ Readme
+
 Testing:
   ☐ create unit tests for all code
   ☐ setup testing environment
@@ -15,12 +18,16 @@ Redux:
     ☐ async validation (if a necessary use is found)
 
 React-Apollo:
+  ☐ replies
+  ☐ remove comment
   ✔ Current user  @done(2016-12-01 00:31) @project(React-Apollo)
   ✔ login / logout @done(2016-12-01 00:49) @project(React-Apollo)
   ✔ signup @done(2016-12-01 01:13) @project(React-Apollo)
   ✔ fetch more @done(2016-12-02 00:21) @project(React-Apollo)
   ✔ optimistic ui/update queries @done(2016-12-02 01:22) @project(React-Apollo)
   ✔ Subscription example  @done(2016-12-05 23:09) @project(React-Apollo)
+  ☐ Check if possible to remove id from errableComment, AuthedUser, etc, or
+    just remove them entirely and send errors by throwing them.
 
 Semantic Styling:
   ✔ setup semantic-ui-react @done(2016-12-01 00:31) @project(Semantic Styling)
