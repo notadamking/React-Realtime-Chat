@@ -12,6 +12,7 @@ import reactMiddleware from './middleware/reactMiddleware';
 
 const app = express();
 
+app.disable('x-powered-by');
 app.use(compression());
 app.use(express.static(path.resolve(__dirname, '../build')));
 app.use(morgan(config.isDevelopment ? 'dev' : 'combined'));

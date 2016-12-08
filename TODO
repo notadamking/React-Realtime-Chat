@@ -1,6 +1,10 @@
 Bugs:
   ✔ Fix: when a comment is posted, load more breaks @done(2016-12-02 19:18) @project(Bugs)
 
+Testing:
+  ☐ create unit tests for all code
+  ☐ setup testing environment
+
 Components/Containers:
   ✔ Separate Forms into presentational/functional components @done(2016-12-05 20:28) @project(Components/Containers)
 
@@ -22,7 +26,6 @@ Semantic Styling:
   ✔ setup semantic-ui-react @done(2016-12-01 00:31) @project(Semantic Styling)
   ☐ setup theming
 
-No Console Errors:
+No Console Warnings/Errors:
   ✔ Fix "You cannot change <Router routes>; it will be ignored" bug @done(2016-11-28 23:18) @project(No Console Errors)
-
-Heroku:
+  ☐ react-apollo is currently sending an automatic warning to the console in development only
