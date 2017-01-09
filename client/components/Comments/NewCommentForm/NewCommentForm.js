@@ -1,29 +1,31 @@
 import React, { PropTypes } from 'react';
 import { Field } from 'redux-form';
-import { Button, Form, Message } from 'semantic-ui-react';
+import { Form, Message } from 'semantic-ui-react';
 
 import { FormTextField } from '../../';
 import styles from './NewCommentForm.css';
 
-const NewCommentForm = ({ onSubmit, pristine, submitError, submitting }) => (
+const handleKeyPress = ({ e, onSubmit, pristine, submitting }) => {
+  if (e.which === 13 && !e.shiftKey) {
+    e.preventDefault();
+    if (!pristine && !submitting) {
+      onSubmit();
+    }
+    return false;
+  }
+};
+
+const NewCommentForm = ({ pristine, submitError, submitting, onSubmit }) => (
   <div>
     <Message content={submitError} error header='Comment Failed!' hidden={!submitError} />
     <Form onSubmit={onSubmit}>
       <div className={styles.commentBox}>
         <Field
+          autoHeight
           component={FormTextField}
-          label='Leave a comment'
           name='content'
-          rows={4}
-        />
-        <Button
-          className={styles.submitCommentButton}
-          color='green'
-          content='Submit'
-          disabled={pristine || submitting}
-          inverted
-          size='small'
-          type='submit'
+          rows={1}
+          onKeyPress={(e) => handleKeyPress({ e, onSubmit, pristine, submitting })}
         />
       </div>
     </Form>

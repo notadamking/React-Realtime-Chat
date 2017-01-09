@@ -15,9 +15,6 @@ const CommentComponent = ({ comment, isRemovable, onDelete }) => (
       </Comment.Metadata>
       <Comment.Text>{comment.content}</Comment.Text>
       <Comment.Actions>
-        <Comment.Action>
-          <Icon name='reply' /> Reply
-        </Comment.Action>
         {isRemovable && (
           <Comment.Action onClick={onDelete}>
             <Icon name='trash' /> Delete

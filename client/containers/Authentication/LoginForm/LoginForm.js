@@ -24,11 +24,11 @@ export default class LoginFormContainer extends Component {
   async onSubmit({ email, password }) {
     const { dispatch, submitLogin } = this.props;
     dispatch(clearSubmitErrors());
-    const { data: { login: { error, user } } } = await submitLogin({ email, password });
-    if (user) {
-      dispatch(handleLoginSuccess(user));
-    } else if (error) {
-      dispatch(setLoginSubmitError(error));
+    const { data: { loginAsUser } } = await submitLogin({ email, password });
+    if (loginAsUser.error) {
+      dispatch(setLoginSubmitError(loginAsUser.error));
+    } else {
+      dispatch(handleLoginSuccess(loginAsUser));
     }
   }
 

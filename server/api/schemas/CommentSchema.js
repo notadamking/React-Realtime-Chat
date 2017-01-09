@@ -9,18 +9,6 @@ const types = `
     author: User!
   }
 
-  type NewComment {
-    id: ID
-    comment: Comment
-    error: String
-  }
-
-  type DeletedComment {
-    id: ID
-    comment: Comment
-    error: String
-  }
-
   type CommentFeedUpdate {
     comment: Comment!
     action: String!
@@ -33,8 +21,8 @@ const queries = `
 `;
 
 const mutations = `
-  postComment(content: String!): NewComment
-  deleteComment(id: ID!): DeletedComment
+  postComment(content: String!): Comment
+  deleteComment(id: ID!): Comment
 `;
 
 const subscriptions = `

@@ -14,9 +14,9 @@ import styles from './MainLayout.css';
 export default class MainLayout extends Component {
   componentWillReceiveProps({ data: { currentUser }, user }) {
     const { dispatch } = this.props;
-    if (currentUser && currentUser.user) {
-      if (user !== currentUser.user) {
-        dispatch(setLoggedIn(currentUser.user));
+    if (currentUser) {
+      if (user !== currentUser) {
+        dispatch(setLoggedIn(currentUser));
       }
     } else if (this.props.user) {
       dispatch(setLoggedOut());
@@ -41,7 +41,6 @@ MainLayout.propTypes = {
   children: PropTypes.object.isRequired,
   data: PropTypes.shape({
     currentUser: PropTypes.object,
-    loading: PropTypes.bool.isRequired,
   }),
   dispatch: PropTypes.func,
   user: PropTypes.object,

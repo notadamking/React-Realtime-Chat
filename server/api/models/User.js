@@ -12,23 +12,13 @@ const signJwt = (id) => {
   return jwt.sign({ id }, config.secretKey, { expiresIn: '7d' });
 };
 
-const normalizeUser = (aUser) => {
+const normalizeUser = (aUser, withToken = false) => {
   const user = aUser.toJSON();
   return {
     ...user,
     createdAt: user.created_at,
-    updatedAt: user.updated_at
-  };
-};
-
-const normalizeAuthedUser = (user, authToken = null) => {
-  const normalizedUser = normalizeUser(user);
-  return {
-    id: normalizedUser.id,
-    user: {
-      ...normalizedUser,
-      authToken: authToken || signJwt(user.id),
-    }
+    updatedAt: user.updated_at,
+    authToken: withToken ? signJwt(user.id) : null
   };
 };
 
@@ -53,30 +43,30 @@ const UserModel = {
     try {
       const { id } = await verifyJwt(authToken, config.secretKey);
       const user = await User.where({ id }).fetch();
-      return normalizeAuthedUser(user, authToken);
+      return normalizeUser(user, true);
     } catch (error) {
-      return false;
+      return null;
     }
   },
 
   createNewUser: async ({ email, password }) => {
     const exists = await User.where({ email }).fetch();
     if (exists) {
-      return { error: 'That email address is already in use.' };
+      throw new Error('That email address is already in use.');
     }
     const hash = await getPasswordHash(password);
     const user = await new User({ email, hash }).save();
-    return normalizeAuthedUser(user);
+    return normalizeUser(user, true);
   },
 
   login: async ({ email, password }) => {
     const user = await User.where({ email }).fetch();
     if (!user) {
-      return { error: 'No user with that email address exists.' };
+      throw new Error('No user with that email address exists.');
     } else if (!await validatePassword({ password, hash: user.attributes.hash })) {
-      return { error: 'Invalid email or password.' };
+      throw new Error('Invalid email or password.');
     }
-    return normalizeAuthedUser(user);
+    return normalizeUser(user, true);
   },
 };
 

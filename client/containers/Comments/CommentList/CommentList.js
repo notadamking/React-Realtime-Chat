@@ -1,11 +1,24 @@
 import React, { Component, PropTypes } from 'react';
 import { graphql } from 'react-apollo';
+import { connect } from 'react-redux';
 
 import { CommentList } from '../../../components';
+import { setShouldScrollToBottom } from '../../../redux/actions/comments';
 import { commentListQuery, commentFeedSubscription } from './commentList.graphql';
 
-const COMMENTS_PER_FETCH = 5;
+const COMMENTS_PER_FETCH = 10;
 
+function isDuplicateComment(newComment, existingComments) {
+  return newComment && existingComments.length > 0
+          && existingComments.some(comment => newComment.id === comment.id);
+}
+
+@connect(
+  (state) => ({
+    shouldScrollToBottom: state.comments.shouldScrollToBottom,
+    user: state.auth.currentUser,
+  })
+)
 @graphql(commentListQuery, {
   options: {
     variables: {
@@ -16,29 +29,23 @@ const COMMENTS_PER_FETCH = 5;
   props: ({ data: { comments, fetchMore, loading, subscribeToMore } }) => ({
     comments,
     loading,
-    loadMoreComments: () => {
+    subscribeToMore,
+    loadMoreComments: (commentList) => {
+      const beforeHeight = commentList.scrollHeight;
       return fetchMore({
         variables: {
           offset: comments.length,
-          limit: COMMENTS_PER_FETCH,
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newComments = fetchMoreResult.data.comments;
-
-          if (!previousResult.comments) {
-            return newComments;
-          }
-
           return {
-            comments: [
-              ...previousResult.comments,
-              ...newComments,
-            ],
+            comments: [...previousResult.comments, ...fetchMoreResult.data.comments],
           };
         },
+      }).then(() => {
+        const afterHeight = commentList.scrollHeight;
+        commentList.scrollTop = afterHeight - beforeHeight;
       });
     },
-    subscribeToMore,
   }),
 })
 export default class CommentListContainer extends Component {
@@ -49,23 +56,20 @@ export default class CommentListContainer extends Component {
         updateQuery: (previousResult, { subscriptionData }) => {
           const update = subscriptionData.data.commentFeedUpdated;
           if (update.action === 'add') {
-            const newComment = update.comment;
+            if (isDuplicateComment(update.comment, previousResult.comments)) {
+              return previousResult;
+            }
 
-            if (!previousResult.comments) {
-              return newComment;
+            if (!this.props.user || update.comment.author.id !== this.props.user.id) {
+              setTimeout(() => this.props.dispatch(setShouldScrollToBottom()), 50);
             }
 
             return {
-              comments: [
-                newComment,
-                ...previousResult.comments,
-              ]
+              comments: [update.comment, ...previousResult.comments]
             };
           } else if (update.action === 'delete') {
-            const deletedComment = update.comment;
-
             const remainingComments = previousResult.comments.filter((comment) => {
-              return comment.id !== deletedComment.id;
+              return comment.id !== update.comment.id;
             });
 
             return {
@@ -75,14 +79,30 @@ export default class CommentListContainer extends Component {
         }
       });
     }
+
+    if (nextProps.shouldScrollToBottom) {
+      this.commentList.scrollTop = this.commentList.scrollHeight;
+      this.props.dispatch(setShouldScrollToBottom(false));
+    }
+  }
+
+  handleSetRef(ref) {
+    this.commentList = ref;
+  }
+
+  handleScroll() {
+    if (this.commentList.scrollTop === 0) {
+      this.props.loadMoreComments(this.commentList);
+    }
   }
 
   render() {
-    const { comments, loadMoreComments } = this.props;
+    const { comments } = this.props;
     return (
       <CommentList
         comments={comments}
-        onLoadMoreComments={loadMoreComments}
+        onScroll={this.handleScroll.bind(this)}
+        onSetRef={this.handleSetRef.bind(this)}
       />
     );
   }
@@ -90,7 +110,10 @@ export default class CommentListContainer extends Component {
 
 CommentListContainer.propTypes = {
   comments: PropTypes.object,
+  dispatch: PropTypes.func,
   loadMoreComments: PropTypes.func,
   loading: PropTypes.bool,
+  shouldScrollToBottom: PropTypes.bool,
   subscribeToMore: PropTypes.func,
+  user: PropTypes.object,
 };

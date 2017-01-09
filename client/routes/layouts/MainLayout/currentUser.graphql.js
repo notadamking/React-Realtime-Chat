@@ -4,12 +4,9 @@ export default gql`
 query User {
   currentUser {
     id
-    user {
-      id
-      email
-      createdAt
-      updatedAt
-    }
+    email
+    createdAt
+    updatedAt
   }
 }
 `;

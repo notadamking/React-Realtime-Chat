@@ -1,8 +1,7 @@
 .commentBox {
   text-align: left;
-  margin: 20px auto;
-}
-
-.submitCommentButton {
-  margin-top: 7px !important;
+  margin: 0 auto !important;
+  position: fixed;
+  bottom: 20px;
+  width: 80%;
 }

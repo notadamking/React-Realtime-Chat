@@ -4,15 +4,13 @@ export default gql`
 mutation NewComment($content: String!) {
   postComment(content: $content) {
     id
-    comment {
+    content
+    createdAt
+    updatedAt
+    author {
       id
-      content
-      author {
-        id
-        email
-      }
+      email
     }
-    error
   }
 }
 `;

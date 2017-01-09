@@ -26,11 +26,11 @@ export default class SignupFormContainer extends Component {
   async onSubmit({ email, password }) {
     const { dispatch, submitSignup } = this.props;
     dispatch(clearSubmitErrors());
-    const { data: { createUser: { error, user } } } = await submitSignup({ email, password });
-    if (user) {
-      dispatch(handleSignupSuccess(user));
-    } else if (error) {
-      dispatch(setSignupSubmitError(error));
+    const { data: { createUser } } = await submitSignup({ email, password });
+    if (createUser.error) {
+      dispatch(setSignupSubmitError(createUser.error));
+    } else {
+      dispatch(handleSignupSuccess(createUser));
     }
   }
 

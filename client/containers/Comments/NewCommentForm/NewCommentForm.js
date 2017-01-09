@@ -5,10 +5,12 @@ import { reduxForm } from 'redux-form';
 import { Header } from 'semantic-ui-react';
 
 import { NewCommentForm } from '../../../components';
+import { setShouldScrollToBottom } from '../../../redux/actions/comments';
 import postCommentMutation from './postComment.graphql';
 
 function isDuplicateComment(newComment, existingComments) {
-  return newComment.id !== null && existingComments.some(comment => newComment.id === comment.id);
+  return newComment && existingComments.length > 0
+          && existingComments.some(comment => newComment.id === comment.id);
 }
 
 @connect(
@@ -22,40 +24,29 @@ function isDuplicateComment(newComment, existingComments) {
       variables: { content },
       optimisticResponse: {
         postComment: {
-          __typename: 'NewComment',
+          __typename: 'Comment',
           id: '0',
-          comment: {
-            __typename: 'Comment',
+          content,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          author: {
+            __typename: 'User',
             id: '0',
-            author: {
-              __typename: 'User',
-              id: '0',
-              email: ownProps.user && ownProps.user.email,
-            },
-            content,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            email: ownProps.user && ownProps.user.email,
           },
           error: null
         }
       },
       updateQueries: {
         CommentList: (previousResult, { mutationResult }) => {
-          const newComment = mutationResult.data.postComment.comment;
-
-          if (!previousResult.comments || previousResult.comments.length < 1) {
-            return { comments: [newComment] };
-          }
-
-          if (isDuplicateComment(newComment, previousResult.comments)) {
+          if (isDuplicateComment(mutationResult.data.postComment, previousResult.comments)) {
             return previousResult;
           }
 
+          setTimeout(() => ownProps.dispatch(setShouldScrollToBottom()), 50);
+
           return {
-            comments: [
-              newComment,
-              ...previousResult.comments
-            ]
+            comments: [mutationResult.data.postComment, ...previousResult.comments]
           };
         }
       }
@@ -105,6 +96,7 @@ export default class NewCommentFormContainer extends Component {
 }
 
 NewCommentFormContainer.propTypes = {
+  dispatch: PropTypes.func,
   handleSubmit: PropTypes.func,
   postComment: PropTypes.func,
   pristine: PropTypes.bool,

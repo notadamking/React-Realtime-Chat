@@ -5,12 +5,11 @@ import { User, Comment } from '../api/models';
 import schema from '../api/schema';
 
 export const graphqlMiddleware = graphqlExpress(async (req) => {
-  const userWithToken = await User.getCurrentUser(req.headers.authorization);
+  const currentUser = await User.getCurrentUser(req.headers.authorization);
   return {
     schema,
     context: {
-      user: userWithToken && userWithToken.user,
-      userWithToken,
+      user: currentUser,
       Comment,
       User,
     }

@@ -10,14 +10,6 @@ const normalizeComment = (aComment) => {
   };
 };
 
-const normalizeErrableComment = (errableComment) => {
-  const comment = normalizeComment(errableComment);
-  return {
-    id: comment.id,
-    comment
-  };
-};
-
 const normalizeCommentFeedUpdate = (aComment, action) => {
   const comment = normalizeComment(aComment);
   return {
@@ -44,7 +36,7 @@ const CommentModel = {
 
   postNewComment: async ({ content, user }) => {
     if (!user) {
-      return { error: 'You must be logged in to submit a comment' };
+      throw new Error('You must be logged in to submit a comment');
     }
     const newComment = await
       new Comment({
@@ -57,21 +49,23 @@ const CommentModel = {
       .fetch({ withRelated: ['author'] });
 
     pubsub.publish('commentFeedChannel', normalizeCommentFeedUpdate(comment, 'add'));
-    return normalizeErrableComment(comment);
+
+    return normalizeComment(comment);
   },
 
   deleteComment: async ({ id, user }) => {
     const comment = await Comment
       .where({ id })
       .fetch({ withRelated: ['author'] });
-    const deletedComment = normalizeErrableComment(comment);
+    const deletedComment = normalizeComment(comment);
 
-    if (deletedComment.comment.author_id !== user.id) {
-      return { error: `You cannot delete a comment that you didn't post` };
+    if (deletedComment.author_id !== user.id) {
+      throw new Error(`You cannot delete a comment that you didn't post`);
     }
 
     comment.destroy();
     pubsub.publish('commentFeedChannel', normalizeCommentFeedUpdate(comment, 'delete'));
+
     return deletedComment;
   },
 };

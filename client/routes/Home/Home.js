@@ -5,7 +5,7 @@ import { Container } from 'semantic-ui-react';
 import { CommentList } from '../../containers';
 
 const Home = () => (
-  <Container>
+  <Container fluid>
     <Helmet title='Home' />
     <CommentList />
   </Container>

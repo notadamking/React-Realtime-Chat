@@ -11,21 +11,14 @@ import deleteCommentMutation from './deleteComment.graphql';
       variables: { id: ownProps.comment.id },
       optimisticResponse: {
         deleteComment: {
-          __typename: 'DeletedComment',
+          __typename: 'Comment',
           id: ownProps.comment.id,
-          comment: {
-            __typename: 'Comment',
-            id: ownProps.comment.id,
-          },
-          error: null
         }
       },
       updateQueries: {
         CommentList: (previousResult, { mutationResult }) => {
-          const deletedComment = mutationResult.data.deleteComment.comment;
-
           const remainingComments = previousResult.comments.filter((comment) => {
-            return comment.id !== deletedComment.id;
+            return comment.id !== mutationResult.data.deleteComment.id;
           });
 
           return {
@@ -49,11 +42,11 @@ export default class CommentContainer extends Component {
 
   render() {
     const { comment, user } = this.props;
-    const commentIsOwnedByUser = user && (comment.author.id === user.id);
+    const commentWasPostedByUser = user && (comment.author.id === user.id);
     return (
       <Comment
         comment={comment}
-        isRemovable={commentIsOwnedByUser}
+        isRemovable={commentWasPostedByUser}
         onDelete={this.onDelete.bind(this)}
       />
     );
