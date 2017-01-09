@@ -6,8 +6,8 @@ const subscriptionManager = new SubscriptionManager({
   schema,
   pubsub,
   setupFunctions: {
-    commentFeedUpdated: () => ({
-      commentFeedChannel: (feedUpdate) => feedUpdate.comment.id !== '0',
+    messageFeedUpdated: () => ({
+      messageFeedChannel: (feedUpdate) => feedUpdate.message.id !== '0',
     }),
   },
 });

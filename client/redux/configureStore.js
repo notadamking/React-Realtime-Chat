@@ -2,14 +2,14 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { reducer as form } from 'redux-form';
 import thunk from 'redux-thunk';
 
-import { auth, comments } from './reducers';
+import { auth, messages } from './reducers';
 
 export default ({ initialState, client }) => createStore(
   combineReducers({
     apollo: client.reducer(),
     form,
     auth,
-    comments,
+    messages,
   }),
   initialState,
   compose(

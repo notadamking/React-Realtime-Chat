@@ -1,3 +1,0 @@
-export {
-  setShouldScrollToBottom,
-} from './commentsActions';

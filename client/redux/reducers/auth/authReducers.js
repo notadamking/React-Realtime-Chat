@@ -1,4 +1,5 @@
 import {
+  SET_LOADING,
   SET_LOGGED_IN,
   SET_LOGGED_OUT,
   SET_LOGIN_MODAL_OPEN,
@@ -10,6 +11,7 @@ import {
 
 const initialState = {
   currentUser: null,
+  isLoading: false,
   isLoggedIn: false,
   loginModalOpen: false,
   signupModalOpen: false,
@@ -19,6 +21,12 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case SET_LOADING:
+      return {
+        ...state,
+        isLoading: action.loading
+      };
+
     case SET_LOGGED_IN:
       return {
         ...state,

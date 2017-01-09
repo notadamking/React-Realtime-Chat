@@ -1,7 +1,7 @@
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 
 import config from '../../config';
-import { User, Comment } from '../api/models';
+import { User, Message } from '../api/models';
 import schema from '../api/schema';
 
 export const graphqlMiddleware = graphqlExpress(async (req) => {
@@ -10,7 +10,7 @@ export const graphqlMiddleware = graphqlExpress(async (req) => {
     schema,
     context: {
       user: currentUser,
-      Comment,
+      Message,
       User,
     }
   };

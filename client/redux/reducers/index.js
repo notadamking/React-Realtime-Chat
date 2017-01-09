@@ -1,7 +1,7 @@
 import auth from './auth';
-import comments from './comments';
+import messages from './messages';
 
 export {
   auth,
-  comments,
+  messages,
 };

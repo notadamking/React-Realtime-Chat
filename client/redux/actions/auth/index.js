@@ -1,4 +1,5 @@
 export {
+  setLoading,
   setLoggedIn,
   setLoggedOut,
   setLoginModalOpen,

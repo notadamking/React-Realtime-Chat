@@ -1,0 +1,20 @@
+.messagesContainer {
+  position: relative;
+  margin: 0 auto !important;
+  width: 80%;
+  height: calc(100vh - 110px);
+  overflow-y: scroll;
+}
+
+.messageList {
+  overflow: auto;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  max-width: 100% !important;
+  max-height: calc(100vh - 130px);
+}
+
+.loadMoreButton {
+  cursor: pointer;
+}

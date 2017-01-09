@@ -4,10 +4,10 @@ import LoginModal from './Authentication/LoginModal';
 import SignupForm from './Authentication/SignupForm';
 import SignupModal from './Authentication/SignupModal';
 
-/* Comments */
-import Comment from './Comments/Comment';
-import CommentList from './Comments/CommentList';
-import NewCommentForm from './Comments/NewCommentForm';
+/* Messages */
+import Message from './Messages/Message';
+import MessageList from './Messages/MessageList';
+import NewMessageForm from './Messages/NewMessageForm';
 
 /* Forms */
 import FormField from './Forms/FormField';
@@ -23,15 +23,15 @@ import Navbar from './Navigation/Navbar';
 import RelativeTime from './RelativeTime';
 
 export {
-  Comment,
-  CommentList,
+  Message,
+  MessageList,
   FormField,
   FormTextField,
   Html,
   LoginForm,
   LoginModal,
   Navbar,
-  NewCommentForm,
+  NewMessageForm,
   RelativeTime,
   SignupForm,
   SignupModal,

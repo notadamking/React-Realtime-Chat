@@ -1,7 +1,7 @@
-import Comment from './Comment';
+import Message from './Message';
 import User from './User';
 
 export {
-  Comment,
+  Message,
   User,
 };

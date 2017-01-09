@@ -4,7 +4,7 @@ import { graphql } from 'react-apollo';
 import Helmet from 'react-helmet';
 
 import config from '../../../../config';
-import { setLoggedIn, setLoggedOut } from '../../../redux/actions/auth';
+import { setLoading, setLoggedIn, setLoggedOut } from '../../../redux/actions/auth';
 import { Navbar } from '../../../containers';
 import getCurrentUser from './currentUser.graphql';
 import styles from './MainLayout.css';
@@ -12,6 +12,11 @@ import styles from './MainLayout.css';
 @connect()
 @graphql(getCurrentUser, { options: { ssr: false } })
 export default class MainLayout extends Component {
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch(setLoading());
+  }
+
   componentWillReceiveProps({ data: { currentUser }, user }) {
     const { dispatch } = this.props;
     if (currentUser) {
@@ -21,6 +26,7 @@ export default class MainLayout extends Component {
     } else if (this.props.user) {
       dispatch(setLoggedOut());
     }
+    dispatch(setLoading(false));
   }
 
   render() {

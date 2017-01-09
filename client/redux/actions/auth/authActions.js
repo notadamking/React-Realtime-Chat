@@ -1,5 +1,6 @@
 import config from '../../../../config';
 import {
+  SET_LOADING,
   SET_LOGGED_IN,
   SET_LOGGED_OUT,
   SET_LOGIN_MODAL_OPEN,
@@ -8,6 +9,11 @@ import {
   SET_SIGNUP_SUBMIT_ERROR,
   CLEAR_AUTH_SUBMIT_ERRORS,
 } from '../types';
+
+export const setLoading = (loading = true) => ({
+  type: SET_LOADING,
+  loading
+});
 
 export const setLoggedIn = (user) => ({
   type: SET_LOGGED_IN,
@@ -18,12 +24,12 @@ export const setLoggedOut = () => ({
   type: SET_LOGGED_OUT
 });
 
-export const setLoginModalOpen = (open) => ({
+export const setLoginModalOpen = (open = true) => ({
   type: SET_LOGIN_MODAL_OPEN,
   open
 });
 
-export const setSignupModalOpen = (open) => ({
+export const setSignupModalOpen = (open = true) => ({
   type: SET_SIGNUP_MODAL_OPEN,
   open
 });

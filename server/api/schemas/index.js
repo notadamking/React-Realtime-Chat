@@ -1,7 +1,7 @@
-import CommentSchema from './CommentSchema';
+import MessageSchema from './MessageSchema';
 import UserSchema from './UserSchema';
 
 export {
-  CommentSchema,
+  MessageSchema,
   UserSchema,
 };

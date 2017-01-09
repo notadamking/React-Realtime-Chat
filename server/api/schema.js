@@ -1,7 +1,7 @@
 import { makeExecutableSchema } from 'graphql-tools';
 
 import { EmailScalar, UrlScalar, DateScalar } from './types';
-import { UserSchema, CommentSchema } from './schemas';
+import { UserSchema, MessageSchema } from './schemas';
 
 const typeDefs = [`
   scalar Email
@@ -9,20 +9,20 @@ const typeDefs = [`
   scalar Date
 
   ${UserSchema.types}
-  ${CommentSchema.types()}
+  ${MessageSchema.types()}
 
   type Query {
     ${UserSchema.queries}
-    ${CommentSchema.queries}
+    ${MessageSchema.queries}
   }
 
   type Mutation {
     ${UserSchema.mutations}
-    ${CommentSchema.mutations}
+    ${MessageSchema.mutations}
   }
 
   type Subscription {
-    ${CommentSchema.subscriptions}
+    ${MessageSchema.subscriptions}
   }
 
   schema {
@@ -38,14 +38,14 @@ const resolvers = {
   Url: UrlScalar,
   Query: {
     ...UserSchema.resolvers.Query,
-    ...CommentSchema.resolvers.Query,
+    ...MessageSchema.resolvers.Query,
   },
   Mutation: {
     ...UserSchema.resolvers.Mutation,
-    ...CommentSchema.resolvers.Mutation,
+    ...MessageSchema.resolvers.Mutation,
   },
   Subscription: {
-    ...CommentSchema.resolvers.Subscription,
+    ...MessageSchema.resolvers.Subscription,
   },
 };
 

@@ -8,8 +8,8 @@ const Bookshelf = bookshelf(Knex);
 
 /* eslint no-use-before-define: 0 */
 
-const Comment = Bookshelf.Model.extend({
-  tableName: 'comment',
+const Message = Bookshelf.Model.extend({
+  tableName: 'message',
   hasTimestamps: true,
   author() {
     return this.belongsTo(User, 'author_id');
@@ -19,12 +19,12 @@ const Comment = Bookshelf.Model.extend({
 const User = Bookshelf.Model.extend({
   tableName: 'user',
   hasTimestamps: true,
-  postedComments() {
-    return this.hasMany(Comment);
+  postedMessages() {
+    return this.hasMany(Message);
   }
 });
 
 export {
-  Comment,
+  Message,
   User,
 };

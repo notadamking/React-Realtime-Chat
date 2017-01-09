@@ -1,0 +1,3 @@
+export {
+  setShouldScrollToBottom,
+} from './messagesActions';
