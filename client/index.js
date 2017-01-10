@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ApolloClient, { createNetworkInterface, addTypename } from 'apollo-client';
+import ApolloClient, { createNetworkInterface } from 'apollo-client';
 import { Router, browserHistory } from 'react-router';
 import { ApolloProvider } from 'react-apollo';
 import { AppContainer } from 'react-hot-loader';
@@ -36,7 +36,6 @@ const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(networkInterfa
 
 const client = new ApolloClient({
   networkInterface: networkInterfaceWithSubscriptions,
-  queryTransformer: addTypename,
   dataIdFromObject: (result) => {
     if (result.id && result.__typename) {
       return result.__typename + result.id;

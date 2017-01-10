@@ -51,7 +51,8 @@ function isDuplicateMessage(newMessage, existingMessages) {
 export default class MessageListContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (!this.subscription && !nextProps.loading) {
-      setTimeout(() => this.props.dispatch(setShouldScrollToBottom()), 100);
+      // scroll to bottom after initial page load
+      setTimeout(() => this.props.dispatch(setShouldScrollToBottom()), 250);
 
       this.subscription = nextProps.subscribeToMore({
         document: messageFeedSubscription,
@@ -83,7 +84,7 @@ export default class MessageListContainer extends Component {
     }
 
     if (nextProps.shouldScrollToBottom) {
-      this.messageList.scrollTop = this.messageList.scrollHeight + 1000;
+      this.messageList.scrollTop = this.messageList.scrollHeight;
       this.props.dispatch(setShouldScrollToBottom(false));
     }
   }
@@ -100,13 +101,15 @@ export default class MessageListContainer extends Component {
 
   render() {
     const { messages } = this.props;
-    return (
+    return messages
+    ? (
       <MessageList
-        messages={messages}
+        messages={messages.slice()} /* .slice() copies the array */
         onScroll={this.handleScroll.bind(this)}
         onSetRef={this.handleSetRef.bind(this)}
       />
-    );
+    )
+    : <noscript />;
   }
 }
 

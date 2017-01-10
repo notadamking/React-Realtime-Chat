@@ -1,7 +1,6 @@
 import React from 'react';
-import ApolloClient, { createNetworkInterface, addTypename } from 'apollo-client';
-import { ApolloProvider } from 'react-apollo';
-import { renderToStringWithData } from 'react-apollo/server';
+import ApolloClient, { createNetworkInterface } from 'apollo-client';
+import { ApolloProvider, renderToStringWithData } from 'react-apollo';
 import { RouterContext, match } from 'react-router';
 import { createLocation } from 'history/LocationUtils';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -36,7 +35,6 @@ export default (req, res) => {
         credentials: 'same-origin',
         headers: req.headers,
       }),
-      queryTransformer: addTypename,
       dataIdFromObject: (result) => {
         if (result.id && result.__typename) {
           return result.__typename + result.id;
