@@ -1,12 +1,8 @@
-import Promise from 'bluebird';
 import jwt from 'jsonwebtoken';
-import bcryptjs from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 
 import config from '../../../config';
 import { User } from './bookshelf';
-
-const bcrypt = Promise.promisifyAll(bcryptjs);
-const verifyJwt = Promise.promisify(jwt.verify);
 
 const signJwt = (id) => {
   return jwt.sign({ id }, config.secretKey, { expiresIn: '7d' });
@@ -24,13 +20,13 @@ const normalizeUser = (aUser, withToken = false) => {
 
 const validatePassword = async ({ password, hash }) => {
   if (!password || !hash) return false;
-  return await bcrypt.compareAsync(password, hash);
+  return await bcrypt.compare(password, hash);
 };
 
 const getPasswordHash = async (password) => {
   const rounds = config.isDevelopment ? 10 : 12;
-  const salt = await bcrypt.genSaltAsync(rounds);
-  return await bcrypt.hashAsync(password, salt);
+  const salt = await bcrypt.genSalt(rounds);
+  return await bcrypt.hash(password, salt);
 };
 
 const UserModel = {
@@ -41,7 +37,7 @@ const UserModel = {
 
   getCurrentUser: async (authToken) => {
     try {
-      const { id } = await verifyJwt(authToken, config.secretKey);
+      const { id } = await jwt.verify(authToken, config.secretKey);
       const user = await User.where({ id }).fetch();
       return normalizeUser(user, true);
     } catch (error) {

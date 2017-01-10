@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "apollo-client": "^0.7.0",
-    "babel-core": "^6.18.2",
+    "babel-core": "^6.21.0",
     "babel-eslint": "^7.1.1",
     "babel-loader": "6.2.5",
     "babel-plugin-add-module-exports": "^0.2.1",
@@ -31,8 +31,7 @@
     "babel-preset-react": "6.11.1",
     "babel-preset-stage-0": "^6.16.0",
     "babel-register": "6.14.0",
-    "bcryptjs": "^2.3.0",
-    "bluebird": "^3.4.6",
+    "bcryptjs": "^2.4.0",
     "body-parser": "^1.15.2",
     "bookshelf": "^0.10.2",
     "classnames": "^2.2.5",
@@ -51,11 +50,11 @@
     "history": "4.0.0",
     "isomorphic-fetch": "^2.2.1",
     "json-loader": "^0.5.4",
-    "jsonwebtoken": "^7.1.9",
+    "jsonwebtoken": "^7.2.1",
     "knex": "^0.12.6",
     "moment": "^2.17.0",
     "morgan": "1.7.0",
-    "pg": "^6.1.0",
+    "pg": "^6.1.2",
     "postcss-cssnext": "^2.8.0",
     "postcss-loader": "0.13.0",
     "react": "15.3.1",
@@ -75,7 +74,7 @@
     "url-loader": "0.5.7",
     "validator": "^6.2.1",
     "webpack": "1.13.1",
-    "webpack-isomorphic-tools": "^2.6.4"
+    "webpack-isomorphic-tools": "^2.6.5"
   },
   "description": "Example of a universal web-app using react, redux, apollo, and hot reloading",
   "repository": {
