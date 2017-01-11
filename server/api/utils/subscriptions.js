@@ -6,8 +6,11 @@ const subscriptionManager = new SubscriptionManager({
   schema,
   pubsub,
   setupFunctions: {
-    messageFeedUpdated: () => ({
-      messageFeedChannel: (feedUpdate) => feedUpdate.message.id !== '0',
+    messageAdded: () => ({
+      messageAdded: (message) => message.id !== '0',
+    }),
+    messageDeleted: () => ({
+      messageDeleted: (message) => message.id !== '0',
     }),
   },
 });

@@ -8,11 +8,6 @@ const types = `
     updatedAt: String!
     author: User!
   }
-
-  type MessageFeedUpdate {
-    message: Message!
-    action: String!
-  }
 `;
 
 const queries = `
@@ -26,7 +21,8 @@ const mutations = `
 `;
 
 const subscriptions = `
-  messageFeedUpdated: MessageFeedUpdate
+  messageAdded: Message
+  messageDeleted: Message
 `;
 
 const resolvers = {
@@ -45,7 +41,8 @@ const resolvers = {
     }
   },
   Subscription: {
-    messageFeedUpdated: (feedUpdate) => feedUpdate,
+    messageAdded: (message) => message,
+    messageDeleted: (message) => message,
   },
 };
 

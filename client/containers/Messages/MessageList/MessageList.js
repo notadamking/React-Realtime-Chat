@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { MessageList } from '../../../components';
 import { setShouldScrollToBottom } from '../../../redux/actions/messages';
-import { messageListQuery, messageFeedSubscription } from './messageList.graphql';
+import { messageListQuery, messageAddedSubscription, messageDeletedSubscription } from './messageList.graphql';
 
 const MESSAGES_PER_FETCH = 10;
 
@@ -54,33 +54,37 @@ export default class MessageListContainer extends Component {
       // scroll to bottom after initial page load
       setTimeout(() => this.props.dispatch(setShouldScrollToBottom()), 250);
 
-      this.subscription = nextProps.subscribeToMore({
-        document: messageFeedSubscription,
-        updateQuery: (previousResult, { subscriptionData }) => {
-          const update = subscriptionData.data.messageFeedUpdated;
-          if (update.action === 'add') {
-            if (isDuplicateMessage(update.message, previousResult.messages)) {
+      this.subscription = [
+        nextProps.subscribeToMore({
+          document: messageAddedSubscription,
+          updateQuery: (previousResult, { subscriptionData }) => {
+            const newMessage = subscriptionData.data.messageAdded;
+            if (isDuplicateMessage(newMessage, previousResult.messages)) {
               return previousResult;
             }
 
-            if (!this.props.user || update.message.author.id !== this.props.user.id) {
+            if (!this.props.user || newMessage.author.id !== this.props.user.id) {
               setTimeout(() => this.props.dispatch(setShouldScrollToBottom()), 100);
             }
 
             return {
-              messages: [update.message, ...previousResult.messages]
+              messages: [newMessage, ...previousResult.messages]
             };
-          } else if (update.action === 'delete') {
+          }
+        }),
+        nextProps.subscribeToMore({
+          document: messageDeletedSubscription,
+          updateQuery: (previousResult, { subscriptionData }) => {
             const remainingMessages = previousResult.messages.filter((message) => {
-              return message.id !== update.message.id;
+              return message.id !== subscriptionData.data.messageDeleted.id;
             });
 
             return {
               messages: remainingMessages
             };
           }
-        }
-      });
+        }),
+      ];
     }
 
     if (nextProps.shouldScrollToBottom) {

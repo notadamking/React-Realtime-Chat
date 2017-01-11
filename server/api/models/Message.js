@@ -10,14 +10,6 @@ const normalizeMessage = (aMessage) => {
   };
 };
 
-const normalizeMessageFeedUpdate = (aMessage, action) => {
-  const message = normalizeMessage(aMessage);
-  return {
-    message,
-    action
-  };
-};
-
 const MessageModel = {
   getMessages: async ({ offset = 0, limit = 10 }) => {
     const protectedLimit = (limit < 1 || limit > 20) ? 20 : limit;
@@ -47,26 +39,27 @@ const MessageModel = {
     const message = await Message
       .where({ id: newMessage.id })
       .fetch({ withRelated: ['author'] });
+    const normalizedMessage = normalizeMessage(message);
 
-    pubsub.publish('messageFeedChannel', normalizeMessageFeedUpdate(message, 'add'));
+    pubsub.publish('messageAdded', normalizedMessage);
 
-    return normalizeMessage(message);
+    return normalizedMessage;
   },
 
   deleteMessage: async ({ id, user }) => {
     const message = await Message
       .where({ id })
       .fetch({ withRelated: ['author'] });
-    const deletedMessage = normalizeMessage(message);
+    const normalizedMessage = normalizeMessage(message);
 
-    if (deletedMessage.author_id !== user.id) {
+    if (normalizedMessage.author_id !== user.id) {
       throw new Error(`You cannot delete a message that you didn't post`);
     }
 
     message.destroy();
-    pubsub.publish('messageFeedChannel', normalizeMessageFeedUpdate(message, 'delete'));
+    pubsub.publish('messageDeleted', normalizedMessage);
 
-    return deletedMessage;
+    return normalizedMessage;
   },
 };
 

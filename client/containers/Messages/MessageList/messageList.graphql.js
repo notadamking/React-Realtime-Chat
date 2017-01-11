@@ -15,20 +15,32 @@ query MessageList($offset: Int, $limit: Int) {
 }
 `;
 
-export const messageFeedSubscription = gql`
-subscription MessageFeedUpdates {
-  messageFeedUpdated {
-    message {
+export const messageAddedSubscription = gql`
+subscription MessageAdded {
+  messageAdded {
+    id
+    content
+    createdAt
+    updatedAt
+    author {
       id
-      content
-      createdAt
-      updatedAt
-      author {
-        id
-        email
-      }
+      email
     }
-    action
+  }
+}
+`;
+
+export const messageDeletedSubscription = gql`
+subscription MessageDeleted {
+  messageDeleted {
+    id
+    content
+    createdAt
+    updatedAt
+    author {
+      id
+      email
+    }
   }
 }
 `;
