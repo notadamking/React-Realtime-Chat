@@ -21,7 +21,11 @@ function isDuplicateMessage(newMessage, existingMessages) {
 @graphql(postMessageMutation, {
   props: ({ ownProps, mutate }) => ({
     postMessage: (content) => mutate({
-      variables: { content },
+      variables: {
+        room: 'home', // change this
+        channel: 'general', // and this
+        content
+      },
       optimisticResponse: {
         postMessage: {
           __typename: 'Message',

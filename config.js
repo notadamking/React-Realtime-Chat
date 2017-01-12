@@ -21,11 +21,7 @@ module.exports = {
     port: isDevelopment ? 3000 : productionPort,
   },
   secretKey: 'd98d1690-7f39-4676-830d-7cf8720b1475',
-  dbConfig: {
-    client: 'pg',
-    connection: isDevelopment ? localDbUrl : productionDbUrl,
-    searchPath: 'knex,public',
-  },
+  dbUrl: isDevelopment ? localDbUrl : productionDbUrl,
   devServerPort: 3001,
   assetTransferPort: 3003,
   authTokenName: 'token',

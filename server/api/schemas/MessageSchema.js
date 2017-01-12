@@ -3,6 +3,8 @@ import { UserSchema } from './';
 const types = `
   type Message {
     id: ID!
+    room: String!
+    channel: String!
     content: String!
     createdAt: String!
     updatedAt: String!
@@ -11,12 +13,11 @@ const types = `
 `;
 
 const queries = `
-  messages(offset: Int, limit: Int): [Message]
-  message(id: ID!): Message
+  messages(room: String!, channel: String!, offset: Int, limit: Int): [Message]
 `;
 
 const mutations = `
-  postMessage(content: String!): Message
+  postMessage(room: String!, channel: String!, content: String!): Message
   deleteMessage(id: ID!): Message
 `;
 
@@ -27,14 +28,13 @@ const subscriptions = `
 
 const resolvers = {
   Query: {
-    messages: async (root, { offset, limit }, context) => {
-      return await context.Message.getMessages({ offset, limit });
+    messages: async (root, { room, channel, offset, limit }, context) => {
+      return await context.Message.getMessages({ room, channel, offset, limit });
     },
-    message: async (root, { id }, context) => await context.Message.getById(id),
   },
   Mutation: {
-    postMessage: async (__, { content }, context) => {
-      return await context.Message.postNewMessage({ content, user: context.user });
+    postMessage: async (__, { room, channel, content }, context) => {
+      return await context.Message.postNewMessage({ room, channel, content, user: context.user });
     },
     deleteMessage: async (__, { id }, context) => {
       return await context.Message.deleteMessage({ id, user: context.user });

@@ -1,15 +1,17 @@
+/* I temporarily removed the !'s from definition until
+   errors have been handled
+*/
 const types = `
   type User {
-    id: ID!
-    email: Email!
-    createdAt: String!
-    updatedAt: String!
+    id: ID
+    email: Email
+    createdAt: String
+    updatedAt: String
     authToken: String
   }
 `;
 
 const queries = `
-  user(id: ID!): User
   currentUser: User
 `;
 
@@ -20,7 +22,6 @@ const mutations = `
 
 const resolvers = {
   Query: {
-    user: async (root, { id }, context) => await context.User.getById(id),
     currentUser: (__, ___, context) => context.user,
   },
   Mutation: {

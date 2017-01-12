@@ -22,6 +22,8 @@ function isDuplicateMessage(newMessage, existingMessages) {
 @graphql(messageListQuery, {
   options: {
     variables: {
+      room: 'home',
+      channel: 'general',
       offset: 0,
       limit: MESSAGES_PER_FETCH,
     }
