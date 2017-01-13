@@ -1,0 +1,21 @@
+.channelsHeader {
+  color: #ab9ba9 !important;
+  margin-top: 20px !important;
+  font-size: 1.1em !important;
+}
+
+.channelItem {
+  color: #ab9ba9 !important;
+  font-size: 1em !important;
+  line-height: 1.5em !important;
+}
+
+.activeItem {
+  color: #FFF !important;
+  background-color: #4c9689 !important;
+}
+
+.notificationLabel {
+  background-color: #eb4d5c !important;
+  border-color: ##eb4d5c !important;
+}

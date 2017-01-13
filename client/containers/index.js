@@ -7,14 +7,16 @@ import Message from './Messages/Message';
 import MessageList from './Messages/MessageList';
 import NewMessageForm from './Messages/NewMessageForm';
 
-/* Layout */
+/* Navigation */
 import Navbar from './Navigation/Navbar';
+import NavMenu from './Navigation/NavMenu';
 
 export {
   Message,
   MessageList,
   LoginForm,
   Navbar,
+  NavMenu,
   NewMessageForm,
   SignupForm,
 };

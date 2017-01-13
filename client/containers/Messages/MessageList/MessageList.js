@@ -53,9 +53,6 @@ function isDuplicateMessage(newMessage, existingMessages) {
 export default class MessageListContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (!this.subscription && !nextProps.loading) {
-      // scroll to bottom after initial page load
-      setTimeout(() => this.props.dispatch(setShouldScrollToBottom()), 500);
-
       this.subscription = [
         nextProps.subscribeToMore({
           document: messageAddedSubscription,

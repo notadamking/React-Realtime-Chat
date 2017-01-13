@@ -8,7 +8,7 @@ import 'isomorphic-fetch';
 
 import { Html } from '../../client/components';
 import configureStore from '../../client/redux/configureStore';
-import routes from '../../client/routes';
+import getRoutes from '../../client/routes';
 import config from '../../config';
 
 export default (req, res) => {
@@ -19,8 +19,23 @@ export default (req, res) => {
   }
 
   const location = createLocation(req.url);
+  const client = new ApolloClient({
+    ssrMode: true,
+    networkInterface: createNetworkInterface({
+      uri: `http://${config.server.host}:${config.server.port}${config.graphqlEndpoint}`,
+      credentials: 'same-origin',
+      headers: req.headers,
+    }),
+    dataIdFromObject: (result) => {
+      if (result.id && result.__typename) {
+        return result.__typename + result.id;
+      }
+      return null;
+    },
+  });
+  const store = configureStore({ client });
 
-  match({ routes, location }, (error, redirectLocation, renderProps) => {
+  match({ routes: getRoutes(store), location }, (error, redirectLocation, renderProps) => {
     if (error) {
       return res.status(500).send(error.message);
     } else if (redirectLocation) {
@@ -28,21 +43,6 @@ export default (req, res) => {
     } else if (!renderProps) {
       return res.status(404).send('Not Found');
     }
-    const client = new ApolloClient({
-      ssrMode: true,
-      networkInterface: createNetworkInterface({
-        uri: `http://${config.server.host}:${config.server.port}${config.graphqlEndpoint}`,
-        credentials: 'same-origin',
-        headers: req.headers,
-      }),
-      dataIdFromObject: (result) => {
-        if (result.id && result.__typename) {
-          return result.__typename + result.id;
-        }
-        return null;
-      },
-    });
-    const store = configureStore({ client });
     const component = (
       <ApolloProvider client={client} store={store}>
         <RouterContext {...renderProps} />

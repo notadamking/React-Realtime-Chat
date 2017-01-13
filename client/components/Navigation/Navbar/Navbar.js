@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 import { Menu } from 'semantic-ui-react';
 
 import { LoginModal, SignupModal } from '../../../components';
@@ -6,6 +7,15 @@ import styles from './Navbar.css';
 
 const Navbar = ({ loginModalOpen, signupModalOpen, user, onCloseModal, onLoginClicked, onLogoutClicked, onSignupClicked }) => (
   <Menu className={styles.navbar} secondary>
+    <Menu.Item>
+      <Link to='/messages/general'>Home</Link>
+    </Menu.Item>
+    <Menu.Item>
+      <Link to='/newRoom/messages/general'>NewRoom</Link>
+    </Menu.Item>
+    <Menu.Item>
+      <Link to='/anotherRoom/messages/general'>AnotherRoom</Link>
+    </Menu.Item>
     {user ? (
       <Menu.Menu position='right'>
         <Menu.Item>

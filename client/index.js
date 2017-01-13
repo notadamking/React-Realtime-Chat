@@ -10,7 +10,7 @@ import 'isomorphic-fetch';
 import config from '../config';
 import addGraphQLSubscriptions from './utils/subscriptions';
 import configureStore from './redux/configureStore';
-import routes from './routes';
+import getRoutes from './routes';
 
 const networkInterface = createNetworkInterface({
   uri: config.graphqlEndpoint,
@@ -56,7 +56,7 @@ function render() {
     <AppContainer>
       <ApolloProvider client={client} store={store}>
         <Router history={browserHistory}>
-          {routes}
+          {getRoutes(store)}
         </Router>
       </ApolloProvider>
     </AppContainer>,

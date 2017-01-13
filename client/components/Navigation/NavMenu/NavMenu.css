@@ -1,0 +1,18 @@
+.navMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 15% !important;
+  height: 100%;
+  background-color: #4D394B !important;
+}
+
+.navMenuItem {
+  color: #ab9ba9 !important;
+}
+
+.roomTitle {
+  color: #FFF;
+  font-size: 1.25em !important;
+  margin-bottom: 5px !important;
+}

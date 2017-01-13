@@ -17,12 +17,15 @@ import FormTextField from './Forms/FormTextField';
 import Html from './Html';
 
 /* Navigation */
+import Channels from './Navigation/Channels';
 import Navbar from './Navigation/Navbar';
+import NavMenu from './Navigation/NavMenu';
 
 /* RelativeTime */
 import RelativeTime from './RelativeTime';
 
 export {
+  Channels,
   Message,
   MessageList,
   FormField,
@@ -31,6 +34,7 @@ export {
   LoginForm,
   LoginModal,
   Navbar,
+  NavMenu,
   NewMessageForm,
   RelativeTime,
   SignupForm,

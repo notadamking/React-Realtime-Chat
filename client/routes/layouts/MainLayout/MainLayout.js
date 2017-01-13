@@ -1,53 +1,20 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { graphql } from 'react-apollo';
+import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 
 import config from '../../../../config';
-import { setLoading, setLoggedIn, setLoggedOut } from '../../../redux/actions/auth';
-import { Navbar } from '../../../containers';
-import getCurrentUser from './currentUser.graphql';
 import styles from './MainLayout.css';
 
-@connect()
-@graphql(getCurrentUser, { options: { ssr: false } })
-export default class MainLayout extends Component {
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(setLoading());
-  }
-
-  componentWillReceiveProps({ data: { currentUser }, user }) {
-    const { dispatch } = this.props;
-    if (currentUser) {
-      if (user !== currentUser) {
-        dispatch(setLoggedIn(currentUser));
-      }
-    } else if (this.props.user) {
-      dispatch(setLoggedOut());
-    }
-    dispatch(setLoading(false));
-  }
-
-  render() {
-    const { children } = this.props;
-    return (
-      <div className={styles.page}>
-        <Helmet title=' ' titleTemplate={`%s | ${config.meta.title}`} />
-        <Navbar />
-        <div className={styles.content}>
-          {children}
-        </div>
-      </div>
-    );
-  }
-}
+const MainLayout = ({ children }) => (
+  <div className={styles.page}>
+    <Helmet title=' ' titleTemplate={`%s | ${config.meta.title}`} />
+    <div className={styles.content}>
+      {children}
+    </div>
+  </div>
+);
 
 MainLayout.propTypes = {
   children: PropTypes.object.isRequired,
-  data: PropTypes.shape({
-    currentUser: PropTypes.object,
-  }),
-  dispatch: PropTypes.func,
-  user: PropTypes.object,
 };
+
+export default MainLayout;
