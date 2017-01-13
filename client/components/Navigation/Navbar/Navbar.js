@@ -2,9 +2,10 @@ import React, { PropTypes } from 'react';
 import { Menu } from 'semantic-ui-react';
 
 import { LoginModal, SignupModal } from '../../../components';
+import styles from './Navbar.css';
 
 const Navbar = ({ loginModalOpen, signupModalOpen, user, onCloseModal, onLoginClicked, onLogoutClicked, onSignupClicked }) => (
-  <Menu secondary>
+  <Menu className={styles.navbar} secondary>
     {user ? (
       <Menu.Menu position='right'>
         <Menu.Item>

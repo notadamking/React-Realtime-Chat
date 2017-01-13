@@ -20,14 +20,14 @@ function isDuplicateMessage(newMessage, existingMessages) {
   })
 )
 @graphql(messageListQuery, {
-  options: {
+  options: ({ channel, room }) => ({
     variables: {
-      room: 'home',
-      channel: 'general',
+      room,
+      channel,
       offset: 0,
       limit: MESSAGES_PER_FETCH,
     }
-  },
+  }),
   props: ({ data: { messages, fetchMore, loading, subscribeToMore } }) => ({
     messages,
     loading,
@@ -54,11 +54,15 @@ export default class MessageListContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (!this.subscription && !nextProps.loading) {
       // scroll to bottom after initial page load
-      setTimeout(() => this.props.dispatch(setShouldScrollToBottom()), 250);
+      setTimeout(() => this.props.dispatch(setShouldScrollToBottom()), 500);
 
       this.subscription = [
         nextProps.subscribeToMore({
           document: messageAddedSubscription,
+          variables: {
+            room: this.props.room,
+            channel: this.props.channel,
+          },
           updateQuery: (previousResult, { subscriptionData }) => {
             const newMessage = subscriptionData.data.messageAdded;
             if (isDuplicateMessage(newMessage, previousResult.messages)) {
@@ -76,6 +80,10 @@ export default class MessageListContainer extends Component {
         }),
         nextProps.subscribeToMore({
           document: messageDeletedSubscription,
+          variables: {
+            room: this.props.room,
+            channel: this.props.channel,
+          },
           updateQuery: (previousResult, { subscriptionData }) => {
             const remainingMessages = previousResult.messages.filter((message) => {
               return message.id !== subscriptionData.data.messageDeleted.id;
@@ -107,23 +115,23 @@ export default class MessageListContainer extends Component {
 
   render() {
     const { messages } = this.props;
-    return messages
-    ? (
+    return (
       <MessageList
-        messages={messages.slice()} /* .slice() copies the array */
+        messages={messages && messages.slice()} /* .slice() copies the array */
         onScroll={this.handleScroll.bind(this)}
         onSetRef={this.handleSetRef.bind(this)}
       />
-    )
-    : <noscript />;
+    );
   }
 }
 
 MessageListContainer.propTypes = {
+  channel: PropTypes.string.isRequired,
   dispatch: PropTypes.func,
   loadMoreMessages: PropTypes.func,
   loading: PropTypes.bool,
   messages: PropTypes.object,
+  room: PropTypes.string.isRequired,
   shouldScrollToBottom: PropTypes.bool,
   subscribeToMore: PropTypes.func,
   user: PropTypes.object,

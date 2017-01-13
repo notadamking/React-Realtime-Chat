@@ -1,14 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import cx from 'classnames';
 
-import { Message, NewMessageForm } from '../../../containers';
+import { Message } from '../../../containers';
 import styles from './MessageList.css';
 
 export default class MessageList extends Component {
   render () {
     const { messages, onScroll, onSetRef } = this.props;
     return (
-      <div className={styles.messagesContainer}>
+      <div className={styles.messageListContainer}>
         <div
           className={cx('ui', 'comments', styles.messageList)}
           ref={onSetRef}
@@ -21,7 +21,6 @@ export default class MessageList extends Component {
             />
           ))}
         </div>
-        <NewMessageForm />
       </div>
     );
   }

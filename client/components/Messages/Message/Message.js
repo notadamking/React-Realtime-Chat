@@ -7,7 +7,7 @@ import styles from './Message.css';
 
 const MessageComponent = ({ message, isRemovable, onDelete }) => (
   <Comment className={cx({ [styles.newMessage]: message.id !== '0' })}>
-    <Comment.Avatar src={`https://api.adorable.io/avatars/64/${message.author.email}.png`} />
+    {/* <Comment.Avatar src={`https://api.adorable.io/avatars/64/${message.author.email}.png`} /> */}
     <Comment.Content>
       <Comment.Author as='a'>{message.author.email}</Comment.Author>
       <Comment.Metadata>

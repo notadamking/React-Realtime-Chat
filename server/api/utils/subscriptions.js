@@ -6,11 +6,15 @@ const subscriptionManager = new SubscriptionManager({
   schema,
   pubsub,
   setupFunctions: {
-    messageAdded: () => ({
-      messageAdded: (message) => message.id !== '0',
+    messageAdded: (options, args) => ({
+      messageAdded: {
+        filter: (message) => message.room === args.room && message.channel === args.channel,
+      },
     }),
-    messageDeleted: () => ({
-      messageDeleted: (message) => message.id !== '0',
+    messageDeleted: (options, args) => ({
+      messageDeleted: {
+        filter: (message) => message.room === args.room && message.channel === args.channel,
+      },
     }),
   },
 });

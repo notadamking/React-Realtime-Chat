@@ -15,15 +15,14 @@ function isDuplicateMessage(newMessage, existingMessages) {
 @connect(
   (state) => ({
     user: state.auth.currentUser,
-    authLoading: state.auth.isLoading,
   })
 )
 @graphql(postMessageMutation, {
   props: ({ ownProps, mutate }) => ({
     postMessage: (content) => mutate({
       variables: {
-        room: 'home', // change this
-        channel: 'general', // and this
+        room: ownProps.room,
+        channel: ownProps.channel,
         content
       },
       optimisticResponse: {
@@ -85,10 +84,8 @@ export default class NewMessageFormContainer extends Component {
 
   render() {
     const { submitError } = this.state;
-    const { authLoading, handleSubmit, pristine, submitting, user } = this.props;
-    return authLoading
-    ? <noscript />
-    : (
+    const { handleSubmit, pristine, submitting, user } = this.props;
+    return (
       <NewMessageForm
         pristine={pristine}
         submitError={submitError}
@@ -101,12 +98,13 @@ export default class NewMessageFormContainer extends Component {
 }
 
 NewMessageFormContainer.propTypes = {
-  authLoading: PropTypes.bool,
+  channel: PropTypes.string.isRequired,
   dispatch: PropTypes.func,
   handleSubmit: PropTypes.func,
   postMessage: PropTypes.func,
   pristine: PropTypes.bool,
   reset: PropTypes.func,
+  room: PropTypes.string.isRequired,
   submitting: PropTypes.bool,
   user: PropTypes.object,
 };

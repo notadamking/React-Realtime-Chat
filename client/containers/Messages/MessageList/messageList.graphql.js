@@ -16,8 +16,8 @@ query MessageList($room: String!, $channel: String!, $offset: Int, $limit: Int) 
 `;
 
 export const messageAddedSubscription = gql`
-subscription MessageAdded {
-  messageAdded {
+subscription MessageAdded($room: String!, $channel: String!) {
+  messageAdded(room: $room, channel: $channel) {
     id
     content
     createdAt
@@ -31,8 +31,8 @@ subscription MessageAdded {
 `;
 
 export const messageDeletedSubscription = gql`
-subscription MessageDeleted {
-  messageDeleted {
+subscription MessageDeleted($room: String!, $channel: String!) {
+  messageDeleted(room: $room, channel: $channel) {
     id
     content
     createdAt

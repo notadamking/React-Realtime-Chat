@@ -22,8 +22,8 @@ const mutations = `
 `;
 
 const subscriptions = `
-  messageAdded: Message
-  messageDeleted: Message
+  messageAdded(room: String!, channel: String!): Message
+  messageDeleted(room: String!, channel: String!): Message
 `;
 
 const resolvers = {

@@ -1,18 +1,20 @@
-.messagesContainer {
-  position: relative;
-  margin: 0 auto !important;
+.messageListContainer {
+  padding-right: 40px;
+  padding-bottom: 62px;
+  padding-top: 40px;
   width: 80%;
-  height: calc(100vh - 110px);
+  height: 100vh;
   overflow-y: scroll;
+  float: right;
 }
 
 .messageList {
   overflow: auto;
-  position: absolute;
-  bottom: 0;
   width: 100%;
-  max-width: 100% !important;
-  max-height: calc(100vh - 130px);
+  padding-bottom: 20px;
+  margin-bottom: 40px;
+  max-width: 100% !important; /* .ui.comments adds max-width: 640px */
+  height: calc(100vh - 100px);
 }
 
 .loadMoreButton {
