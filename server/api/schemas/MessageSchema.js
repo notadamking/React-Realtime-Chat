@@ -10,9 +10,15 @@ const types = `
     updatedAt: String!
     author: User!
   }
+
+  type ChannelsInRoomUpdate {
+    room: String!
+    channels: [String]!
+  }
 `;
 
 const queries = `
+  channelsForRoom(room: String!): [String]
   messages(room: String!, channel: String!, offset: Int, limit: Int): [Message]
 `;
 
@@ -22,25 +28,30 @@ const mutations = `
 `;
 
 const subscriptions = `
+  channelsInRoomChanged(room: String!): ChannelsInRoomUpdate
   messageAdded(room: String!, channel: String!): Message
   messageDeleted(room: String!, channel: String!): Message
 `;
 
 const resolvers = {
   Query: {
+    channelsForRoom: async (root, { room }, context) => {
+      return await context.Message.getChannelsForRoom(room);
+    },
     messages: async (root, { room, channel, offset, limit }, context) => {
       return await context.Message.getMessages({ room, channel, offset, limit });
     },
   },
   Mutation: {
-    postMessage: async (__, { room, channel, content }, context) => {
+    postMessage: async (root, { room, channel, content }, context) => {
       return await context.Message.postNewMessage({ room, channel, content, user: context.user });
     },
-    deleteMessage: async (__, { id }, context) => {
+    deleteMessage: async (root, { id }, context) => {
       return await context.Message.deleteMessage({ id, user: context.user });
     }
   },
   Subscription: {
+    channelsInRoomChanged: (channels) => channels,
     messageAdded: (message) => message,
     messageDeleted: (message) => message,
   },

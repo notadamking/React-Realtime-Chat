@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
 import { withApollo } from 'react-apollo';
+import { connect } from 'react-redux';
 
 import config from '../../../../config';
 import { setLoggedOut, setLoginModalOpen, setSignupModalOpen } from '../../../redux/actions/auth';
@@ -44,7 +44,6 @@ export default class NavMenuContainer extends Component {
 
   render() {
     const { channel, loginModalOpen, room, signupModalOpen, user } = this.props;
-    console.log(channel);
     return (
       <div>
         <NavMenu

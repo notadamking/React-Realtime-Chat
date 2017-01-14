@@ -1,7 +1,13 @@
 .channelsHeader {
   color: #ab9ba9 !important;
-  margin-top: 20px !important;
+  margin-top: 30px !important;
   font-size: 1.1em !important;
+}
+
+.channelsContainer {
+  max-height: 165px;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .channelItem {
@@ -13,6 +19,18 @@
 .activeItem {
   color: #FFF !important;
   background-color: #4c9689 !important;
+}
+
+.channelIcon {
+  float: none !important;
+}
+
+.directMessageIcon {
+  color: #38978D;
+}
+
+.activeDirectMessageIcon {
+  color: #fff;
 }
 
 .notificationLabel {

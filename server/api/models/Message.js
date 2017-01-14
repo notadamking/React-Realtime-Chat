@@ -12,6 +12,13 @@ export default (sequelize, DataTypes) => {
       associate({ User }) {
         this.belongsTo(User, { as: 'author' });
       },
+      async getChannelsForRoom(room) {
+        const channels = await this.aggregate('channel', 'DISTINCT', {
+          plain: false,
+          where: { room }
+        });
+        return channels.map((channel) => channel.DISTINCT);
+      },
       async getMessages({ room, channel, offset = 0, limit = 10 }) {
         const protectedLimit = (limit < 1 || limit > 50) ? 50 : limit;
         const messages = await this.findAll({
@@ -22,26 +29,6 @@ export default (sequelize, DataTypes) => {
           order: [['createdAt', 'DESC']],
         });
         return messages.map((message) => message.toJSON());
-      },
-      async postNewMessage({ room, channel, content, user }) {
-        if (!user) {
-          throw new Error('You must be logged in to submit a message');
-        }
-        const message = await this.create({
-          room,
-          channel,
-          content,
-          authorId: user.id
-        });
-        const author = await message.getAuthor();
-        const newMessage = {
-          ...message.toJSON(),
-          author: author.toJSON()
-        };
-
-        pubsub.publish('messageAdded', newMessage);
-
-        return newMessage;
       },
       async deleteMessage({ id, user }) {
         const message = await this.findById(id, {
@@ -58,6 +45,35 @@ export default (sequelize, DataTypes) => {
         pubsub.publish('messageDeleted', deletedMessage);
 
         return deletedMessage;
+      },
+      async postNewMessage({ room, channel, content, user }) {
+        if (!user) {
+          throw new Error('You must be logged in to submit a message');
+        }
+
+        const existingChannels = await this.getChannelsForRoom(room);
+        const message = await this.create({
+          room,
+          channel,
+          content,
+          authorId: user.id
+        });
+        const author = await message.getAuthor();
+        const newMessage = {
+          ...message.toJSON(),
+          author: author.toJSON()
+        };
+
+        pubsub.publish('messageAdded', newMessage);
+
+        if (!existingChannels.includes(channel)) {
+          pubsub.publish('channelsInRoomChanged', {
+            room,
+            channels: [...existingChannels, channel],
+          });
+        }
+
+        return newMessage;
       },
     }
   });

@@ -4,11 +4,14 @@ import { graphql } from 'react-apollo';
 import Helmet from 'react-helmet';
 
 import { setLoading, setLoggedIn, setLoggedOut } from '../../redux/actions/auth';
-import { MessageList, NavMenu, NewMessageForm } from '../../containers';
+import { MessageRoom } from '../../containers';
 import getCurrentUser from './currentUser.graphql';
-// import styles from './Messages.css';
 
-@connect()
+@connect(
+  (state) => ({
+    user: state.auth.currentUser,
+  })
+)
 @graphql(getCurrentUser, { options: { ssr: false } })
 export default class Messages extends Component {
   componentDidMount() {
@@ -29,7 +32,7 @@ export default class Messages extends Component {
   }
 
   render() {
-    const { params, route } = this.props;
+    const { params, route, user } = this.props;
     const room = (params.room || route.room);
     const channel = (params.channel || route.channel);
     return (
@@ -37,9 +40,7 @@ export default class Messages extends Component {
         <Helmet
           title={`${channel} | ${room.charAt(0).toUpperCase() + room.slice(1)}`}
         />
-        <NavMenu channel={channel} room={room} />
-        <MessageList channel={channel} room={room} />
-        <NewMessageForm channel={channel} room={room} />
+        <MessageRoom channel={channel} room={room} user={user} />
       </div>
     );
   }

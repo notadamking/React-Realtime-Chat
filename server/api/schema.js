@@ -22,6 +22,7 @@ const typeDefs = [`
   }
 
   type Subscription {
+    ${UserSchema.subscriptions}
     ${MessageSchema.subscriptions}
   }
 
@@ -45,6 +46,7 @@ const resolvers = {
     ...MessageSchema.resolvers.Mutation,
   },
   Subscription: {
+    ...UserSchema.resolvers.Subscription,
     ...MessageSchema.resolvers.Subscription,
   },
 };

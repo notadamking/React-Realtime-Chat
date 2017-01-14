@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
-import { Menu } from 'semantic-ui-react';
+import { Icon, Menu } from 'semantic-ui-react';
 
-import { Channels } from '../../../components';
+import { Channels, DirectMessages } from '../../../containers';
 import styles from './NavMenu.css';
 
 const NavMenu = ({ channel, room, user, onLoginClicked, onLogoutClicked, onSignupClicked }) => (
@@ -11,11 +11,18 @@ const NavMenu = ({ channel, room, user, onLoginClicked, onLogoutClicked, onSignu
     </Menu.Item>
     {user ? (
       <Menu.Menu>
-        <Menu.Item className={styles.navMenuItem} icon='user' content={user.email} />
+        <Menu.Item className={styles.navMenuItem}>
+          <Icon
+            className={styles.userIcon}
+            name='circle'
+            size='small'
+          />
+          &nbsp;{user.email}
+        </Menu.Item>
         <Menu.Item
           className={styles.navMenuItem}
-          icon='sign out'
           content='logout'
+          icon='sign out'
           onClick={onLogoutClicked}
         />
       </Menu.Menu>
@@ -23,29 +30,20 @@ const NavMenu = ({ channel, room, user, onLoginClicked, onLogoutClicked, onSignu
       <Menu.Menu>
         <Menu.Item
           className={styles.navMenuItem}
-          icon='talk'
           content='sign up'
+          icon='talk'
           onClick={onSignupClicked}
         />
         <Menu.Item
           className={styles.navMenuItem}
-          icon='sign in'
           content='login'
+          icon='sign in'
           onClick={onLoginClicked}
         />
       </Menu.Menu>
     )}
-    <Channels
-      activeChannel={channel}
-      channels={['general', 'test', 'new']}
-      room={room}
-    />
-    <Channels
-      activeChannel={channel}
-      channels={['a@a.com', '1@1.com', 't@t.com']}
-      directMessages
-      room={room}
-    />
+    <Channels channel={channel} room={room} />
+    <DirectMessages channel={channel} room={room} user={user} />
   </Menu>
 );
 

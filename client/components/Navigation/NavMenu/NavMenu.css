@@ -2,8 +2,9 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 15% !important;
+  width: 15rem !important;
   height: 100%;
+  border-radius: 0 !important;
   background-color: #4D394B !important;
 }
 
@@ -15,4 +16,9 @@
   color: #FFF;
   font-size: 1.25em !important;
   margin-bottom: 5px !important;
+}
+
+.userIcon {
+  float: none !important;
+  color: #38978D;
 }

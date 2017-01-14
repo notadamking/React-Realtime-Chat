@@ -15,7 +15,7 @@ const handleKeyPress = ({ e, onSubmit, pristine, submitting }) => {
   }
 };
 
-const NewMessageForm = ({ pristine, submitError, submitting, user, onSubmit }) => {
+const NewMessageForm = ({ channel, pristine, submitError, submitting, user, onSubmit }) => {
   return user
   ? (
     <div>
@@ -26,6 +26,7 @@ const NewMessageForm = ({ pristine, submitError, submitting, user, onSubmit }) =
             autoHeight
             component={FormTextField}
             name='content'
+            placeholder={`Message #${channel}`}
             rows={1}
             onKeyPress={(e) => handleKeyPress({ e, onSubmit, pristine, submitting })}
           />
@@ -39,6 +40,7 @@ const NewMessageForm = ({ pristine, submitError, submitting, user, onSubmit }) =
 };
 
 NewMessageForm.propTypes = {
+  channel: PropTypes.string,
   pristine: PropTypes.bool,
   submitError: PropTypes.string,
   submitting: PropTypes.bool,

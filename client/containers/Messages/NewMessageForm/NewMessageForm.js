@@ -84,9 +84,10 @@ export default class NewMessageFormContainer extends Component {
 
   render() {
     const { submitError } = this.state;
-    const { handleSubmit, pristine, submitting, user } = this.props;
+    const { channel, handleSubmit, pristine, submitting, user } = this.props;
     return (
       <NewMessageForm
+        channel={channel}
         pristine={pristine}
         submitError={submitError}
         submitting={submitting}
