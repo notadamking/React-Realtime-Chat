@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import { browserHistory } from 'react-router';
-import { Button, Icon, Menu } from 'semantic-ui-react';
+import { Icon, Menu } from 'semantic-ui-react';
 import cx from 'classnames';
 
 import styles from './Channels.css';
 
 const Channels = ({ activeChannel, channels, directMessages, room }) => (
-  <Menu secondary vertical>
+  <Menu className={styles.channelsMenu} secondary vertical>
     <Menu.Item>
       <Menu.Header className={styles.channelsHeader}>
         {directMessages ? 'DIRECT MESSAGES' : `CHANNELS (${channels ? channels.length : 0})`}

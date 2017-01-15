@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { graphql } from 'react-apollo';
 
 import { MessageList, NavMenu, NewMessageForm } from '../../';
+import { MessagesHeader } from '../../../components';
 import { updateCurrentRoomMutation } from './messageRoom.graphql';
 
 function isDuplicateUser(newUser, existingUsers) {
@@ -67,6 +68,7 @@ export default class MessageRoomContainer extends Component {
     return (
       <div>
         <NavMenu channel={channel} room={room} />
+        <MessagesHeader channel={channel} />
         <MessageList channel={channel} room={room} />
         <NewMessageForm channel={channel} room={room} />
       </div>

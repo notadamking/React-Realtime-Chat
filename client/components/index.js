@@ -7,6 +7,7 @@ import SignupModal from './Authentication/SignupModal';
 /* Messages */
 import Message from './Messages/Message';
 import MessageList from './Messages/MessageList';
+import MessagesHeader from './Messages/MessagesHeader';
 import NewMessageForm from './Messages/NewMessageForm';
 
 /* Forms */
@@ -26,13 +27,14 @@ import RelativeTime from './RelativeTime';
 
 export {
   Channels,
-  Message,
-  MessageList,
   FormField,
   FormTextField,
   Html,
   LoginForm,
   LoginModal,
+  Message,
+  MessageList,
+  MessagesHeader,
   Navbar,
   NavMenu,
   NewMessageForm,

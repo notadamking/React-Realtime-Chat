@@ -68,7 +68,18 @@ export default class NewMessageFormContainer extends Component {
     };
   }
 
-  async onSubmit({ content }) {
+  handleKeyPress(e) {
+    if (e.which === 13 && !e.shiftKey) {
+      const { handleSubmit, pristine, submitting } = this.props;
+      e.preventDefault();
+      if (!pristine && !submitting) {
+        handleSubmit(this.onSubmit.bind(this))();
+      }
+      return false;
+    }
+  }
+
+  async onSubmit({ content }) { // eslint-disable-line react/prop-types
     const { postMessage, reset } = this.props;
     if (content) {
       reset();
@@ -92,6 +103,7 @@ export default class NewMessageFormContainer extends Component {
         submitError={submitError}
         submitting={submitting}
         user={user}
+        onKeyPress={this.handleKeyPress.bind(this)}
         onSubmit={handleSubmit(this.onSubmit.bind(this))}
       />
     );

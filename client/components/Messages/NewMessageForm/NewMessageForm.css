@@ -5,8 +5,7 @@
   background-color: white;
   padding-top: 1px;
   padding-bottom: 20px;
-  padding-right: 40px;
-  text-align: left;
-  float: right;
-  width: 80%;
+  padding-right: 30px;
+  padding-left: 20px;
+  width: calc(100% - 13.75rem);
 }

@@ -5,17 +5,7 @@ import { Form, Header, Message } from 'semantic-ui-react';
 import { FormTextField } from '../../';
 import styles from './NewMessageForm.css';
 
-const handleKeyPress = ({ e, onSubmit, pristine, submitting }) => {
-  if (e.which === 13 && !e.shiftKey) {
-    e.preventDefault();
-    if (!pristine && !submitting) {
-      onSubmit();
-    }
-    return false;
-  }
-};
-
-const NewMessageForm = ({ channel, pristine, submitError, submitting, user, onSubmit }) => {
+const NewMessageForm = ({ channel, submitError, user, onKeyPress, onSubmit }) => {
   return user
   ? (
     <div>
@@ -28,7 +18,7 @@ const NewMessageForm = ({ channel, pristine, submitError, submitting, user, onSu
             name='content'
             placeholder={`Message #${channel}`}
             rows={1}
-            onKeyPress={(e) => handleKeyPress({ e, onSubmit, pristine, submitting })}
+            onKeyPress={onKeyPress}
           />
         </div>
       </Form>
@@ -41,10 +31,9 @@ const NewMessageForm = ({ channel, pristine, submitError, submitting, user, onSu
 
 NewMessageForm.propTypes = {
   channel: PropTypes.string,
-  pristine: PropTypes.bool,
   submitError: PropTypes.string,
-  submitting: PropTypes.bool,
   user: PropTypes.object,
+  onKeyPress: PropTypes.func,
   onSubmit: PropTypes.func,
 };
 
