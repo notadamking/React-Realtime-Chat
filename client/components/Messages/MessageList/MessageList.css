@@ -1,7 +1,7 @@
 .messageListContainer {
   padding-bottom: 62px;
   padding-top: 41px;
-  padding-left: 40px;
+  padding-left: 35px;
   width: calc(100% - 13.75rem);
   height: 100vh;
   overflow-y: scroll;
@@ -12,7 +12,7 @@
   overflow: auto;
   width: 100%;
   padding-bottom: 20px;
-  padding-right: 40px;
+  padding-right: 35px;
   margin-bottom: 40px;
   max-width: 100% !important; /* .ui.comments adds max-width: 640px */
   height: calc(100vh - 100px);

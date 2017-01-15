@@ -25,7 +25,7 @@ const NewMessageForm = ({ channel, submitError, user, onKeyPress, onSubmit }) =>
     </div>
   )
   : (
-    <Header as='h4' className={styles.messageBox} content='Login to leave a message.' />
+    <Header as='h4' className={styles.messageBox} content='Login to leave a message' />
   );
 };
 
