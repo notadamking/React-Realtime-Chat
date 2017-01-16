@@ -11,8 +11,6 @@ A reproduction of the popular realtime chat application, Slack (http://slack.com
 - PostCSS
 - Eslint
 
-## Features
-
 ## Getting Started
 ### Installation
 ```bash
