@@ -7,9 +7,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 */
 const productionPort = process.env.PORT || 8080;
 const localDbUrl = 'postgres://postgres:password@localhost:5432/boilerplate';
-const productionDbUrl = process.env.DATABASE_URL
-  ? `${process.env.DATABASE_URL}?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory`
-  : localDbUrl;
+const productionDbUrl = process.env.DATABASE_URL || localDbUrl;
 
 module.exports = {
   env: process.env.NODE_ENV || 'development',
