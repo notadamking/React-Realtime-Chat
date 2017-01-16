@@ -36,7 +36,7 @@ npm start
 ## Contributing
 I am more than happy to accept external contributions to the project in the form of feedback, bug reports, and of course - pull requests :)
 
-Ease of understanding and simplicity are important to the longevity of this project, so if you find a simpler way of doing, something feel free to share!
+Ease of understanding and simplicity are important to the longevity of this project, so if you find a simpler way of doing something, feel free to share!
 
 --- 
 
