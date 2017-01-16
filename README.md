@@ -17,16 +17,26 @@ A reproduction of the popular realtime chat application, Slack (http://slack.com
 
 ## Getting Started
 ### Installation
+```bash
+npm install
+```
 
 ### Development
+```bash
+npm run dev
+```
 
 ### Building for Production
+```bash
+npm start
+```
 
 ### Heroku
 
 ## Contributing
 I am more than happy to accept external contributions to the project in the form of feedback, bug reports, and of course - pull requests :)
-This project has a focus towards simplicity, so if you find a simpler way of doing something, feel free to share!
+
+Ease of understanding and simplicity are important to this project, so if you find a simpler way of doing something feel free to share!
 
 --- 
 
