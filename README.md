@@ -2,16 +2,14 @@
 A reproduction of the popular realtime chat application, Slack (http://slack.com). This stack was built with a focus on scalability, efficiency, performance, and simplicity.
 
 ## Stack
-- React
+- React (w/ Server-side Rendering)
 - Redux
 - Apollo/GraphQL
 - Webpack
 - Babel (ES7)
-- Hot Reloading
-- Server-side Rendering
+- React-hot-reloader
 - PostCSS
 - Eslint
-- Websockets (subscriptions)
 
 ## Features
 
