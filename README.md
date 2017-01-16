@@ -16,10 +16,12 @@ A reproduction of the popular realtime chat application, Slack (http://slack.com
 ## Getting Started
 ### Installation
 ```bash
+git clone https://github.com/adamjking3/Slack-Reproduction.git
+cd Slack-Reproduction
 npm install
 ```
 
-### Development
+### Running in Development
 ```bash
 npm run dev
 ```
@@ -30,6 +32,13 @@ npm start
 ```
 
 ### Heroku
+Once you have your Heroku server set up with postgreSQL available, all you'll need to do is:
+```bash
+git push heroku master
+heroku config:set PGSSLMODE=require
+heroku ps:scale web=1
+heroku open
+```
 
 ## Contributing
 I am more than happy to accept external contributions to the project in the form of feedback, bug reports, and of course - pull requests :)
