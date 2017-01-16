@@ -1,18 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import { reduxForm } from 'redux-form';
 
-import { clearSubmitErrors, handleSignupSuccess, setSignupSubmitError } from '../../../redux/actions/auth';
+import { handleSignupSuccess } from '../../../redux/actions/auth';
 import { SignupForm } from '../../../components';
 import createUserMutation from './createUser.graphql';
 import validate from './validate';
 
-@connect(
-  (state) => ({
-    submitError: (state.auth && state.auth.signupSubmitError) || null,
-  })
-)
 @graphql(createUserMutation, {
   props: ({ mutate }) => ({
     submitSignup: ({ username, password }) => mutate({ variables: { username, password } }),
@@ -23,23 +17,32 @@ import validate from './validate';
   validate
 })
 export default class SignupFormContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      submitError: null
+    };
+  }
+
   async onSubmit({ username, password }) {
-    const { dispatch, submitSignup } = this.props;
-    dispatch(clearSubmitErrors());
+    const { dispatch, submitSignup, onClose } = this.props;
+    this.setState({ submitError: null });
     const { data: { createUser } } = await submitSignup({ username, password });
     if (createUser.error) {
-      dispatch(setSignupSubmitError(createUser.error));
+      this.setState({ submitError: createUser.error });
     } else {
       dispatch(handleSignupSuccess(createUser));
+      onClose();
     }
   }
 
   render() {
-    const { handleSubmit, pristine, submitError, submitting } = this.props;
+    const { handleSubmit, pristine, submitting } = this.props;
     return (
       <SignupForm
         pristine={pristine}
-        submitError={submitError}
+        submitError={this.state.submitError}
         submitting={submitting}
         onSubmit={handleSubmit(this.onSubmit.bind(this))}
       />
@@ -51,7 +54,7 @@ SignupFormContainer.propTypes = {
   dispatch: PropTypes.func,
   handleSubmit: PropTypes.func,
   pristine: PropTypes.bool,
-  submitError: PropTypes.string,
   submitSignup: PropTypes.func,
   submitting: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
 };

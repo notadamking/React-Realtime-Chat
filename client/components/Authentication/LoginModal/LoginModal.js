@@ -8,7 +8,7 @@ const LoginModal = ({ open, onClose, onShowSignupModal }) => (
   <Modal closeIcon dimmer open={open} size='small' onClose={onClose}>
     <Modal.Header>Login</Modal.Header>
     <Modal.Content>
-      <LoginForm />
+      <LoginForm onClose={onClose} />
     </Modal.Content>
     <a className={styles.signupLink} onClick={onShowSignupModal} >
       Need an account?&nbsp; Sign up, it's free!

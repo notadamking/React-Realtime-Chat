@@ -56,7 +56,6 @@ export default class MessageRoomContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.user) {
       const { room, updateCurrentRoom } = this.props;
-      console.log('updating room for user: ', nextProps.user);
       updateCurrentRoom({ room, user: nextProps.user });
     }
   }

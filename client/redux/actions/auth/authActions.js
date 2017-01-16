@@ -1,19 +1,9 @@
 import config from '../../../../config';
+import { setShouldUpdateRoom } from '../messages';
 import {
-  SET_LOADING,
   SET_LOGGED_IN,
   SET_LOGGED_OUT,
-  SET_LOGIN_MODAL_OPEN,
-  SET_SIGNUP_MODAL_OPEN,
-  SET_LOGIN_SUBMIT_ERROR,
-  SET_SIGNUP_SUBMIT_ERROR,
-  CLEAR_AUTH_SUBMIT_ERRORS,
 } from '../types';
-
-export const setLoading = (loading = true) => ({
-  type: SET_LOADING,
-  loading
-});
 
 export const setLoggedIn = (user) => ({
   type: SET_LOGGED_IN,
@@ -24,29 +14,15 @@ export const setLoggedOut = () => ({
   type: SET_LOGGED_OUT
 });
 
-export const setLoginModalOpen = (open = true) => ({
-  type: SET_LOGIN_MODAL_OPEN,
-  open
-});
-
-export const setSignupModalOpen = (open = true) => ({
-  type: SET_SIGNUP_MODAL_OPEN,
-  open
-});
-
-export const setLoginSubmitError = (error) => ({
-  type: SET_LOGIN_SUBMIT_ERROR,
-  error
-});
-
-export const setSignupSubmitError = (error) => ({
-  type: SET_SIGNUP_SUBMIT_ERROR,
-  error
-});
-
-export const clearSubmitErrors = () => ({
-  type: CLEAR_AUTH_SUBMIT_ERRORS
-});
+export const handleLogout = () => {
+  if (global.localStorage && localStorage.getItem(config.authTokenName)) {
+    localStorage.removeItem(config.authTokenName);
+  }
+  return (dispatch) => {
+    dispatch(setLoggedOut());
+    dispatch(setShouldUpdateRoom());
+  };
+};
 
 export const handleLoginSuccess = (user) => {
   if (global.localStorage) {
@@ -54,7 +30,7 @@ export const handleLoginSuccess = (user) => {
   }
   return (dispatch) => {
     dispatch(setLoggedIn(user));
-    dispatch(setLoginModalOpen(false));
+    dispatch(setShouldUpdateRoom());
   };
 };
 
@@ -64,6 +40,6 @@ export const handleSignupSuccess = (user) => {
   }
   return (dispatch) => {
     dispatch(setLoggedIn(user));
-    dispatch(setSignupModalOpen(false));
+    dispatch(setShouldUpdateRoom());
   };
 };

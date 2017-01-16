@@ -2,48 +2,54 @@ import React, { Component, PropTypes } from 'react';
 import { withApollo } from 'react-apollo';
 import { connect } from 'react-redux';
 
-import config from '../../../../config';
-import { setLoggedOut, setLoginModalOpen, setSignupModalOpen } from '../../../redux/actions/auth';
+import { handleLogout } from '../../../redux/actions/auth';
 import { LoginModal, NavMenu, SignupModal } from '../../../components';
 
 @withApollo
 @connect(
   (state) => ({
     user: (state.auth && state.auth.currentUser) || null,
-    loginModalOpen: (state.auth && state.auth.loginModalOpen) || false,
-    signupModalOpen: (state.auth && state.auth.signupModalOpen) || false,
   })
 )
 export default class NavMenuContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loginModalOpen: false,
+      signupModalOpen: false,
+    };
+  }
+
   handleLoginClick() {
-    const { dispatch } = this.props;
-    dispatch(setSignupModalOpen(false));
-    dispatch(setLoginModalOpen(true));
+    this.setState({
+      loginModalOpen: true,
+      signupModalOpen: false
+    });
   }
 
   handleLogoutClick() {
     const { dispatch, client } = this.props;
-    if (global.localStorage && localStorage.getItem(config.authTokenName)) {
-      localStorage.removeItem(config.authTokenName);
-    }
-    dispatch(setLoggedOut());
+    dispatch(handleLogout());
     client.resetStore();
   }
 
   handleSignupClick() {
-    const { dispatch } = this.props;
-    dispatch(setLoginModalOpen(false));
-    dispatch(setSignupModalOpen(true));
+    this.setState({
+      loginModalOpen: false,
+      signupModalOpen: true
+    });
   }
 
   handleCloseModals() {
-    const { dispatch } = this.props;
-    dispatch(setLoginModalOpen(false));
-    dispatch(setSignupModalOpen(false));
+    this.setState({
+      loginModalOpen: false,
+      signupModalOpen: false
+    });
   }
 
   render() {
-    const { channel, loginModalOpen, room, signupModalOpen, user } = this.props;
+    const { channel, room, user } = this.props;
     return (
       <div>
         <NavMenu
@@ -55,14 +61,14 @@ export default class NavMenuContainer extends Component {
           onSignupClicked={this.handleSignupClick.bind(this)}
         />
         <LoginModal
-          open={loginModalOpen}
-          onClose={this.handleCloseModals}
-          onShowSignupModal={this.handleSignupClick}
+          open={this.state.loginModalOpen}
+          onClose={this.handleCloseModals.bind(this)}
+          onShowSignupModal={this.handleSignupClick.bind(this)}
         />
         <SignupModal
-          open={signupModalOpen}
-          onClose={this.handleCloseModals}
-          onShowLoginModal={this.handleLoginClick}
+          open={this.state.signupModalOpen}
+          onClose={this.handleCloseModals.bind(this)}
+          onShowLoginModal={this.handleLoginClick.bind(this)}
         />
       </div>
     );
@@ -73,8 +79,6 @@ NavMenuContainer.propTypes = {
   channel: PropTypes.string,
   client: PropTypes.object,
   dispatch: PropTypes.func,
-  loginModalOpen: PropTypes.bool,
   room: PropTypes.string,
-  signupModalOpen: PropTypes.bool,
   user: PropTypes.object,
 };

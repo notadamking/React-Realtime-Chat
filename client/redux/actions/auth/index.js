@@ -1,12 +1,7 @@
 export {
-  setLoading,
   setLoggedIn,
   setLoggedOut,
-  setLoginModalOpen,
-  setSignupModalOpen,
-  setLoginSubmitError,
-  setSignupSubmitError,
-  clearSubmitErrors,
   handleLoginSuccess,
+  handleLogout,
   handleSignupSuccess,
 } from './authActions';
