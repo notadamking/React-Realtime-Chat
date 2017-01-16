@@ -31,12 +31,12 @@ npm start
 ```
 
 ### Heroku
-Once you have your Heroku server set up with postgreSQL available, all you'll need to do is:
+You can create your own Heroku server or view the example: https://slack-in-react.herokuapp.com
 ```bash
+heroku create
 git push heroku master
-heroku config:set PGSSLMODE=require
-heroku ps:scale web=1
-heroku open
+heroku addons:create heroku-postgresql:hobby-dev
+heroku ps:scale web=1 && heroku open
 ```
 
 ## Contributing
