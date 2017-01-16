@@ -1,5 +1,5 @@
 # Slack Reproduction
-A reproduction of the popular realtime chat application, Slack (http://slack.com). This stack was built with a focus on scalability, efficiency, performance, and simplicity.
+A full-stack reproduction of the popular realtime chat application, Slack (http://slack.com). This stack was built with a focus on scalability, efficiency, performance, and simplicity.
 
 ## Stack
 - React (w/ Server-side Rendering)
