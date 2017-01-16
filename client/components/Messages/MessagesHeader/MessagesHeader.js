@@ -3,17 +3,16 @@ import { Header } from 'semantic-ui-react';
 
 import styles from './MessagesHeader.css';
 
-const MessagesHeader = ({ channel, isDirectMessage }) => (
+const MessagesHeader = ({ channel }) => (
   <div className={styles.headerContainer}>
     <Header as='h3'>
-      {isDirectMessage ? `@${channel}` : `#${channel}`}
+      {channel.includes('@') ? `@${channel}` : `#${channel}`}
     </Header>
   </div>
 );
 
 MessagesHeader.propTypes = {
   channel: PropTypes.string.isRequired,
-  isDirectMessage: PropTypes.bool,
 };
 
 export default MessagesHeader;

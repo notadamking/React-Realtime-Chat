@@ -49,9 +49,9 @@ export default class DirectMessagesContainer extends Component {
         activeChannel={channel}
         channels={users.map((u) => {
           if (user && u.id === user.id) {
-            return `${u.email} (you)`;
+            return `${u.username} (you)`;
           }
-          return u.email;
+          return u.username;
         })}
         directMessages
         room={room}

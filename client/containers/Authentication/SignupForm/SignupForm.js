@@ -15,7 +15,7 @@ import validate from './validate';
 )
 @graphql(createUserMutation, {
   props: ({ mutate }) => ({
-    submitSignup: ({ email, password }) => mutate({ variables: { email, password } }),
+    submitSignup: ({ username, password }) => mutate({ variables: { username, password } }),
   }),
 })
 @reduxForm({
@@ -23,10 +23,10 @@ import validate from './validate';
   validate
 })
 export default class SignupFormContainer extends Component {
-  async onSubmit({ email, password }) {
+  async onSubmit({ username, password }) {
     const { dispatch, submitSignup } = this.props;
     dispatch(clearSubmitErrors());
-    const { data: { createUser } } = await submitSignup({ email, password });
+    const { data: { createUser } } = await submitSignup({ username, password });
     if (createUser.error) {
       dispatch(setSignupSubmitError(createUser.error));
     } else {

@@ -6,7 +6,7 @@ import { MessagesHeader } from '../../../components';
 import { updateCurrentRoomMutation } from './messageRoom.graphql';
 
 function isDuplicateUser(newUser, existingUsers) {
-  return newUser && existingUsers.length > 0
+  return newUser && existingUsers && existingUsers.length > 0
           && existingUsers.some(user => newUser.id === user.id);
 }
 
@@ -18,13 +18,17 @@ function isDuplicateUser(newUser, existingUsers) {
         updateCurrentRoom: {
           __typename: 'User',
           id: user.id,
-          email: user.email,
+          username: user.username,
           currentRoom: room,
         }
       },
       updateQueries: {
         UserList: (previousResult, { mutationResult }) => {
           const updatedUser = mutationResult.data.updateCurrentRoom;
+
+          if (!previousResult.usersInRoom) {
+            return { usersInRoom: [updatedUser] };
+          }
 
           if (isDuplicateUser(updatedUser, previousResult.usersInRoom)) {
             return previousResult;
@@ -40,8 +44,8 @@ function isDuplicateUser(newUser, existingUsers) {
 })
 export default class MessageRoomContainer extends Component {
   componentDidMount() {
-    const { updateCurrentRoom, user } = this.props;
     window.onbeforeunload = (e) => {
+      const { updateCurrentRoom, user } = this.props;
       e.preventDefault();
       if (user) {
         updateCurrentRoom({ room: null, user });
@@ -52,6 +56,7 @@ export default class MessageRoomContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.user) {
       const { room, updateCurrentRoom } = this.props;
+      console.log('updating room for user: ', nextProps.user);
       updateCurrentRoom({ room, user: nextProps.user });
     }
   }

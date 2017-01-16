@@ -11,7 +11,6 @@ import NewMessageForm from './Messages/NewMessageForm';
 /* Navigation */
 import Channels from './Navigation/Channels';
 import DirectMessages from './Navigation/DirectMessages';
-import Navbar from './Navigation/Navbar';
 import NavMenu from './Navigation/NavMenu';
 
 export {
@@ -21,7 +20,6 @@ export {
   MessageList,
   MessageRoom,
   LoginForm,
-  Navbar,
   NavMenu,
   NewMessageForm,
   SignupForm,

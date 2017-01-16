@@ -4,7 +4,7 @@ export const updateCurrentRoomMutation = gql`
 mutation UpdateCurrentRoom($room: String) {
   updateCurrentRoom(room: $room) {
     id
-    email
+    username
     currentRoom
   }
 }

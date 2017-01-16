@@ -4,7 +4,7 @@ export default gql`
 query User {
   currentUser {
     id
-    email
+    username
     createdAt
     updatedAt
   }

@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import gravatar from 'gravatar';
 
 import { pubsub } from '../utils/subscriptions';
 import { isDevelopment, secretKey } from '../../../config';
@@ -22,7 +23,8 @@ const getPasswordHash = async (password) => {
 export default (sequelize, DataTypes) => {
   return sequelize.define('user', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    email: { type: DataTypes.STRING, allowNull: false },
+    username: { type: DataTypes.STRING, allowNull: false },
+    avatarUrl: { type: DataTypes.STRING, allowNull: false },
     hash: { type: DataTypes.STRING(60), allowNull: false },
     currentRoom: { type: DataTypes.STRING },
   }, {
@@ -68,27 +70,28 @@ export default (sequelize, DataTypes) => {
 
         return updatedUser.toJSON();
       },
-      async createNewUser({ email, password }) {
-        const exists = await this.findOne({ where: { email } });
+      async createNewUser({ username, password }) {
+        const exists = await this.findOne({ where: { username } });
 
         if (exists) {
-          throw new Error('That email address is already in use.');
+          throw new Error('That username is already in use.');
         }
 
         const hash = await getPasswordHash(password);
-        const user = await this.create({ email, hash });
+        const avatarUrl = gravatar.url(username);
+        const user = await this.create({ username, avatarUrl, hash });
         return {
           ...user.toJSON(),
           authToken: signJwt(user.id)
         };
       },
-      async login({ email, password }) {
-        const user = await this.findOne({ where: { email } });
+      async login({ username, password }) {
+        const user = await this.findOne({ where: { username } });
 
         if (!user) {
-          throw new Error('No user with that email address exists.');
+          throw new Error('No user with that username exists.');
         } else if (!await validatePassword({ password, hash: user.hash })) {
-          throw new Error('Invalid email or password.');
+          throw new Error('Invalid username or password.');
         }
 
         return {

@@ -9,7 +9,8 @@ mutation NewMessage($room: String!, $channel: String!, $content: String!) {
     updatedAt
     author {
       id
-      email
+      username
+      avatarUrl
     }
   }
 }

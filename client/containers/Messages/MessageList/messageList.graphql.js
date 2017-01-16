@@ -9,7 +9,8 @@ query MessageList($room: String!, $channel: String!, $offset: Int, $limit: Int) 
     updatedAt
     author {
       id
-      email
+      username
+      avatarUrl
     }
   }
 }
@@ -24,7 +25,8 @@ subscription MessageAdded($room: String!, $channel: String!) {
     updatedAt
     author {
       id
-      email
+      username
+      avatarUrl
     }
   }
 }
@@ -34,12 +36,8 @@ export const messageDeletedSubscription = gql`
 subscription MessageDeleted($room: String!, $channel: String!) {
   messageDeleted(room: $room, channel: $channel) {
     id
-    content
-    createdAt
-    updatedAt
     author {
       id
-      email
     }
   }
 }

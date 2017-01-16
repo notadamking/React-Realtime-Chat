@@ -4,7 +4,7 @@ export const userListQuery = gql`
 query UserList($room: String!) {
   usersInRoom(room: $room) {
     id
-    email
+    username
   }
 }
 `;
@@ -14,7 +14,7 @@ subscription onUsersInRoomChanged($room: String!) {
   usersInRoomChanged(room: $room) {
     users {
       id
-      email
+      username
     }
   }
 }

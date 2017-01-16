@@ -14,17 +14,17 @@ import loginMutation from './login.graphql';
 )
 @graphql(loginMutation, {
   props: ({ mutate }) => ({
-    submitLogin: ({ email, password }) => mutate({ variables: { email, password } }),
+    submitLogin: ({ username, password }) => mutate({ variables: { username, password } }),
   }),
 })
 @reduxForm({
   form: 'login'
 })
 export default class LoginFormContainer extends Component {
-  async onSubmit({ email, password }) {
+  async onSubmit({ username, password }) {
     const { dispatch, submitLogin } = this.props;
     dispatch(clearSubmitErrors());
-    const { data: { loginAsUser } } = await submitLogin({ email, password });
+    const { data: { loginAsUser } } = await submitLogin({ username, password });
     if (loginAsUser.error) {
       dispatch(setLoginSubmitError(loginAsUser.error));
     } else {

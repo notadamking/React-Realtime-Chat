@@ -1,13 +1,8 @@
 import { makeExecutableSchema } from 'graphql-tools';
 
-import { EmailScalar, UrlScalar, DateScalar } from './types';
 import { UserSchema, MessageSchema } from './schemas';
 
 const typeDefs = [`
-  scalar Email
-  scalar Url
-  scalar Date
-
   ${UserSchema.types}
   ${MessageSchema.types()}
 
@@ -34,9 +29,6 @@ const typeDefs = [`
 `];
 
 const resolvers = {
-  Email: EmailScalar,
-  Date: DateScalar,
-  Url: UrlScalar,
   Query: {
     ...UserSchema.resolvers.Query,
     ...MessageSchema.resolvers.Query,

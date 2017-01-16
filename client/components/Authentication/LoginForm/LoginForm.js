@@ -11,10 +11,10 @@ const LoginForm = ({ pristine, submitError, submitting, onSubmit }) => (
       <Field
         component={FormField}
         icon='mail'
-        label='Email'
-        name='email'
-        placeholder='email'
-        type='email'
+        label='Username'
+        name='username'
+        placeholder='username'
+        type='text'
       />
       <Field
         component={FormField}

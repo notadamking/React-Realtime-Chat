@@ -1,9 +1,7 @@
-import validator from 'validator';
-
-export default ({ email, password, repeatPassword }) => {
+export default ({ username, password, repeatPassword }) => {
   const errors = {};
-  if (!email || !validator.isEmail(email)) {
-    errors.email = 'Please enter a valid email address';
+  if (!username) {
+    errors.username = 'Please enter a username';
   }
   if (!password) {
     errors.password = 'Please enter a password';

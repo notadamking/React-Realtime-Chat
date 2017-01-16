@@ -8,7 +8,7 @@ import { setShouldScrollToBottom } from '../../../redux/actions/messages';
 import postMessageMutation from './postMessage.graphql';
 
 function isDuplicateMessage(newMessage, existingMessages) {
-  return newMessage && existingMessages.length > 0
+  return newMessage && existingMessages && existingMessages.length > 0
           && existingMessages.some(message => newMessage.id === message.id);
 }
 
@@ -19,7 +19,7 @@ function isDuplicateMessage(newMessage, existingMessages) {
 )
 @graphql(postMessageMutation, {
   props: ({ ownProps, mutate }) => ({
-    postMessage: (content) => mutate({
+    postMessage: ({ content, user }) => mutate({
       variables: {
         room: ownProps.room,
         channel: ownProps.channel,
@@ -35,7 +35,8 @@ function isDuplicateMessage(newMessage, existingMessages) {
           author: {
             __typename: 'User',
             id: '0',
-            email: ownProps.user && ownProps.user.email,
+            username: user.username,
+            avatarUrl: user.avatarUrl,
           },
           error: null
         }
@@ -80,13 +81,18 @@ export default class NewMessageFormContainer extends Component {
   }
 
   async onSubmit({ content }) { // eslint-disable-line react/prop-types
-    const { postMessage, reset } = this.props;
-    if (content) {
-      reset();
-      this.setState({ submitError: null });
+    const { postMessage, reset, user } = this.props;
+    if (!user) {
+      this.setState({ submitError: 'You must be logged in to send a message.' });
+      return;
+    } else if (!content) {
+      return;
     }
 
-    const { data: { postMessage: { error } } } = await postMessage(content);
+    reset();
+    this.setState({ submitError: null });
+
+    const { data: { postMessage: { error } } } = await postMessage({ content, user });
 
     if (error) {
       this.setState({ submitError: error });

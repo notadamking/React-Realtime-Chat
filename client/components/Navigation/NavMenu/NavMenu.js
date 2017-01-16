@@ -17,7 +17,7 @@ const NavMenu = ({ channel, room, user, onLoginClicked, onLogoutClicked, onSignu
             name='circle'
             size='small'
           />
-          &nbsp;{user.email}
+          &nbsp;{user.username}
         </Menu.Item>
         <Menu.Item
           className={styles.navMenuItem}

@@ -4,7 +4,8 @@
 const types = `
   type User {
     id: ID
-    email: Email
+    username: String
+    avatarUrl: String
     createdAt: String
     updatedAt: String
     authToken: String
@@ -24,8 +25,8 @@ const queries = `
 
 const mutations = `
   updateCurrentRoom(room: String): User
-  loginAsUser(email: Email!, password: String!): User
-  createUser(email: Email!, password: String!): User
+  loginAsUser(username: String!, password: String!): User
+  createUser(username: String!, password: String!): User
 `;
 
 const subscriptions = `
@@ -41,16 +42,16 @@ const resolvers = {
   },
   Mutation: {
     updateCurrentRoom: async (__, { room }, context) => {
-      if (!context.user && !context.user.id) {
+      if (!context.user || !context.user.id) {
         throw new Error('You must be logged in to update the current room.');
       }
       return await context.User.updateCurrentRoom({ room, userId: context.user && context.user.id });
     },
-    loginAsUser: async (__, { email, password }, context) => {
-      return await context.User.login({ email, password });
+    loginAsUser: async (__, { username, password }, context) => {
+      return await context.User.login({ username, password });
     },
-    createUser: async (__, { email, password }, context) => {
-      return await context.User.createNewUser({ email, password });
+    createUser: async (__, { username, password }, context) => {
+      return await context.User.createNewUser({ username, password });
     },
   },
   Subscription: {

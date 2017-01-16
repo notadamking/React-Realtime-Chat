@@ -19,7 +19,6 @@ import Html from './Html';
 
 /* Navigation */
 import Channels from './Navigation/Channels';
-import Navbar from './Navigation/Navbar';
 import NavMenu from './Navigation/NavMenu';
 
 /* RelativeTime */
@@ -35,7 +34,6 @@ export {
   Message,
   MessageList,
   MessagesHeader,
-  Navbar,
   NavMenu,
   NewMessageForm,
   RelativeTime,

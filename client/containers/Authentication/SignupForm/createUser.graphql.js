@@ -1,10 +1,10 @@
 import gql from 'graphql-tag';
 
 export default gql`
-mutation User($email: Email!, $password: String!) {
-  createUser(email: $email, password: $password) {
+mutation User($username: String!, $password: String!) {
+  createUser(username: $username, password: $password) {
     id
-    email
+    username
     authToken
   }
 }

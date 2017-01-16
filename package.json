@@ -1,5 +1,5 @@
 {
-  "name": "Slack-Reproduction",
+  "name": "Slack-in-React",
   "version": "1.0.0",
   "scripts": {
     "build": "NODE_ENV=production webpack -c --progress --config webpack/webpack.config.js",
@@ -46,6 +46,7 @@
     "graphql-subscriptions": "^0.2.2",
     "graphql-tag": "^1.2.1",
     "graphql-tools": "^0.9.0",
+    "gravatar": "^1.6.0",
     "history": "4.0.0",
     "isomorphic-fetch": "^2.2.1",
     "json-loader": "^0.5.4",
@@ -73,18 +74,20 @@
     "style-loader": "0.13.1",
     "subscriptions-transport-ws": "^0.3.1",
     "url-loader": "0.5.7",
-    "validator": "^6.2.1",
     "webpack": "1.13.1",
     "webpack-isomorphic-tools": "^2.6.5"
   },
-  "description": "A full-stack reproduction of Slack, the popular realtime chat application, using the best modern web technologies Javascript has to offer. (e.g: React (SSR), Redux, Apollo/GraphQL, Express, Webpack, Babel (ES7), Hot Reloading)",
+  "description": "A full-stack reproduction of Slack, the popular realtime chat application, using React, Redux, Apollo, and more of the top modern web technologies Javascript has to offer.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adamjking3/Slack-Reproduction.git"
+    "url": "git+https://github.com/adamjking3/Slack-in-React.git"
   },
   "keywords": [
-    "react",
+    "full-stack",
+    "slack",
+    "clone",
     "universal",
+    "react",
     "redux",
     "apollo",
     "webpack",
@@ -96,15 +99,12 @@
     "reloading",
     "react-hot-loader",
     "starter",
-    "boilerplate",
-    "slack",
-    "clone",
-    "reproduction"
+    "boilerplate"
   ],
   "author": "Adam King https://github.com/adamjking3",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/adamjking3/Slack-Reproduction/issues"
+    "url": "https://github.com/adamjking3/Slack-in-React/issues"
   },
-  "homepage": "https://github.com/adamjking3/Slack-Reproduction#readme"
+  "homepage": "https://github.com/adamjking3/Slack-in-React#readme"
 }
