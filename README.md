@@ -5,6 +5,7 @@ A full-stack reproduction of the popular realtime chat application, Slack (http:
 - React (w/ Server-side Rendering)
 - Redux
 - Apollo/GraphQL
+- Express
 - Webpack
 - Babel (ES7)
 - React-Hot-Reloader
