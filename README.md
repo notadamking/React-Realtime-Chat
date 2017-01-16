@@ -7,7 +7,7 @@ A reproduction of the popular realtime chat application, Slack (http://slack.com
 - Apollo/GraphQL
 - Webpack
 - Babel (ES7)
-- React-hot-reloader
+- React-Hot-Reloader
 - PostCSS
 - Eslint
 
