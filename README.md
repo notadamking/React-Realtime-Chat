@@ -1,4 +1,4 @@
-# Slack Reproduction
+# Slack in React
 A full-stack reproduction of the popular realtime chat application, Slack (http://slack.com). This stack was built with a focus on scalability, efficiency, performance, and simplicity.
 
 ## Stack
@@ -15,8 +15,8 @@ A full-stack reproduction of the popular realtime chat application, Slack (http:
 ## Getting Started
 ### Installation
 ```bash
-git clone https://github.com/adamjking3/Slack-Reproduction.git
-cd Slack-Reproduction
+git clone https://github.com/adamjking3/Slack-in-React.git
+cd Slack-in-React
 npm install
 ```
 
@@ -46,4 +46,4 @@ Ease of understanding and simplicity are important to the longevity of this proj
 
 --- 
 
-Made by Adam King, Copyright © 2016, licensed under the [MIT License](https://github.com/adamjking3/Slack-Reproduction/blob/master/LICENSE).
+Made by Adam King, Copyright © 2016, licensed under the [MIT License](https://github.com/adamjking3/Slack-in-React/blob/master/LICENSE).
