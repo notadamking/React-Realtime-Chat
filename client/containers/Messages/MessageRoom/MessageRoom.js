@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 
 import { MessageList, NavMenu, NewMessageForm } from '../../';
 import { MessagesHeader } from '../../../components';
+import { setShouldUpdateRoom } from '../../../redux/actions/messages';
 import { updateCurrentRoomMutation } from './messageRoom.graphql';
 
 function isDuplicateUser(newUser, existingUsers) {
@@ -10,33 +12,39 @@ function isDuplicateUser(newUser, existingUsers) {
           && existingUsers.some(user => newUser.id === user.id);
 }
 
+@connect(
+  (state) => ({
+    previousUser: state.auth.previousUser,
+    shouldUpdateRoom: state.messages.shouldUpdateRoom,
+  })
+)
 @graphql(updateCurrentRoomMutation, {
   props: ({ mutate }) => ({
-    updateCurrentRoom: ({ room, user }) => mutate({
-      variables: { room },
+    updateCurrentRoom: ({ authToken, room, user }) => mutate({
+      variables: { room, authToken },
       optimisticResponse: {
         updateCurrentRoom: {
           __typename: 'User',
-          id: user.id,
-          username: user.username,
+          id: user && user.id,
+          username: user && user.username,
           currentRoom: room,
         }
       },
       updateQueries: {
         UserList: (previousResult, { mutationResult }) => {
           const updatedUser = mutationResult.data.updateCurrentRoom;
+          const prevUsers = previousResult.usersInRoom;
 
-          if (!previousResult.usersInRoom) {
-            return { usersInRoom: [updatedUser] };
+          if (!updatedUser.currentRoom) {
+            const filteredUsers = prevUsers ? prevUsers.filter((u) => u.id !== updatedUser.id) : [];
+            return { usersInRoom: filteredUsers };
           }
 
-          if (isDuplicateUser(updatedUser, previousResult.usersInRoom)) {
+          if (isDuplicateUser(updatedUser, prevUsers)) {
             return previousResult;
           }
 
-          return {
-            usersInRoom: [updatedUser, ...previousResult.usersInRoom]
-          };
+          return { usersInRoom: [updatedUser, ...prevUsers] };
         }
       }
     }),
@@ -54,9 +62,17 @@ export default class MessageRoomContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.user) {
-      const { room, updateCurrentRoom } = this.props;
-      updateCurrentRoom({ room, user: nextProps.user });
+    const { dispatch, room, updateCurrentRoom, user } = this.props;
+    if (nextProps.shouldUpdateRoom && nextProps.previousUser) {
+      updateCurrentRoom({
+        authToken: nextProps.previousUser.authToken,
+        room: null,
+        user: nextProps.previousUser
+      });
+      dispatch(setShouldUpdateRoom(false));
+    } else if (nextProps.shouldUpdateRoom) {
+      updateCurrentRoom({ room, user });
+      dispatch(setShouldUpdateRoom(false));
     }
   }
 
@@ -82,8 +98,11 @@ export default class MessageRoomContainer extends Component {
 
 MessageRoomContainer.propTypes = {
   channel: PropTypes.string.isRequired,
+  dispatch: PropTypes.func,
   loading: PropTypes.bool,
+  previousUser: PropTypes.object,
   room: PropTypes.string.isRequired,
+  shouldUpdateRoom: PropTypes.bool,
   subscribeToMore: PropTypes.func,
   updateCurrentRoom: PropTypes.func,
   user: PropTypes.object,

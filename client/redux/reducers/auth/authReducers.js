@@ -5,6 +5,7 @@ import {
 
 const initialState = {
   currentUser: null,
+  previousUser: null,
   isLoggedIn: false,
 };
 
@@ -14,6 +15,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         currentUser: action.user,
+        previousUser: null,
         isLoggedIn: true
       };
 
@@ -21,6 +23,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         currentUser: null,
+        previousUser: state.currentUser,
         isLoggedIn: false
       };
 

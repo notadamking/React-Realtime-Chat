@@ -5,8 +5,7 @@ query User {
   currentUser {
     id
     username
-    createdAt
-    updatedAt
+    authToken
   }
 }
 `;

@@ -24,7 +24,7 @@ const queries = `
 `;
 
 const mutations = `
-  updateCurrentRoom(room: String): User
+  updateCurrentRoom(room: String, authToken: String): User
   loginAsUser(username: String!, password: String!): User
   createUser(username: String!, password: String!): User
 `;
@@ -41,11 +41,13 @@ const resolvers = {
     },
   },
   Mutation: {
-    updateCurrentRoom: async (__, { room }, context) => {
-      if (!context.user || !context.user.id) {
+    updateCurrentRoom: async (__, { room, authToken }, context) => {
+      const authedUser = await context.User.getCurrentUser(authToken);
+      if (!authedUser && !context.user) {
         throw new Error('You must be logged in to update the current room.');
       }
-      return await context.User.updateCurrentRoom({ room, userId: context.user && context.user.id });
+      const userId = (authedUser && authedUser.id) || (context.user && context.user.id);
+      return await context.User.updateCurrentRoom({ room, userId });
     },
     loginAsUser: async (__, { username, password }, context) => {
       return await context.User.login({ username, password });

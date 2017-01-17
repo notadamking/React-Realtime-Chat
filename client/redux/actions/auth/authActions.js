@@ -25,7 +25,7 @@ export const handleLogout = () => {
 };
 
 export const handleLoginSuccess = (user) => {
-  if (global.localStorage) {
+  if (global.localStorage && localStorage.getItem(config.authTokenName) !== user.authToken) {
     localStorage.setItem(config.authTokenName, user.authToken);
   }
   return (dispatch) => {

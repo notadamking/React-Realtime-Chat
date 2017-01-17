@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import Helmet from 'react-helmet';
 
-import { setLoggedIn, setLoggedOut } from '../../redux/actions/auth';
+import { handleLoginSuccess } from '../../redux/actions/auth';
 import { MessageRoom } from '../../containers';
 import getCurrentUser from './currentUser.graphql';
 
@@ -16,12 +16,8 @@ import getCurrentUser from './currentUser.graphql';
 export default class Messages extends Component {
   componentWillReceiveProps({ data: { currentUser }, user }) {
     const { dispatch } = this.props;
-    if (currentUser) {
-      if (user !== currentUser) {
-        dispatch(setLoggedIn(currentUser));
-      }
-    } else if (this.props.user) {
-      dispatch(setLoggedOut());
+    if (currentUser && user !== currentUser) {
+      dispatch(handleLoginSuccess(currentUser));
     }
   }
 
