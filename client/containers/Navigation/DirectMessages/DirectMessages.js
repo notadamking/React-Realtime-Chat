@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
+import { browserHistory } from 'react-router';
 import { graphql } from 'react-apollo';
 
-import { Channels } from '../../../components';
+import { DirectMessages } from '../../../components';
 import { usersInRoomChangedSubscription, userListQuery } from './directMessages.graphql';
 
 @graphql(userListQuery, {
@@ -42,19 +43,19 @@ export default class DirectMessagesContainer extends Component {
     }
   }
 
+  handleClickChannel(channel) {
+    const { room } = this.props;
+    browserHistory.push(`/${room}/messages/${channel}`);
+  }
+
   render() {
-    const { channel, room, user, users } = this.props;
+    const { channel, user, users } = this.props;
     return (
-      <Channels
+      <DirectMessages
         activeChannel={channel}
-        channels={users.map((u) => {
-          if (user && u.id === user.id) {
-            return `${u.username} (you)`;
-          }
-          return u.username;
-        })}
-        directMessages
-        room={room}
+        channels={users.map((u) => `@${u.username}`)}
+        user={user}
+        onClickChannel={this.handleClickChannel.bind(this)}
       />
     );
   }

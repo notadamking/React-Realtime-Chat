@@ -6,7 +6,7 @@ import styles from './MessagesHeader.css';
 const MessagesHeader = ({ channel }) => (
   <div className={styles.headerContainer}>
     <Header as='h3'>
-      {channel.includes('@') ? `@${channel}` : `#${channel}`}
+      {channel.includes('@') ? channel : `#${channel}`}
     </Header>
   </div>
 );

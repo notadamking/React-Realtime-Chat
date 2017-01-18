@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { browserHistory } from 'react-router';
 import { graphql } from 'react-apollo';
 
 import { Channels } from '../../../components';
@@ -31,14 +32,19 @@ export default class ChannelsContainer extends Component {
     }
   }
 
+  handleClickChannel(channel) {
+    const { room } = this.props;
+    browserHistory.push(`/${room}/messages/${channel}`);
+  }
+
   render() {
-    const { channel, channels, room } = this.props;
+    const { channel, channels } = this.props;
     const channelList = channels.indexOf(channel) === -1 ? [...channels, channel] : channels;
     return (
       <Channels
         activeChannel={channel}
-        channels={channelList}
-        room={room}
+        channels={channelList.filter((c) => c.charAt(0) !== '@')}
+        onClickChannel={this.handleClickChannel.bind(this)}
       />
     );
   }

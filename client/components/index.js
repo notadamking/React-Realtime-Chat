@@ -19,6 +19,7 @@ import Html from './Html';
 
 /* Navigation */
 import Channels from './Navigation/Channels';
+import DirectMessages from './Navigation/DirectMessages';
 import NavMenu from './Navigation/NavMenu';
 
 /* RelativeTime */
@@ -26,6 +27,7 @@ import RelativeTime from './RelativeTime';
 
 export {
   Channels,
+  DirectMessages,
   FormField,
   FormTextField,
   Html,

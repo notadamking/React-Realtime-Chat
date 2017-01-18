@@ -2,13 +2,13 @@ import React, { PropTypes } from 'react';
 import { Icon, Menu } from 'semantic-ui-react';
 import cx from 'classnames';
 
-import styles from './Channels.css';
+import styles from './DirectMessages.css';
 
-const Channels = ({ activeChannel, channels, onClickChannel }) => (
+const DirectMessages = ({ activeChannel, channels, user, onClickChannel }) => (
   <Menu className={styles.channelsMenu} secondary vertical>
     <Menu.Item>
       <Menu.Header className={styles.channelsHeader}>
-        CHANNELS ({channels ? channels.length : 0})
+        DIRECT MESSAGES
       </Menu.Header>
       <Menu.Menu className={styles.channelsContainer}>
         {channels && channels.map((channel) => (
@@ -21,13 +21,17 @@ const Channels = ({ activeChannel, channels, onClickChannel }) => (
             onClick={() => onClickChannel(channel)}
           >
             <Icon
-              className={cx(styles.channelIcon, {
+              className={cx(styles.channelIcon, styles.directMessageIcon, {
                 [styles.activeIcon]: activeChannel === channel
               })}
-              name='hashtag'
+              name='circle'
               size='small'
             />
-            &nbsp;{channel}
+            &nbsp;
+            {user && channel.slice(1) === user.username
+              ? `${channel.slice(1)} (you)`
+              : channel.slice(1)
+            }
           </Menu.Item>
         ))}
       </Menu.Menu>
@@ -35,10 +39,11 @@ const Channels = ({ activeChannel, channels, onClickChannel }) => (
   </Menu>
 );
 
-Channels.propTypes = {
+DirectMessages.propTypes = {
   activeChannel: PropTypes.string,
   channels: PropTypes.array,
+  user: PropTypes.object,
   onClickChannel: PropTypes.func,
 };
 
-export default Channels;
+export default DirectMessages;

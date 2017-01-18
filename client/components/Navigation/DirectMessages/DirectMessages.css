@@ -29,6 +29,10 @@
   float: none !important;
 }
 
+.directMessageIcon {
+  color: #38978D;
+}
+
 .activeIcon {
   color: #fff;
 }
