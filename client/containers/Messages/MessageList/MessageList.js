@@ -52,13 +52,18 @@ function isDuplicateMessage(newMessage, existingMessages) {
 })
 export default class MessageListContainer extends Component {
   componentWillReceiveProps(nextProps) {
+    if (this.subscription && nextProps.channel !== this.props.channel) {
+      this.subscription.forEach(unsubscribe => unsubscribe());
+      this.subscription = null;
+    }
+
     if (!this.subscription && !nextProps.loading) {
       this.subscription = [
         nextProps.subscribeToMore({
           document: messageAddedSubscription,
           variables: {
-            room: this.props.room,
-            channel: this.props.channel,
+            room: nextProps.room,
+            channel: nextProps.channel,
           },
           updateQuery: (previousResult, { subscriptionData }) => {
             const newMessage = subscriptionData.data.messageAdded;
@@ -70,25 +75,20 @@ export default class MessageListContainer extends Component {
               setTimeout(() => this.props.dispatch(setShouldScrollToBottom()), 100);
             }
 
-            return {
-              messages: [newMessage, ...previousResult.messages]
-            };
+            return { messages: [newMessage, ...previousResult.messages] };
           }
         }),
         nextProps.subscribeToMore({
           document: messageDeletedSubscription,
           variables: {
-            room: this.props.room,
-            channel: this.props.channel,
+            room: nextProps.room,
+            channel: nextProps.channel,
           },
           updateQuery: (previousResult, { subscriptionData }) => {
             const remainingMessages = previousResult.messages.filter((message) => {
               return message.id !== subscriptionData.data.messageDeleted.id;
             });
-
-            return {
-              messages: remainingMessages
-            };
+            return { messages: remainingMessages };
           }
         }),
       ];

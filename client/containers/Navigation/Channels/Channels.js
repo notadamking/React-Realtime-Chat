@@ -18,17 +18,15 @@ import { channelsForRoomQuery, channelsInRoomChangedSubscription } from './chann
 export default class ChannelsContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (!this.subscription && !nextProps.loading) {
-      this.subscription = [
-        nextProps.subscribeToMore({
-          document: channelsInRoomChangedSubscription,
-          variables: { room: this.props.room },
-          updateQuery: (previousResult, { subscriptionData }) => {
-            return {
-              channelsForRoom: subscriptionData.data.channelsInRoomChanged.channels
-            };
-          }
-        }),
-      ];
+      this.subscription = nextProps.subscribeToMore({
+        document: channelsInRoomChangedSubscription,
+        variables: { room: this.props.room },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          return {
+            channelsForRoom: subscriptionData.data.channelsInRoomChanged.channels
+          };
+        }
+      });
     }
   }
 
