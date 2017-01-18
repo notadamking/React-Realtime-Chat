@@ -14,9 +14,8 @@ import getCurrentUser from './currentUser.graphql';
 )
 @graphql(getCurrentUser, { options: { ssr: false } })
 export default class Messages extends Component {
-  componentWillReceiveProps({ data: { currentUser }, user }) {
-    const { dispatch } = this.props;
-    if (currentUser && user !== currentUser) {
+  componentWillReceiveProps({ data: { currentUser, loading }, dispatch, user }) {
+    if (!loading && currentUser && user !== currentUser) {
       dispatch(handleLoginSuccess(currentUser));
     }
   }

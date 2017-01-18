@@ -1,5 +1,5 @@
 import config from '../../../../config';
-import { setShouldUpdateRoom } from '../messages';
+import { setShouldScrollToBottom, setShouldUpdateRoom } from '../messages';
 import {
   SET_LOGGED_IN,
   SET_LOGGED_OUT,
@@ -31,15 +31,6 @@ export const handleLoginSuccess = (user) => {
   return (dispatch) => {
     dispatch(setLoggedIn(user));
     dispatch(setShouldUpdateRoom());
-  };
-};
-
-export const handleSignupSuccess = (user) => {
-  if (global.localStorage) {
-    localStorage.setItem(config.authTokenName, user.authToken);
-  }
-  return (dispatch) => {
-    dispatch(setLoggedIn(user));
-    dispatch(setShouldUpdateRoom());
+    dispatch(setShouldScrollToBottom());
   };
 };

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { graphql } from 'react-apollo';
 import { reduxForm } from 'redux-form';
 
-import { handleSignupSuccess } from '../../../redux/actions/auth';
+import { handleLoginSuccess } from '../../../redux/actions/auth';
 import { SignupForm } from '../../../components';
 import createUserMutation from './createUser.graphql';
 import validate from './validate';
@@ -32,7 +32,7 @@ export default class SignupFormContainer extends Component {
     if (createUser.error) {
       this.setState({ submitError: createUser.error });
     } else {
-      dispatch(handleSignupSuccess(createUser));
+      dispatch(handleLoginSuccess(createUser));
       onClose();
     }
   }

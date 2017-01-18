@@ -3,5 +3,4 @@ export {
   setLoggedOut,
   handleLoginSuccess,
   handleLogout,
-  handleSignupSuccess,
 } from './authActions';
