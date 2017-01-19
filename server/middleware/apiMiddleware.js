@@ -5,7 +5,7 @@ import { User, Message } from '../api/models'; // eslint-disable-line import/nam
 import schema from '../api/schema';
 
 export const graphqlMiddleware = graphqlExpress(async (req) => {
-  const currentUser = await User.getCurrentUser(req.headers.authorization).catch(() => {});
+  const currentUser = await User.getCurrentUser(req.headers.authorization);
   return {
     schema,
     context: {

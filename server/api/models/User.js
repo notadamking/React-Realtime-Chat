@@ -41,7 +41,6 @@ export default (sequelize, DataTypes) => {
             authToken
           };
         } catch (error) {
-          // throw new Error('Invalid or missing auth token.');
           return null;
         }
       },
