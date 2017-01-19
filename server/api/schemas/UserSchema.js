@@ -1,13 +1,10 @@
-/* I temporarily removed the !'s from definition until
-   errors have been handled
-*/
 const types = `
   type User {
-    id: ID
-    username: String
-    avatarUrl: String
-    createdAt: String
-    updatedAt: String
+    id: ID!
+    username: String!
+    avatarUrl: String!
+    createdAt: String!
+    updatedAt: String!
     authToken: String
     currentRoom: String
   }
@@ -44,7 +41,7 @@ const resolvers = {
     updateCurrentRoom: async (__, { room, authToken }, context) => {
       const authedUser = await context.User.getCurrentUser(authToken);
       if (!authedUser && !context.user) {
-        throw new Error('You must be logged in to update the current room.');
+        throw new Error('You must be logged in to update your current room.');
       }
       const userId = (authedUser && authedUser.id) || (context.user && context.user.id);
       return await context.User.updateCurrentRoom({ room, userId });

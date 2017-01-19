@@ -82,21 +82,11 @@ export default class NewMessageFormContainer extends Component {
 
   async onSubmit({ content }) { // eslint-disable-line react/prop-types
     const { postMessage, reset, user } = this.props;
-    if (!user) {
-      this.setState({ submitError: 'You must be logged in to send a message.' });
-      return;
-    } else if (!content) {
-      return;
-    }
-
     reset();
     this.setState({ submitError: null });
-
-    const { data: { postMessage: { error } } } = await postMessage({ content, user });
-
-    if (error) {
-      this.setState({ submitError: error });
-    }
+    postMessage({ content, user }).catch(({ graphQLErrors }) => {
+      this.setState({ submitError: graphQLErrors[0].message });
+    });
   }
 
   render() {

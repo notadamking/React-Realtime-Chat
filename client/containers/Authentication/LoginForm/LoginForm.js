@@ -23,16 +23,15 @@ export default class LoginFormContainer extends Component {
     };
   }
 
-  async onSubmit({ username, password }) {
+  onSubmit({ username, password }) {
     const { dispatch, submitLogin, onClose } = this.props;
     this.setState({ submitError: null });
-    const { data: { loginAsUser } } = await submitLogin({ username, password });
-    if (loginAsUser.error) {
-      this.setState({ submitError: loginAsUser.error });
-    } else {
+    submitLogin({ username, password }).then(({ data: { loginAsUser } }) => {
       dispatch(handleLoginSuccess(loginAsUser));
       onClose();
-    }
+    }).catch(({ graphQLErrors }) => {
+      this.setState({ submitError: graphQLErrors[0].message });
+    });
   }
 
   render() {

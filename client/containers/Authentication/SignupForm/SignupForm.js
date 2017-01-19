@@ -28,13 +28,12 @@ export default class SignupFormContainer extends Component {
   async onSubmit({ username, password }) {
     const { dispatch, submitSignup, onClose } = this.props;
     this.setState({ submitError: null });
-    const { data: { createUser } } = await submitSignup({ username, password });
-    if (createUser.error) {
-      this.setState({ submitError: createUser.error });
-    } else {
+    submitSignup({ username, password }).then(({ data: { createUser } }) => {
       dispatch(handleLoginSuccess(createUser));
       onClose();
-    }
+    }).catch(({ graphQLErrors }) => {
+      this.setState({ submitError: graphQLErrors[0].message });
+    });
   }
 
   render() {
