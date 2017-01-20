@@ -10,9 +10,22 @@ export default (store) => (
   <Route component={MainLayout} path='/'>
     <IndexRedirect to='/messages/general' />
     <Route
+      channel='general'
+      component={Messages}
+      path='/messages'
+      room='home'
+      onEnter={() => setTimeout(() => store.dispatch(setShouldScrollToBottom()), 500)}
+    />
+    <Route
       component={Messages}
       path='/messages/:channel'
       room='home'
+      onEnter={() => setTimeout(() => store.dispatch(setShouldScrollToBottom()), 500)}
+    />
+    <Route
+      channel='general'
+      component={Messages}
+      path='/:room/messages'
       onEnter={() => setTimeout(() => store.dispatch(setShouldScrollToBottom()), 500)}
     />
     <Route

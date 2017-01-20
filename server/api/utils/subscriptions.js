@@ -21,8 +21,8 @@ const subscriptionManager = new SubscriptionManager({
         filter: (message) => message.room === args.room && message.channel === args.channel,
       },
     }),
-    usersInRoomChanged: (options, args) => ({
-      usersInRoomChanged: {
+    onlineUsersChanged: (options, args) => ({
+      onlineUsersChanged: {
         filter: (update) => update.room === args.room,
       },
     }),

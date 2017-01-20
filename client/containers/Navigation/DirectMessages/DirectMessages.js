@@ -3,43 +3,49 @@ import { browserHistory } from 'react-router';
 import { graphql } from 'react-apollo';
 
 import { DirectMessages } from '../../../components';
-import { usersInRoomChangedSubscription, userListQuery } from './directMessages.graphql';
+import { onlineUsersChangedSubscription, onlineUsersForRoomQuery, usersForRoomQuery } from './directMessages.graphql';
 
-@graphql(userListQuery, {
+@graphql(onlineUsersForRoomQuery, {
   options: ({ room }) => ({
     variables: { room }
   }),
-  props: ({ data: { loading, usersInRoom, subscribeToMore } }) => ({
-    users: usersInRoom,
+  props: ({ data: { loading, onlineUsersForRoom, subscribeToMore } }) => ({
+    onlineUsers: onlineUsersForRoom,
     loading,
     subscribeToMore,
   }),
 })
+@graphql(usersForRoomQuery, {
+  options: ({ room }) => ({
+    variables: { room }
+  }),
+  props: ({ data: { usersForRoom } }) => ({
+    users: usersForRoom,
+  })
+})
 export default class DirectMessagesContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (!this.subscription && !nextProps.loading) {
-      this.subscription = [
-        nextProps.subscribeToMore({
-          document: usersInRoomChangedSubscription,
-          variables: { room: this.props.room },
-          updateQuery: (previousResult, { subscriptionData }) => {
-            const users = subscriptionData.data.usersInRoomChanged.users;
-            const currentUser = this.props.user;
+      this.subscription = nextProps.subscribeToMore({
+        document: onlineUsersChangedSubscription,
+        variables: { room: this.props.room },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          const users = subscriptionData.data.onlineUsersChanged.users;
+          const currentUser = this.props.user;
 
-            if (currentUser) {
-              const currentUserIndex = users.map((u) => u.id).indexOf(currentUser.id);
-              const filteredUsers = users.filter((u) => u.id !== currentUser.id);
-              return {
-                usersInRoom: [users[currentUserIndex], ...filteredUsers]
-              };
-            }
-
+          if (currentUser) {
+            const currentUserIndex = users.map((u) => u.id).indexOf(currentUser.id);
+            const filteredUsers = users.filter((u) => u.id !== currentUser.id);
             return {
-              usersInRoom: users
+              onlineUsersForRoom: [users[currentUserIndex], ...filteredUsers]
             };
           }
-        }),
-      ];
+
+          return {
+            onlineUsersForRoom: users
+          };
+        }
+      });
     }
   }
 
@@ -49,11 +55,18 @@ export default class DirectMessagesContainer extends Component {
   }
 
   render() {
-    const { channel, user, users } = this.props;
+    const { channel, onlineUsers, user, users } = this.props;
+    const online = onlineUsers.map((u) => `@${u.username}`);
+    const offline = users
+      .filter((u) => {
+        return (!user || u.username !== user.username) && !online.includes(`@${u.username}`);
+      })
+      .map((u) => `@${u.username}`);
     return (
       <DirectMessages
         activeChannel={channel}
-        channels={users.map((u) => `@${u.username}`)}
+        offlineUsers={[...new Set(offline)]}
+        onlineUsers={[...new Set(online)]}
         user={user}
         onClickChannel={this.handleClickChannel.bind(this)}
       />
@@ -64,6 +77,7 @@ export default class DirectMessagesContainer extends Component {
 DirectMessagesContainer.propTypes = {
   channel: PropTypes.string.isRequired,
   loading: PropTypes.bool,
+  onlineUsers: PropTypes.array,
   room: PropTypes.string.isRequired,
   subscribeToMore: PropTypes.func,
   user: PropTypes.object,

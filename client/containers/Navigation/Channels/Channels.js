@@ -41,7 +41,7 @@ export default class ChannelsContainer extends Component {
     return (
       <Channels
         activeChannel={channel}
-        channels={channelList.filter((c) => c.charAt(0) !== '@')}
+        channels={[...new Set(channelList.filter((c) => c.charAt(0) !== '@'))]}
         onClickChannel={this.handleClickChannel.bind(this)}
       />
     );

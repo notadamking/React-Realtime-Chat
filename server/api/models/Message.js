@@ -19,10 +19,26 @@ export default (sequelize, DataTypes) => {
         });
         return channels.map((channel) => channel.DISTINCT);
       },
-      async getMessages({ room, channel, offset = 0, limit = 10 }) {
+      async getMessages({ room, channel, offset = 0, limit = 10, user = null }) {
         const protectedLimit = (limit < 1 || limit > 50) ? 50 : limit;
+        const where = { room };
+        if (channel.charAt(0) === '@') {
+          const otherUser = await models.User.findOne({
+            where: { username: channel.slice(1) }
+          });
+          where.$or = [{
+            channel,
+            authorId: user && user.id,
+          }, {
+            channel: `@${user && user.username}`,
+            authorId: otherUser.toJSON().id,
+          }];
+        } else {
+          where.channel = channel;
+        }
+
         const messages = await this.findAll({
-          where: { room, channel },
+          where,
           include: [{ model: models.User, as: 'author' }],
           offset,
           limit: protectedLimit,
