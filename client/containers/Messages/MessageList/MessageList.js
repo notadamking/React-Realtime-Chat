@@ -8,11 +8,6 @@ import { messageListQuery, messageAddedSubscription, messageDeletedSubscription 
 
 const MESSAGES_PER_FETCH = 10;
 
-function isDuplicateMessage(newMessage, existingMessages) {
-  return newMessage && existingMessages.length > 0
-          && existingMessages.some(message => newMessage.id === message.id);
-}
-
 @connect(
   (state) => ({
     shouldScrollToBottom: state.messages.shouldScrollToBottom,
@@ -26,11 +21,12 @@ function isDuplicateMessage(newMessage, existingMessages) {
       channel,
       offset: 0,
       limit: MESSAGES_PER_FETCH,
-    }
+    },
   }),
-  props: ({ data: { messages, fetchMore, loading, subscribeToMore } }) => ({
+  props: ({ data: { messages, fetchMore, loading, refetch, subscribeToMore } }) => ({
     messages,
     loading,
+    refetch,
     subscribeToMore,
     loadMoreMessages: (messageList) => {
       const beforeHeight = messageList.scrollHeight;
@@ -52,6 +48,10 @@ function isDuplicateMessage(newMessage, existingMessages) {
 })
 export default class MessageListContainer extends Component {
   componentWillReceiveProps(nextProps) {
+    if (nextProps.user && !this.props.user && nextProps.refetch) {
+      nextProps.refetch();
+    }
+
     if (this.subscription && nextProps.channel !== this.props.channel) {
       this.subscription.forEach(unsubscribe => unsubscribe());
       this.subscription = null;
@@ -67,10 +67,6 @@ export default class MessageListContainer extends Component {
           },
           updateQuery: (previousResult, { subscriptionData }) => {
             const newMessage = subscriptionData.data.messageAdded;
-            if (isDuplicateMessage(newMessage, previousResult.messages)) {
-              return previousResult;
-            }
-
             if (!this.props.user || newMessage.author.id !== this.props.user.id) {
               setTimeout(() => this.props.dispatch(setShouldScrollToBottom()), 100);
             }
@@ -114,7 +110,7 @@ export default class MessageListContainer extends Component {
     const { messages } = this.props;
     return (
       <MessageList
-        messages={messages && messages.slice()} /* .slice() copies the array */
+        messages={messages && [...new Set(messages)]} /* .slice() copies the array */
         onScroll={this.handleScroll.bind(this)}
         onSetRef={this.handleSetRef.bind(this)}
       />
@@ -128,6 +124,7 @@ MessageListContainer.propTypes = {
   loadMoreMessages: PropTypes.func,
   loading: PropTypes.bool,
   messages: PropTypes.object,
+  refetch: PropTypes.func,
   room: PropTypes.string.isRequired,
   shouldScrollToBottom: PropTypes.bool,
   subscribeToMore: PropTypes.func,

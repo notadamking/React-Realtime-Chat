@@ -4,6 +4,7 @@ import gravatar from 'gravatar';
 
 import { pubsub } from '../utils/subscriptions';
 import { isDevelopment, secretKey } from '../../../config';
+import models from '../models';
 
 const signJwt = (id) => {
   return jwt.sign({ id }, secretKey, { expiresIn: '7d' });
@@ -29,7 +30,15 @@ export default (sequelize, DataTypes) => {
     currentRoom: { type: DataTypes.STRING },
   }, {
     classMethods: {
-      associate({ Message }) {
+      associate({ JoinedRoom, Message, Room }) {
+        this.belongsToMany(Room, {
+          through: {
+            model: JoinedRoom
+          },
+          as: 'joinedRooms',
+          foreignKey: 'userId',
+          constraints: false,
+        });
         this.hasMany(Message, { foreignKey: 'authorId' });
       },
       async getCurrentUser(authToken) {
@@ -44,24 +53,31 @@ export default (sequelize, DataTypes) => {
           return null;
         }
       },
-      async getUsersInRoom(room) {
-        const users = await this.findAll({ where: { currentRoom: room } });
-        return users;
-      },
-      async updateCurrentRoom({ room, userId }) {
-        const user = await this.findOne({ where: { id: userId } });
-        const oldRoom = user.toJSON().currentRoom;
-        const updatedUser = await user.update({ currentRoom: room });
-        const updatedUsersInRoom = await this.findAll({ where: { currentRoom: room } });
+      async updateCurrentRoom({ room, user }) {
+        if (!user) {
+          throw new Error('You must be logged in to update your current room.');
+        }
+        if (room) {
+          models.JoinedRoom.findOrCreate({
+            where: {
+              roomName: room,
+              userId: user.id,
+            }
+          });
+        }
 
-        pubsub.publish('usersInRoomChanged', {
+        const oldUser = await this.findOne({ where: { id: user.id } });
+        const oldRoom = oldUser.toJSON().currentRoom;
+        const updatedUser = await oldUser.update({ currentRoom: room });
+        const updatedOnlineUsers = await this.findAll({ where: { currentRoom: room } });
+
+        pubsub.publish('onlineUsersChanged', {
           room,
-          users: updatedUsersInRoom
+          users: updatedOnlineUsers
         });
-
         if (oldRoom && oldRoom !== room) {
           const usersInOldRoom = await this.findAll({ where: { currentRoom: oldRoom } });
-          pubsub.publish('usersInRoomChanged', {
+          pubsub.publish('onlineUsersChanged', {
             room: oldRoom,
             users: usersInOldRoom
           });
@@ -71,7 +87,6 @@ export default (sequelize, DataTypes) => {
       },
       async createNewUser({ username, password }) {
         const exists = await this.findOne({ where: { username } });
-
         if (exists) {
           throw new Error('That username is already in use.');
         }
@@ -86,7 +101,6 @@ export default (sequelize, DataTypes) => {
       },
       async login({ username, password }) {
         const user = await this.findOne({ where: { username } });
-
         if (!user) {
           throw new Error('No user with that username exists.');
         } else if (!await validatePassword({ password, hash: user.hash })) {

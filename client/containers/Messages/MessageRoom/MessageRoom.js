@@ -7,11 +7,6 @@ import { MessagesHeader } from '../../../components';
 import { setShouldUpdateRoom } from '../../../redux/actions/messages';
 import { updateCurrentRoomMutation } from './messageRoom.graphql';
 
-function isDuplicateUser(newUser, existingUsers) {
-  return newUser && existingUsers && existingUsers.length > 0
-          && existingUsers.some(user => newUser.id === user.id);
-}
-
 @connect(
   (state) => ({
     previousUser: state.auth.previousUser,
@@ -31,20 +26,24 @@ function isDuplicateUser(newUser, existingUsers) {
         }
       },
       updateQueries: {
-        UserList: (previousResult, { mutationResult }) => {
+        OnlineUserList: (previousResult, { mutationResult }) => {
           const updatedUser = mutationResult.data.updateCurrentRoom;
-          const prevUsers = previousResult.usersInRoom;
-
+          const prevUsers = previousResult.onlineUsersForRoom;
           if (!updatedUser.currentRoom) {
             const filteredUsers = prevUsers ? prevUsers.filter((u) => u.id !== updatedUser.id) : [];
-            return { usersInRoom: filteredUsers };
+            return { onlineUsersForRoom: filteredUsers };
           }
 
-          if (isDuplicateUser(updatedUser, prevUsers)) {
-            return previousResult;
+          return { onlineUsersForRoom: [updatedUser, ...prevUsers] };
+        },
+        UserList: (previousResult, { mutationResult }) => {
+          const updatedUser = mutationResult.data.updateCurrentRoom;
+          const prevUsers = previousResult.usersForRoom;
+          if (!prevUsers) {
+            return { usersForRoom: [updatedUser] };
           }
 
-          return { usersInRoom: [updatedUser, ...prevUsers] };
+          return { usersForRoom: [updatedUser, ...prevUsers] };
         }
       }
     }),

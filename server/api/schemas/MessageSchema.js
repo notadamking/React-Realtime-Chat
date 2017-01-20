@@ -39,7 +39,7 @@ const resolvers = {
       return await context.Message.getChannelsForRoom(room);
     },
     messages: async (root, { room, channel, offset, limit }, context) => {
-      return await context.Message.getMessages({ room, channel, offset, limit });
+      return await context.Message.getMessages({ room, channel, offset, limit, user: context.user });
     },
   },
   Mutation: {

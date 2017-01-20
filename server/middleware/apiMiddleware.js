@@ -1,7 +1,7 @@
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 
 import config from '../../config';
-import { User, Message } from '../api/models'; // eslint-disable-line import/named
+import { Message, Room, User } from '../api/models'; // eslint-disable-line import/named
 import schema from '../api/schema';
 
 export const graphqlMiddleware = graphqlExpress(async (req) => {
@@ -11,6 +11,7 @@ export const graphqlMiddleware = graphqlExpress(async (req) => {
     context: {
       user: currentUser,
       Message,
+      Room,
       User,
     }
   };

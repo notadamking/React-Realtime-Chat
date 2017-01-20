@@ -7,11 +7,6 @@ import { NewMessageForm } from '../../../components';
 import { setShouldScrollToBottom } from '../../../redux/actions/messages';
 import postMessageMutation from './postMessage.graphql';
 
-function isDuplicateMessage(newMessage, existingMessages) {
-  return newMessage && existingMessages && existingMessages.length > 0
-          && existingMessages.some(message => newMessage.id === message.id);
-}
-
 @connect(
   (state) => ({
     user: state.auth.currentUser,
@@ -43,10 +38,6 @@ function isDuplicateMessage(newMessage, existingMessages) {
       },
       updateQueries: {
         MessageList: (previousResult, { mutationResult }) => {
-          if (isDuplicateMessage(mutationResult.data.postMessage, previousResult.messages)) {
-            return previousResult;
-          }
-
           setTimeout(() => ownProps.dispatch(setShouldScrollToBottom()), 100);
 
           return {

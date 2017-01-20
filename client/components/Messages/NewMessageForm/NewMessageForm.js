@@ -16,7 +16,7 @@ const NewMessageForm = ({ channel, submitError, user, onKeyPress, onSubmit }) =>
             autoHeight
             component={FormTextField}
             name='content'
-            placeholder={`Message #${channel}`}
+            placeholder={`Message ${channel.charAt(0) === '@' ? channel : `#${channel}`}`}
             rows={1}
             onKeyPress={onKeyPress}
           />

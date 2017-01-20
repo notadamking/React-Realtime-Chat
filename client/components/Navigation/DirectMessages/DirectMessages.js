@@ -4,33 +4,56 @@ import cx from 'classnames';
 
 import styles from './DirectMessages.css';
 
-const DirectMessages = ({ activeChannel, channels, user, onClickChannel }) => (
+const DirectMessages = ({ activeChannel, offlineUsers, onlineUsers, user, onClickChannel }) => (
   <Menu className={styles.channelsMenu} secondary vertical>
     <Menu.Item>
       <Menu.Header className={styles.channelsHeader}>
         DIRECT MESSAGES
       </Menu.Header>
       <Menu.Menu className={styles.channelsContainer}>
-        {channels && channels.map((channel) => (
+        {onlineUsers && onlineUsers.map((onlineUser) => (
           <Menu.Item
-            active={activeChannel === channel}
+            active={activeChannel === onlineUser}
             className={cx(styles.channelItem, {
-              [styles.activeItem]: activeChannel === channel
+              [styles.activeItem]: activeChannel === onlineUser
             })}
-            key={channel}
-            onClick={() => onClickChannel(channel)}
+            key={onlineUser}
+            onClick={() => onClickChannel(onlineUser)}
           >
             <Icon
-              className={cx(styles.channelIcon, styles.directMessageIcon, {
-                [styles.activeIcon]: activeChannel === channel
+              className={cx(styles.channelIcon, styles.onlineIcon, {
+                [styles.activeIcon]: activeChannel === onlineUser
               })}
               name='circle'
               size='small'
             />
             &nbsp;
-            {user && channel.slice(1) === user.username
-              ? `${channel.slice(1)} (you)`
-              : channel.slice(1)
+            {user && onlineUser.slice(1) === user.username
+              ? `${onlineUser.slice(1)} (you)`
+              : onlineUser.slice(1)
+            }
+          </Menu.Item>
+        ))}
+        {offlineUsers && offlineUsers.map((offlineUser) => (
+          <Menu.Item
+            active={activeChannel === offlineUser}
+            className={cx(styles.channelItem, {
+              [styles.activeItem]: activeChannel === offlineUser
+            })}
+            key={offlineUser}
+            onClick={() => onClickChannel(offlineUser)}
+          >
+            <Icon
+              className={cx(styles.channelIcon, {
+                [styles.activeIcon]: activeChannel === offlineUser,
+              })}
+              name='circle'
+              size='small'
+            />
+            &nbsp;
+            {user && offlineUser.slice(1) === user.username
+              ? `${offlineUser.slice(1)} (you)`
+              : offlineUser.slice(1)
             }
           </Menu.Item>
         ))}
@@ -41,7 +64,8 @@ const DirectMessages = ({ activeChannel, channels, user, onClickChannel }) => (
 
 DirectMessages.propTypes = {
   activeChannel: PropTypes.string,
-  channels: PropTypes.array,
+  offlineUsers: PropTypes.array,
+  onlineUsers: PropTypes.array,
   user: PropTypes.object,
   onClickChannel: PropTypes.func,
 };
