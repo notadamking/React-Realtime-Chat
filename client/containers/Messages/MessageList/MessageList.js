@@ -50,6 +50,7 @@ export default class MessageListContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.user && !this.props.user && nextProps.refetch) {
       nextProps.refetch();
+      setTimeout(() => this.props.dispatch(setShouldScrollToBottom()), 100);
     }
 
     if (this.subscription && nextProps.channel !== this.props.channel) {
@@ -64,6 +65,9 @@ export default class MessageListContainer extends Component {
           variables: {
             room: nextProps.room,
             channel: nextProps.channel,
+          },
+          context: {
+            user: nextProps.user,
           },
           updateQuery: (previousResult, { subscriptionData }) => {
             const newMessage = subscriptionData.data.messageAdded;

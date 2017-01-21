@@ -13,7 +13,9 @@ const subscriptionManager = new SubscriptionManager({
     }),
     messageAdded: (options, args) => ({
       messageAdded: {
-        filter: (message) => message.room === args.room && message.channel === args.channel,
+        filter: (message) => {
+          return message.room === args.room && message.channel === args.channel;
+        },
       },
     }),
     messageDeleted: (options, args) => ({

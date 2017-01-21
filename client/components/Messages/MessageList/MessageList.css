@@ -15,7 +15,7 @@
   padding-right: 35px;
   margin-bottom: 40px;
   max-width: 100% !important; /* .ui.comments adds max-width: 640px */
-  height: calc(100vh - 100px);
+  height: calc(100vh - 104px);
 }
 
 .loadMoreButton {

@@ -20,14 +20,17 @@ export default (sequelize, DataTypes) => {
         return users;
       },
       async getAllUsersForRoom(aRoom) {
-        const room = await this.findById(aRoom, {
+        const room = await this.findCreateFind({
+          where: {
+            name: aRoom,
+          },
           attributes: [],
           include: [{
             model: models.User,
             as: 'users',
           }],
         });
-        return room ? room.toJSON().users : [];
+        return room[0].users ? room[0].users.map((u) => u.toJSON()) : [];
       },
     },
     timestamps: false,

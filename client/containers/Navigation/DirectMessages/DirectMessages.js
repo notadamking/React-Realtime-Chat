@@ -32,7 +32,6 @@ export default class DirectMessagesContainer extends Component {
         updateQuery: (previousResult, { subscriptionData }) => {
           const users = subscriptionData.data.onlineUsersChanged.users;
           const currentUser = this.props.user;
-
           if (currentUser) {
             const currentUserIndex = users.map((u) => u.id).indexOf(currentUser.id);
             const filteredUsers = users.filter((u) => u.id !== currentUser.id);
@@ -56,10 +55,14 @@ export default class DirectMessagesContainer extends Component {
 
   render() {
     const { channel, onlineUsers, user, users } = this.props;
-    const online = onlineUsers.map((u) => `@${u.username}`);
+    const online = onlineUsers
+      .filter((u) => u.username !== null)
+      .map((u) => `@${u.username}`);
     const offline = users
       .filter((u) => {
-        return (!user || u.username !== user.username) && !online.includes(`@${u.username}`);
+        return u.username !== null
+          && (!user || u.username !== user.username)
+          && !online.includes(`@${u.username}`);
       })
       .map((u) => `@${u.username}`);
     return (

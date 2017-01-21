@@ -80,7 +80,17 @@ export default (sequelize, DataTypes) => {
           author: author.toJSON()
         };
 
-        pubsub.publish('messageAdded', newMessage);
+        if (channel.charAt(0) === '@') {
+          const otherUser = await models.User.findOne({
+            where: { username: channel.slice(1) }
+          });
+          pubsub.publish('messageAdded', {
+            ...newMessage,
+            otherUser: otherUser.toJSON(),
+          });
+        } else {
+          pubsub.publish('messageAdded', newMessage);
+        }
 
         if (!existingChannels.includes(channel)) {
           pubsub.publish('channelsInRoomChanged', {
