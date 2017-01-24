@@ -15,8 +15,8 @@ A full-stack reproduction of the popular realtime chat application, Slack (http:
 ## Getting Started
 ### Installation
 ```bash
-git clone https://github.com/adamjking3/Slack-in-React.git
-cd Slack-in-React
+git clone https://github.com/adamjking3/React-Realtime-Chat.git
+cd React-Realtime-Chat
 npm install
 ```
 
@@ -44,6 +44,6 @@ I am more than happy to accept external contributions to the project in the form
 
 Ease of understanding and simplicity are important to the longevity of this project, so if you find a simpler way of doing something, feel free to share!
 
---- 
+---
 
-Made by Adam King, Copyright © 2016, licensed under the [MIT License](https://github.com/adamjking3/Slack-in-React/blob/master/LICENSE).
+Made by Adam King, Copyright © 2016, licensed under the [MIT License](https://github.com/adamjking3/React-Realtime-Chat/blob/master/LICENSE).

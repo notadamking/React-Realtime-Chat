@@ -1,5 +1,5 @@
 {
-  "name": "Slack-in-React",
+  "name": "React-Realtime-Chat",
   "version": "1.0.0",
   "scripts": {
     "build": "NODE_ENV=production webpack -c --progress --config webpack/webpack.config.js",
@@ -80,7 +80,7 @@
   "description": "A full-stack reproduction of Slack, the popular realtime chat application, using React, Redux, Apollo, and more of the top modern web technologies Javascript has to offer.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adamjking3/Slack-in-React.git"
+    "url": "git+https://github.com/adamjking3/React-Realtime-Chat.git"
   },
   "keywords": [
     "full-stack",
@@ -99,12 +99,15 @@
     "reloading",
     "react-hot-loader",
     "starter",
-    "boilerplate"
+    "boilerplate",
+    "realtime",
+    "chat",
+    "web application",
   ],
   "author": "Adam King https://github.com/adamjking3",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/adamjking3/Slack-in-React/issues"
+    "url": "https://github.com/adamjking3/React-Realtime-Chat/issues"
   },
-  "homepage": "https://github.com/adamjking3/Slack-in-React#readme"
+  "homepage": "https://github.com/adamjking3/React-Realtime-Chat#readme"
 }
