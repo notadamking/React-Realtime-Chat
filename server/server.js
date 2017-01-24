@@ -25,7 +25,7 @@ if (__DEVELOPMENT__) {
 app.use(config.graphqlEndpoint, bodyParser.json(), graphqlMiddleware);
 app.use(reactMiddleware);
 
-models.sequelize.sync({ force: false }).then(() => {
+models.sequelize.sync({ force: true }).then(() => {
   const server = app.listen(config.server.port, () => {
     console.info(
       `🔌  HTTP and Websocket Server running in ${app.get('env')}`
