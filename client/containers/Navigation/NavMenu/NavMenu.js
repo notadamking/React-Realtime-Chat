@@ -59,10 +59,12 @@ export default class NavMenuContainer extends Component {
   handleKeyUp(e) {
     if (e.which === 13 && !e.shiftKey) {
       const { channel } = this.props;
-      browserHistory.push(`/${e.target.value}/messages/${channel}`);
       this.setState({
         isEditingRoom: false
       });
+      if (e.target.value) {
+        browserHistory.push(`/${e.target.value}/messages/${channel}`);
+      }
     }
   }
 

@@ -8,7 +8,7 @@ const NavMenu = ({ channel, isEditingRoom, room, user, onEditRoomClicked, onKeyU
   <Menu className={styles.navMenu} vertical>
     <Menu.Item>
       {isEditingRoom
-        ? <Input placeholder='Enter room' onKeyUp={onKeyUp} />
+        ? <Input autoFocus placeholder='Enter room' onKeyUp={onKeyUp} />
         : (
           <Menu.Header className={styles.roomTitle}>
             {room}&nbsp;
