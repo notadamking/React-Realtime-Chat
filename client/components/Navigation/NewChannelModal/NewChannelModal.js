@@ -5,7 +5,7 @@ const NewChannelModal = ({ open, onClose, onKeyUp }) => (
   <Modal closeIcon dimmer open={open} size='small' onClose={onClose}>
     <Modal.Header>Create new channel</Modal.Header>
     <Modal.Content>
-      <Input fluid placeholder='Enter channel' onKeyUp={onKeyUp} />
+      <Input autoFocus fluid placeholder='Enter channel' onKeyUp={onKeyUp} />
     </Modal.Content>
   </Modal>
 );
