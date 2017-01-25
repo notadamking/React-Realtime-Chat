@@ -4,11 +4,12 @@ import cx from 'classnames';
 
 import styles from './Channels.css';
 
-const Channels = ({ activeChannel, channels, onClickChannel }) => (
+const Channels = ({ activeChannel, channels, onClickChannel, onClickCreateNewChannel }) => (
   <Menu className={styles.channelsMenu} secondary vertical>
     <Menu.Item>
       <Menu.Header className={styles.channelsHeader}>
         CHANNELS ({channels ? channels.length : 0})
+        <Icon circular className={styles.newChannelIcon} name='plus' onClick={onClickCreateNewChannel} />
       </Menu.Header>
       <Menu.Menu className={styles.channelsContainer}>
         {channels && channels.map((channel) => (
@@ -38,7 +39,8 @@ const Channels = ({ activeChannel, channels, onClickChannel }) => (
 Channels.propTypes = {
   activeChannel: PropTypes.string,
   channels: PropTypes.array,
-  onClickChannel: PropTypes.func,
+  onClickChannel: PropTypes.func.isRequired,
+  onClickCreateNewChannel: PropTypes.func.isRequired,
 };
 
 export default Channels;

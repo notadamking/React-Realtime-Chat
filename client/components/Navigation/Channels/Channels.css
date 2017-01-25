@@ -8,6 +8,18 @@
   font-size: 1.1em !important;
 }
 
+.newChannelIcon {
+  position: absolute;
+  right: 0;
+  margin-top: -7px !important;
+}
+
+.newChannelIcon:hover {
+  color: white;
+  background-color: #ab9ba9;
+  cursor: pointer;
+}
+
 .channelsContainer {
   max-height: 165px;
   overflow-x: hidden;

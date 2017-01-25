@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { browserHistory } from 'react-router';
 import { graphql } from 'react-apollo';
 
-import { Channels } from '../../../components';
+import { Channels, NewChannelModal } from '../../../components';
 import { channelsForRoomQuery, channelsInRoomChangedSubscription } from './channels.graphql';
 
 @graphql(channelsForRoomQuery, {
@@ -16,6 +16,14 @@ import { channelsForRoomQuery, channelsInRoomChangedSubscription } from './chann
   })
 })
 export default class ChannelsContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isCreatingNewChannel: false
+    };
+  }
+
   componentWillReceiveProps(nextProps) {
     if (!this.subscription && !nextProps.loading) {
       this.subscription = nextProps.subscribeToMore({
@@ -35,15 +43,41 @@ export default class ChannelsContainer extends Component {
     browserHistory.push(`/${room}/messages/${channel}`);
   }
 
+  handleClickCreateNewChannel() {
+    this.setState({ isCreatingNewChannel: true });
+  }
+
+  handleCloseModal() {
+    this.setState({ isCreatingNewChannel: false });
+  }
+
+  handleKeyUp(e) {
+    if (e.which === 13) {
+      const { room } = this.props;
+      this.setState({ isCreatingNewChannel: false });
+      if (e.target.value) {
+        browserHistory.push(`/${room}/messages/${e.target.value}`);
+      }
+    }
+  }
+
   render() {
     const { channel, channels } = this.props;
     const channelList = channels.indexOf(channel) === -1 ? [...channels, channel] : channels;
     return (
-      <Channels
-        activeChannel={channel}
-        channels={[...new Set(channelList.filter((c) => c.charAt(0) !== '@'))]}
-        onClickChannel={this.handleClickChannel.bind(this)}
-      />
+      <div>
+        <Channels
+          activeChannel={channel}
+          channels={[...new Set(channelList.filter((c) => c.charAt(0) !== '@'))]}
+          onClickChannel={this.handleClickChannel.bind(this)}
+          onClickCreateNewChannel={this.handleClickCreateNewChannel.bind(this)}
+        />
+        <NewChannelModal
+          open={this.state.isCreatingNewChannel}
+          onClose={this.handleCloseModal.bind(this)}
+          onKeyUp={this.handleKeyUp.bind(this)}
+        />
+      </div>
     );
   }
 }

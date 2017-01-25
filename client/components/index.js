@@ -21,6 +21,7 @@ import Html from './Html';
 import Channels from './Navigation/Channels';
 import DirectMessages from './Navigation/DirectMessages';
 import NavMenu from './Navigation/NavMenu';
+import NewChannelModal from './Navigation/NewChannelModal';
 
 /* RelativeTime */
 import RelativeTime from './RelativeTime';
@@ -37,6 +38,7 @@ export {
   MessageList,
   MessagesHeader,
   NavMenu,
+  NewChannelModal,
   NewMessageForm,
   RelativeTime,
   SignupForm,

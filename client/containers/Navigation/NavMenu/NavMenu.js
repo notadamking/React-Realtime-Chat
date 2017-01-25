@@ -57,7 +57,7 @@ export default class NavMenuContainer extends Component {
   }
 
   handleKeyUp(e) {
-    if (e.which === 13 && !e.shiftKey) {
+    if (e.which === 13) {
       const { channel } = this.props;
       this.setState({
         isEditingRoom: false
