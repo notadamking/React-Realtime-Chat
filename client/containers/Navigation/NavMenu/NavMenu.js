@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { withApollo } from 'react-apollo';
+import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 
 import { handleLogout } from '../../../redux/actions/auth';
@@ -16,6 +17,7 @@ export default class NavMenuContainer extends Component {
     super(props);
 
     this.state = {
+      isEditingRoom: false,
       loginModalOpen: false,
       signupModalOpen: false,
     };
@@ -48,14 +50,33 @@ export default class NavMenuContainer extends Component {
     });
   }
 
+  handleEditRoomClick() {
+    this.setState({
+      isEditingRoom: true
+    });
+  }
+
+  handleKeyUp(e) {
+    if (e.which === 13 && !e.shiftKey) {
+      const { channel } = this.props;
+      browserHistory.push(`/${e.target.value}/messages/${channel}`);
+      this.setState({
+        isEditingRoom: false
+      });
+    }
+  }
+
   render() {
     const { channel, room, user } = this.props;
     return (
       <div>
         <NavMenu
           channel={channel}
+          isEditingRoom={this.state.isEditingRoom}
           room={room}
           user={user}
+          onEditRoomClicked={this.handleEditRoomClick.bind(this)}
+          onKeyUp={this.handleKeyUp.bind(this)}
           onLoginClicked={this.handleLoginClick.bind(this)}
           onLogoutClicked={this.handleLogoutClick.bind(this)}
           onSignupClicked={this.handleSignupClick.bind(this)}

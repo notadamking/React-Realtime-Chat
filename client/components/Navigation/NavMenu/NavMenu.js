@@ -1,13 +1,21 @@
 import React, { PropTypes } from 'react';
-import { Icon, Menu } from 'semantic-ui-react';
+import { Icon, Input, Menu } from 'semantic-ui-react';
 
 import { Channels, DirectMessages } from '../../../containers';
 import styles from './NavMenu.css';
 
-const NavMenu = ({ channel, room, user, onLoginClicked, onLogoutClicked, onSignupClicked }) => (
+const NavMenu = ({ channel, isEditingRoom, room, user, onEditRoomClicked, onKeyUp, onLoginClicked, onLogoutClicked, onSignupClicked }) => (
   <Menu className={styles.navMenu} vertical>
     <Menu.Item>
-      <Menu.Header className={styles.roomTitle}>{room}</Menu.Header>
+      {isEditingRoom
+        ? <Input placeholder='Enter room' onKeyUp={onKeyUp} />
+        : (
+          <Menu.Header className={styles.roomTitle}>
+            {room}&nbsp;
+            <Icon className={styles.editRoomIcon} name='write' onClick={onEditRoomClicked} />
+          </Menu.Header>
+        )
+      }
     </Menu.Item>
     {user ? (
       <Menu.Menu>
@@ -49,8 +57,11 @@ const NavMenu = ({ channel, room, user, onLoginClicked, onLogoutClicked, onSignu
 
 NavMenu.propTypes = {
   channel: PropTypes.string,
+  isEditingRoom: PropTypes.bool,
   room: PropTypes.string,
   user: PropTypes.object,
+  onEditRoomClicked: PropTypes.func,
+  onKeyUp: PropTypes.func,
   onLoginClicked: PropTypes.func,
   onLogoutClicked: PropTypes.func,
   onSignupClicked: PropTypes.func,

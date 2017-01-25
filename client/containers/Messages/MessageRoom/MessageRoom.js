@@ -61,7 +61,7 @@ export default class MessageRoomContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { dispatch, room, updateCurrentRoom, user } = this.props;
+    const { dispatch, room, updateCurrentRoom } = this.props;
     if (nextProps.shouldUpdateRoom && nextProps.previousUser) {
       updateCurrentRoom({
         authToken: nextProps.previousUser.authToken,
@@ -70,8 +70,10 @@ export default class MessageRoomContainer extends Component {
       });
       dispatch(setShouldUpdateRoom(false));
     } else if (nextProps.shouldUpdateRoom) {
-      updateCurrentRoom({ room, user });
+      updateCurrentRoom({ room: nextProps.room, user: nextProps.user });
       dispatch(setShouldUpdateRoom(false));
+    } else if (nextProps.room !== room) {
+      updateCurrentRoom({ room: nextProps.room, user: nextProps.user });
     }
   }
 
