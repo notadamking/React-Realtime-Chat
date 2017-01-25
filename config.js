@@ -12,7 +12,7 @@ const productionDbUrl = process.env.DATABASE_URL || localDbUrl;
 module.exports = {
   env: process.env.NODE_ENV || 'development',
   meta: {
-    title: 'React Redux Apollo Starter'
+    title: 'Slack in React'
   },
   server: {
     host: 'localhost',
