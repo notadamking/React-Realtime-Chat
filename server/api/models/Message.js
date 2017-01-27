@@ -58,7 +58,17 @@ export default (sequelize, DataTypes) => {
         const deletedMessage = message.toJSON();
 
         message.destroy();
-        pubsub.publish('messageDeleted', deletedMessage);
+        if (message.channel.charAt(0) === '@') {
+          const otherUser = await models.User.findOne({
+            where: { username: message.channel.slice(1) }
+          });
+          pubsub.publish('messageDeleted', {
+            ...deletedMessage,
+            otherUser: otherUser.toJSON(),
+          });
+        } else {
+          pubsub.publish('messageDeleted', deletedMessage);
+        }
 
         return deletedMessage;
       },

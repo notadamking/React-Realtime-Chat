@@ -14,13 +14,29 @@ const subscriptionManager = new SubscriptionManager({
     messageAdded: (options, args) => ({
       messageAdded: {
         filter: (message) => {
+          if (message.channel.charAt(0) === '@') {
+            return message.room === args.room
+              && ((message.channel === args.channel.slice(1)
+                && message.author.username === args.username)
+              || (args.channel.slice(1) === message.author.username
+                && message.otherUser.username === args.username));
+          }
           return message.room === args.room && message.channel === args.channel;
         },
       },
     }),
     messageDeleted: (options, args) => ({
       messageDeleted: {
-        filter: (message) => message.room === args.room && message.channel === args.channel,
+        filter: (message) => {
+          if (message.channel.charAt(0) === '@') {
+            return message.room === args.room
+              && ((message.channel === args.channel.slice(1)
+                && message.author.username === args.username)
+              || (args.channel.slice(1) === message.author.username
+                && message.otherUser.username === args.username));
+          }
+          return message.room === args.room && message.channel === args.channel;
+        },
       },
     }),
     onlineUsersChanged: (options, args) => ({

@@ -49,6 +49,8 @@ const MESSAGES_PER_FETCH = 10;
 export default class MessageListContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.user && !this.props.user && nextProps.refetch) {
+      this.subscription.forEach(unsubscribe => unsubscribe());
+      this.subscription = null;
       nextProps.refetch();
       setTimeout(() => this.props.dispatch(setShouldScrollToBottom()), 100);
     }
@@ -65,9 +67,7 @@ export default class MessageListContainer extends Component {
           variables: {
             room: nextProps.room,
             channel: nextProps.channel,
-          },
-          context: {
-            user: nextProps.user,
+            username: nextProps.user && nextProps.user.username,
           },
           updateQuery: (previousResult, { subscriptionData }) => {
             const newMessage = subscriptionData.data.messageAdded;
@@ -83,6 +83,7 @@ export default class MessageListContainer extends Component {
           variables: {
             room: nextProps.room,
             channel: nextProps.channel,
+            username: nextProps.user && nextProps.user.username,
           },
           updateQuery: (previousResult, { subscriptionData }) => {
             const remainingMessages = previousResult.messages.filter((message) => {
